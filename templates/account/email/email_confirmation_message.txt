@@ -1,4 +1,4 @@
-Hello,
+{% load account %}{% load i18n %}{% autoescape off %}Hello,
 
 You're receiving this email because you signed up for an account at Hills Clinic.
 
@@ -6,13 +6,8 @@ Please click the link below to confirm your email address:
 
 {{ activate_url }}
 
-This link will expire in {{ expiration_days }} days.
-
 If you didn't create an account, you can safely ignore this email.
 
 Best regards,
 The Hills Clinic Team
-
----
-Hills Clinic - Transform Your Height, Transform Your Life
-https://hillsclinic.onrender.com
+{% endautoescape %}

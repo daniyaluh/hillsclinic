@@ -179,7 +179,9 @@ SITE_ID = 1
 # django-allauth settings (production-grade email verification)
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# Email verification: "mandatory", "optional", or "none"
+# Set to "optional" initially to test signup, then switch to "mandatory" once email is confirmed working
+ACCOUNT_EMAIL_VERIFICATION = os.getenv("ACCOUNT_EMAIL_VERIFICATION", "optional")
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # POST-only confirmation (secure)
@@ -383,6 +385,16 @@ LOGGING = {
         "django": {
             "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+        "django.mail": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "allauth": {
+            "handlers": ["console"],
+            "level": "DEBUG",
             "propagate": False,
         },
         "wagtail": {
