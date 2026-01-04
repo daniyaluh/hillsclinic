@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n wagtailimages_tags %}
 <!DOCTYPE html>
 <html lang="{{ CURRENT_LANGUAGE_CODE|default:'en' }}" dir="{% if IS_RTL %}rtl{% else %}ltr{% endif %}">
 <head>
@@ -25,7 +25,15 @@
     <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/media/logo.png">
+    {% if settings.core.SiteSettings.favicon %}
+        {% image settings.core.SiteSettings.favicon fill-32x32 format-png as favicon_img %}
+        <link rel="icon" type="image/png" href="{{ favicon_img.url }}">
+    {% elif settings.core.SiteSettings.logo %}
+        {% image settings.core.SiteSettings.logo fill-32x32 format-png as logo_favicon %}
+        <link rel="icon" type="image/png" href="{{ logo_favicon.url }}">
+    {% else %}
+        <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    {% endif %}
     
     <title>{% block title %}Hills Clinic{% endblock %}</title>
     

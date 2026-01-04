@@ -1,5 +1,37 @@
 from django.db import models
 from django.urls import reverse
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
+from wagtail.admin.panels import FieldPanel
+
+
+@register_setting
+class SiteSettings(BaseSiteSetting):
+    """Site-wide settings for logo, favicon, and other branding."""
+    
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Site logo displayed in header and footer"
+    )
+    favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Favicon (browser tab icon)"
+    )
+    
+    panels = [
+        FieldPanel('logo'),
+        FieldPanel('favicon'),
+    ]
+    
+    class Meta:
+        verbose_name = "Site Settings"
 
 
 class Doctor(models.Model):
