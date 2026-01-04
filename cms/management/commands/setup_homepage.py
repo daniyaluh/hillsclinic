@@ -2,6 +2,7 @@
 Django management command to set up initial Wagtail site and homepage.
 """
 from django.core.management.base import BaseCommand
+from django.db import connection
 from wagtail.models import Page, Site, Locale
 from cms.models import HomePage
 
@@ -18,11 +19,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR("Root page not found!"))
             return
 
-        # Delete existing default pages
-        for page in Page.objects.filter(depth=2):
-            self.stdout.write(f"Deleting existing page: {page.title}")
-            page.delete()
-
         # Get or create default locale
         locale, created = Locale.objects.get_or_create(language_code='en')
         if created:
@@ -36,6 +32,15 @@ class Command(BaseCommand):
         if homepage:
             self.stdout.write(f"Homepage already exists: {homepage.title}")
         else:
+            # Delete existing default pages using raw SQL to avoid signal issues
+            self.stdout.write("Removing default Wagtail welcome page...")
+            with connection.cursor() as cursor:
+                # Delete any non-root, non-HomePage pages at depth 2
+                cursor.execute("""
+                    DELETE FROM wagtailcore_page 
+                    WHERE depth = 2 AND id NOT IN (SELECT page_ptr_id FROM cms_homepage)
+                """)
+            
             # Create homepage using proper Wagtail methods
             self.stdout.write("Creating new homepage...")
             
