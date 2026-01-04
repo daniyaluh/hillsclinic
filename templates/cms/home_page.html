@@ -53,7 +53,12 @@
                 
                 <!-- Main Image Container -->
                 <div class="relative rounded-[2rem] overflow-hidden shadow-2xl">
-                    <img src="/media/img3.png" alt="Hills Clinic - Limb Lengthening Surgery" class="w-full h-auto object-cover">
+                    {% if page.hero_image %}
+                        {% image page.hero_image fill-800x600 as hero_img %}
+                        <img src="{{ hero_img.url }}" alt="{{ page.hero_title }}" class="w-full h-auto object-cover">
+                    {% else %}
+                        <img src="{% static 'images/hero-placeholder.jpg' %}" alt="Hills Clinic - Limb Lengthening Surgery" class="w-full h-auto object-cover">
+                    {% endif %}
                     
                     <!-- Experience Badge - Bottom Left -->
                     <div class="absolute bottom-8 left-8 bg-white rounded-xl px-6 py-4 shadow-xl">
