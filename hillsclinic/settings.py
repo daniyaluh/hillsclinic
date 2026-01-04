@@ -180,8 +180,8 @@ SITE_ID = 1
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 # Email verification: "mandatory", "optional", or "none"
-# Set to "optional" initially to test signup, then switch to "mandatory" once email is confirmed working
-ACCOUNT_EMAIL_VERIFICATION = os.getenv("ACCOUNT_EMAIL_VERIFICATION", "optional")
+# Set to "none" to completely bypass email for testing
+ACCOUNT_EMAIL_VERIFICATION = os.getenv("ACCOUNT_EMAIL_VERIFICATION", "none")
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # POST-only confirmation (secure)
@@ -191,6 +191,7 @@ ACCOUNT_FORMS = {
     "signup": "accounts.forms.CustomSignupForm",
 }
 LOGIN_REDIRECT_URL = "/login-redirect/"  # Smart redirect: staff → /staff/, patients → /portal/
+ACCOUNT_SIGNUP_REDIRECT_URL = "/portal/"  # Go directly to portal after signup
 LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https" if not DEBUG else "http"
 
