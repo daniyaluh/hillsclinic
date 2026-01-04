@@ -4,6 +4,9 @@ Custom forms for accounts app.
 
 from django import forms
 from allauth.account.forms import SignupForm
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CustomSignupForm(SignupForm):
@@ -25,19 +28,26 @@ class CustomSignupForm(SignupForm):
         self.order_fields(field_order)
     
     def save(self, request):
-        user = super().save(request)
-        
-        # Parse name and save to user
-        full_name = self.cleaned_data.get('full_name', '').strip()
-        if full_name:
-            name_parts = full_name.split()
-            user.first_name = name_parts[0] if name_parts else ''
-            user.last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
-            user.save()
+        try:
+            user = super().save(request)
             
-            # Also save to patient profile if it exists
-            if hasattr(user, 'patient_profile'):
-                user.patient_profile.full_name = full_name
-                user.patient_profile.save()
-        
-        return user
+            # Parse name and save to user
+            full_name = self.cleaned_data.get('full_name', '').strip()
+            if full_name:
+                name_parts = full_name.split()
+                user.first_name = name_parts[0] if name_parts else ''
+                user.last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
+                user.save()
+                
+                # Also save to patient profile if it exists
+                try:
+                    if hasattr(user, 'patient_profile'):
+                        user.patient_profile.full_name = full_name
+                        user.patient_profile.save()
+                except Exception as e:
+                    logger.warning(f"Could not update patient profile for {user.email}: {e}")
+            
+            return user
+        except Exception as e:
+            logger.error(f"Error in CustomSignupForm.save: {e}", exc_info=True)
+            raise
