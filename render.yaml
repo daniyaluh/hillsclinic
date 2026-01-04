@@ -38,16 +38,18 @@ services:
         sync: false
       - key: DJANGO_SUPERUSER_PASSWORD
         sync: false
-      # Email settings - set these in Render dashboard
+      # Email settings (Gmail SMTP)
       - key: EMAIL_BACKEND
-        sync: false
+        value: "django.core.mail.backends.smtp.EmailBackend"
       - key: EMAIL_HOST
-        sync: false
+        value: "smtp.gmail.com"
       - key: EMAIL_PORT
-        sync: false
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
       - key: EMAIL_HOST_USER
-        sync: false
+        value: "darkiegaming21@gmail.com"
       - key: EMAIL_HOST_PASSWORD
-        sync: false
+        value: "tofp ahnv bmwg bmcd"
       - key: DEFAULT_FROM_EMAIL
-        sync: false
+        value: "Hills Clinic <darkiegaming21@gmail.com>"
