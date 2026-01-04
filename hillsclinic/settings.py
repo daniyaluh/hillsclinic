@@ -365,6 +365,16 @@ LOGGING = {
 }
 
 # =============================================================================
+# DJANGO TASKS (for Wagtail background tasks)
+# =============================================================================
+# Use dummy backend to avoid modelsearch signal bug with Python 3.12
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks.backends.dummy.DummyBackend"
+    }
+}
+
+# =============================================================================
 # CELERY (for background tasks)
 # =============================================================================
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
