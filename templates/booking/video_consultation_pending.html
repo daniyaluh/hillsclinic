@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} - Hills Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-stone-50 min-h-screen">
+    <div class="container mx-auto px-4">
+        <div class="max-w-lg mx-auto text-center">
+            <!-- Icon -->
+            <div class="mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-amber-100 rounded-2xl">
+                    <svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="text-3xl font-serif font-bold text-stone-900 mb-4">Complete Your Booking</h1>
+            
+            <p class="text-stone-600 mb-8">
+                Your consultation is reserved but requires payment to confirm.
+            </p>
+            
+            <!-- Consultation Summary -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8 mb-8 text-left">
+                <h2 class="text-lg font-semibold mb-6 text-center text-stone-900">Booking Summary</h2>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between py-3 border-b border-stone-100">
+                        <span class="text-stone-500">Date</span>
+                        <span class="font-medium text-stone-900">{{ consultation.scheduled_date|date:"F j, Y" }}</span>
+                    </div>
+                    <div class="flex justify-between py-3 border-b border-stone-100">
+                        <span class="text-stone-500">Time</span>
+                        <span class="font-medium text-stone-900">{{ consultation.scheduled_time|time:"g:i A" }}</span>
+                    </div>
+                    <div class="flex justify-between py-3 border-b border-stone-100">
+                        <span class="text-stone-500">Duration</span>
+                        <span class="font-medium text-stone-900">30 minutes</span>
+                    </div>
+                    <div class="flex justify-between py-3">
+                        <span class="text-stone-500">Fee</span>
+                        <span class="font-bold text-amber-600 text-lg">{{ consultation_fee }}</span>
+                    </div>
+                </div>
+                
+                <div class="bg-amber-50 ring-1 ring-amber-200 rounded-2xl p-4 mb-6">
+                    <p class="text-sm text-amber-800">
+                        <strong>Note:</strong> Online payment is currently being configured. 
+                        Please contact us to complete your booking.
+                    </p>
+                </div>
+                
+                <div class="space-y-3">
+                    <a href="https://wa.me/1234567890?text=Hi,%20I%20would%20like%20to%20complete%20payment%20for%20my%20video%20consultation%20on%20{{ consultation.scheduled_date|date:'F j, Y' }}" 
+                       target="_blank"
+                       class="flex items-center justify-center w-full px-6 py-4 bg-emerald-500 text-white font-semibold rounded-full hover:bg-emerald-600 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                        </svg>
+                        Pay via WhatsApp
+                    </a>
+                    
+                    <a href="mailto:payments@hillsclinic.com?subject=Video%20Consultation%20Payment%20-%20{{ consultation.scheduled_date|date:'F j, Y' }}" 
+                       class="flex items-center justify-center w-full px-6 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Contact via Email
+                    </a>
+                </div>
+            </div>
+            
+            <p class="text-sm text-stone-500">
+                Reference ID: <span class="font-mono bg-stone-100 px-2 py-1 rounded">{{ consultation.id }}</span>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Your Booking - Hills Clinic{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-b from-stone-100 to-white py-20">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto text-center">
+            <!-- Success Animation -->
+            <div class="mb-8">
+                <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto ring-4 ring-emerald-50">
+                    <svg class="w-12 h-12 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Consultation Request Received!</h1>
+            <p class="text-xl text-stone-600 mb-8">Complete your payment to confirm your appointment.</p>
+            
+            {% if appointment %}
+            <!-- Payment Required Alert -->
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 ring-2 ring-amber-200 rounded-3xl p-8 mb-8">
+                <div class="flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-amber-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="text-lg font-semibold text-amber-800">Payment Required Within 48 Hours</span>
+                </div>
+                <p class="text-amber-700 mb-6">Your consultation will be cancelled automatically if payment is not received by <strong>{{ appointment.payment_deadline|date:"M d, Y g:i A" }}</strong></p>
+                
+                <!-- Pay Now Button -->
+                <a href="{% url 'portal:appointment-payment' pk=appointment.id %}" 
+                   class="inline-flex items-center justify-center gap-3 px-10 py-4 bg-amber-600 text-white text-lg font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    </svg>
+                    Pay $10 Now to Confirm
+                </a>
+            </div>
+            
+            <!-- Booking Details -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8 mb-8 text-left">
+                <h2 class="font-semibold text-lg mb-4 text-stone-900">Booking Details</h2>
+                <dl class="space-y-4">
+                    <div class="flex justify-between items-center py-2 border-b border-stone-100">
+                        <dt class="text-stone-500">Reference Number:</dt>
+                        <dd class="font-mono text-sm text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">#{{ appointment.id }}</dd>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-stone-100">
+                        <dt class="text-stone-500">Status:</dt>
+                        <dd class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-700">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            </svg>
+                            Awaiting Payment
+                        </dd>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-stone-100">
+                        <dt class="text-stone-500">Consultation Fee:</dt>
+                        <dd class="text-lg font-bold text-stone-900">${{ appointment.consultation_fee }}</dd>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <dt class="text-stone-500">Payment Deadline:</dt>
+                        <dd class="text-red-600 font-medium">{{ appointment.payment_deadline|date:"M d, Y g:i A" }}</dd>
+                    </div>
+                </dl>
+            </div>
+            {% endif %}
+            
+            <!-- Simple Steps -->
+            <div class="bg-stone-50 rounded-3xl ring-1 ring-stone-200 p-8 mb-8 text-left">
+                <h2 class="font-semibold text-lg mb-6 text-stone-900">How It Works</h2>
+                <ol class="space-y-5">
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 w-9 h-9 bg-amber-600 text-white rounded-full flex items-center justify-center font-bold mr-4">1</span>
+                        <div>
+                            <h3 class="font-medium text-stone-900">Pay Consultation Fee ($10)</h3>
+                            <p class="text-stone-600 text-sm">Send payment via EasyPaisa or JazzCash and upload screenshot.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 w-9 h-9 bg-stone-400 text-white rounded-full flex items-center justify-center font-bold mr-4">2</span>
+                        <div>
+                            <h3 class="font-medium text-stone-900">We Verify & Assign Time Slot</h3>
+                            <p class="text-stone-600 text-sm">Our team will verify your payment and assign your consultation time.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 w-9 h-9 bg-stone-400 text-white rounded-full flex items-center justify-center font-bold mr-4">3</span>
+                        <div>
+                            <h3 class="font-medium text-stone-900">Consultation Confirmed!</h3>
+                            <p class="text-stone-600 text-sm">You'll receive an email with your confirmed appointment details.</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            
+            <!-- Quick Contact -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8 mb-8">
+                <h2 class="font-semibold text-lg mb-4 text-stone-900">Need Help With Payment?</h2>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <a href="https://wa.me/923015943329" target="_blank" class="flex items-center justify-center p-4 bg-emerald-500 text-white rounded-2xl hover:bg-emerald-600 transition-colors">
+                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                        </svg>
+                        WhatsApp Us
+                    </a>
+                    <a href="tel:+923015943329" class="flex items-center justify-center p-4 bg-stone-100 text-stone-700 rounded-2xl hover:bg-stone-200 transition-colors">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                        Call Us
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Back to Home -->
+            <div class="flex justify-center gap-4">
+                {% if appointment %}
+                <a href="{% url 'portal:appointment-payment' pk=appointment.id %}" class="inline-flex items-center px-8 py-3 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                    Pay Now
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+                {% endif %}
+                <a href="/" class="inline-flex items-center px-6 py-3 border-2 border-stone-300 text-stone-700 font-medium rounded-full hover:border-stone-400 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+                    </svg>
+                    Back to Homepage
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

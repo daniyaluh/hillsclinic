@@ -1,0 +1,200 @@
+# Turkish translations for Hills Clinic
+# Copyright (C) 2025 Hills Clinic
+# This file is distributed under the same license as the Hills Clinic package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hills Clinic 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: Hills Clinic Team\n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# Navigation
+msgid "Home"
+msgstr "Ana Sayfa"
+
+msgid "Procedures"
+msgstr "Prosedürler"
+
+msgid "Overview"
+msgstr "Genel Bakış"
+
+msgid "Ilizarov (External)"
+msgstr "İlizarov (Harici)"
+
+msgid "Internal Nails"
+msgstr "İç Çiviler"
+
+msgid "LON Method"
+msgstr "LON Yöntemi"
+
+msgid "International Patients"
+msgstr "Uluslararası Hastalar"
+
+msgid "Cost & Financing"
+msgstr "Maliyet ve Finansman"
+
+msgid "Recovery"
+msgstr "İyileşme"
+
+msgid "Success Stories"
+msgstr "Başarı Hikayeleri"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Our Team"
+msgstr "Ekibimiz"
+
+msgid "Patient Portal"
+msgstr "Hasta Portalı"
+
+msgid "My Portal"
+msgstr "Portalım"
+
+msgid "Logout"
+msgstr "Çıkış Yap"
+
+msgid "Book Consultation"
+msgstr "Konsültasyon Ayırt"
+
+msgid "Select Language"
+msgstr "Dil Seçin"
+
+msgid "Select language"
+msgstr "Dil seçin"
+
+# Footer
+msgid "Quick Links"
+msgstr "Hızlı Bağlantılar"
+
+msgid "Legal"
+msgstr "Yasal"
+
+msgid "Privacy Policy"
+msgstr "Gizlilik Politikası"
+
+msgid "Terms of Service"
+msgstr "Kullanım Koşulları"
+
+msgid "Cookie Policy"
+msgstr "Çerez Politikası"
+
+msgid "Contact"
+msgstr "İletişim"
+
+msgid "All rights reserved"
+msgstr "Tüm hakları saklıdır"
+
+# Common
+msgid "Learn More"
+msgstr "Daha Fazla Bilgi"
+
+msgid "Read More"
+msgstr "Devamını Oku"
+
+msgid "Submit"
+msgstr "Gönder"
+
+msgid "Send"
+msgstr "Gönder"
+
+msgid "Cancel"
+msgstr "İptal"
+
+msgid "Save"
+msgstr "Kaydet"
+
+msgid "Back"
+msgstr "Geri"
+
+msgid "Next"
+msgstr "İleri"
+
+msgid "Previous"
+msgstr "Önceki"
+
+msgid "Close"
+msgstr "Kapat"
+
+# Medical
+msgid "Height Lengthening"
+msgstr "Boy Uzatma"
+
+msgid "Limb Lengthening"
+msgstr "Uzuv Uzatma"
+
+msgid "Leg Lengthening"
+msgstr "Bacak Uzatma"
+
+msgid "Consultation"
+msgstr "Konsültasyon"
+
+msgid "Free Consultation"
+msgstr "Ücretsiz Konsültasyon"
+
+msgid "Book Your Free Consultation"
+msgstr "Ücretsiz Konsültasyonunuzu Ayırtın"
+
+msgid "Doctor"
+msgstr "Doktor"
+
+msgid "Surgeon"
+msgstr "Cerrah"
+
+msgid "Medical Team"
+msgstr "Tıbbi Ekip"
+
+msgid "Surgery"
+msgstr "Ameliyat"
+
+msgid "Treatment"
+msgstr "Tedavi"
+
+msgid "Patient"
+msgstr "Hasta"
+
+msgid "Results"
+msgstr "Sonuçlar"
+
+# Forms
+msgid "Full Name"
+msgstr "Tam Ad"
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Country"
+msgstr "Ülke"
+
+msgid "Message"
+msgstr "Mesaj"
+
+msgid "Your message has been sent successfully"
+msgstr "Mesajınız başarıyla gönderildi"
+
+# Video Consultation
+msgid "Video Consultation"
+msgstr "Video Konsültasyon"
+
+msgid "Book Video Consultation"
+msgstr "Video Konsültasyon Ayırt"
+
+msgid "Join Meeting"
+msgstr "Toplantıya Katıl"
+
+msgid "Payment"
+msgstr "Ödeme"
+
+msgid "Pay Now"
+msgstr "Şimdi Öde"

@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">Contact Us</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto">Have questions? We're here to help. Reach out to us anytime.</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-20 bg-stone-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-3 gap-12">
+            
+            <!-- Contact Info -->
+            <div class="lg:col-span-1 space-y-8">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-4">Get in Touch</h2>
+                    <p class="text-stone-600 mb-8">We'd love to hear from you. Choose your preferred method of contact.</p>
+                </div>
+                
+                <!-- Phone -->
+                <div class="flex items-start bg-white rounded-2xl p-5 ring-1 ring-stone-200">
+                    <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-stone-900">Phone</h3>
+                        <p class="text-stone-600">+92 301 5943329</p>
+                        <p class="text-sm text-stone-500">Available 9 AM - 8 PM (PKT)</p>
+                    </div>
+                </div>
+                
+                <!-- WhatsApp -->
+                <div class="flex items-start bg-white rounded-2xl p-5 ring-1 ring-stone-200">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-stone-900">WhatsApp</h3>
+                        <a href="https://wa.me/923015943329" class="text-emerald-600 hover:text-emerald-700 font-medium">Chat with us</a>
+                        <p class="text-sm text-stone-500">Quick responses 24/7</p>
+                    </div>
+                </div>
+                
+                <!-- Email -->
+                <div class="flex items-start bg-white rounded-2xl p-5 ring-1 ring-stone-200">
+                    <div class="w-12 h-12 bg-stone-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-stone-900">Email</h3>
+                        <a href="mailto:info@hillsclinic.com" class="text-amber-700 hover:text-amber-800 font-medium">info@hillsclinic.com</a>
+                        <p class="text-sm text-stone-500">Response within 24 hours</p>
+                    </div>
+                </div>
+                
+                <!-- Location -->
+                <div class="flex items-start bg-white rounded-2xl p-5 ring-1 ring-stone-200">
+                    <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-stone-900">Location</h3>
+                        <p class="text-stone-600">Hills Clinic</p>
+                        <p class="text-stone-600">Islamabad, Pakistan</p>
+                    </div>
+                </div>
+                
+                <!-- Social Media -->
+                <div class="pt-4">
+                    <h3 class="font-semibold text-stone-900 mb-4">Follow Us</h3>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-11 h-11 bg-white ring-1 ring-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:bg-amber-50 hover:text-amber-600 hover:ring-amber-300 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="w-11 h-11 bg-white ring-1 ring-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:bg-amber-50 hover:text-amber-600 hover:ring-amber-300 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="w-11 h-11 bg-white ring-1 ring-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:bg-amber-50 hover:text-amber-600 hover:ring-amber-300 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                        <a href="#" class="w-11 h-11 bg-white ring-1 ring-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:bg-amber-50 hover:text-amber-600 hover:ring-amber-300 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8 md:p-10">
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6">Send Us a Message</h2>
+                    
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="mb-6 p-4 rounded-2xl {% if message.tags == 'success' %}bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200{% else %}bg-red-50 text-red-700 ring-1 ring-red-200{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post" action="{% url 'booking:contact' %}">
+                        {% csrf_token %}
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">Your Name *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">Email Address *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-stone-700 mb-2">Subject *</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.subject.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-stone-700 mb-2">Message *</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.message.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-8 p-4 bg-stone-50 rounded-2xl">
+                            <div class="flex items-start">
+                                {{ form.privacy_consent }}
+                                <label class="ml-3 text-sm text-stone-600">
+                                    I agree to the <a href="/privacy-policy/" class="text-amber-700 hover:text-amber-800 font-medium">Privacy Policy</a> and consent to Hills Clinic contacting me. *
+                                </label>
+                            </div>
+                            {% if form.privacy_consent.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.privacy_consent.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <button type="submit" class="inline-flex items-center px-8 py-3 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                            Send Message
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-2xl font-serif font-bold text-stone-900 text-center mb-8">Find Us</h2>
+            <div class="bg-stone-100 rounded-3xl overflow-hidden h-96 ring-1 ring-stone-200">
+                <div class="w-full h-full flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-stone-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-10 h-10 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <p class="text-stone-600 font-medium">Hills Clinic, Islamabad, Pakistan</p>
+                        <a href="https://maps.google.com/?q=Islamabad,Pakistan" target="_blank" class="mt-4 inline-flex items-center text-amber-700 hover:text-amber-800 font-medium">
+                            Open in Google Maps
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Consultation CTA -->
+<section class="py-16 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-serif font-bold mb-4">Ready for a Consultation?</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Book a consultation and speak directly with our medical team.</p>
+        <a href="{% url 'booking:consultation' %}" class="inline-flex items-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+            Book Consultation
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Portal Header -->
+<div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-4">
+            <a href="{% url 'portal:dashboard' %}" class="text-stone-400 hover:text-white transition-colors">Dashboard</a>
+            <span class="text-stone-600 mx-2">/</span>
+            <span class="text-white">Profile</span>
+        </nav>
+        <h1 class="text-2xl lg:text-3xl font-serif font-bold">My Profile</h1>
+        <p class="text-stone-400 mt-1">Update your personal and medical information</p>
+    </div>
+</div>
+
+<div class="bg-stone-100 min-h-screen">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-4xl mx-auto">
+            
+            {% if messages %}
+            {% for message in messages %}
+            <div class="mb-6 p-4 rounded-2xl flex items-center gap-3 {% if message.tags == 'success' %}bg-green-50 border border-green-200 text-green-800{% else %}bg-red-50 border border-red-200 text-red-800{% endif %}">
+                {% if message.tags == 'success' %}
+                <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                {% endif %}
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" class="space-y-6" x-data="{ 
+                previewUrl: '{% if patient.profile_picture %}{{ patient.profile_picture.url }}{% endif %}',
+                showPreview: {% if patient.profile_picture %}true{% else %}false{% endif %}
+            }">
+                {% csrf_token %}
+                
+                <!-- Profile Picture Section -->
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-stone-100">
+                        <h2 class="text-lg font-bold text-stone-900 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            Profile Picture
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center gap-6">
+                            <div class="relative">
+                                <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center overflow-hidden border-2 border-stone-200">
+                                    <template x-if="showPreview">
+                                        <img :src="previewUrl" alt="Profile preview" class="w-full h-full object-cover">
+                                    </template>
+                                    <template x-if="!showPreview">
+                                        <svg class="w-12 h-12 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                    </template>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1">
+                                <label for="profile-picture-input" class="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 bg-stone-100 text-stone-700 font-medium rounded-xl hover:bg-stone-200 transition border border-stone-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Choose Photo
+                                </label>
+                                <input type="file" name="profile_picture" id="profile-picture-input" accept="image/*" class="hidden"
+                                       @change="const file = $event.target.files[0]; if(file) { previewUrl = URL.createObjectURL(file); showPreview = true; }">
+                                <p class="text-sm text-stone-500 mt-2">JPG, PNG, or GIF. Max 5MB.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Basic Information -->
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-stone-100">
+                        <h2 class="text-lg font-bold text-stone-900 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                            </div>
+                            Basic Information
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label for="id_full_name" class="block text-sm font-semibold text-stone-700 mb-2">Full Name *</label>
+                                {{ form.full_name }}
+                                <p class="mt-1 text-xs text-stone-500">This is how your name will appear on all communications</p>
+                            </div>
+                            
+                            <div>
+                                <label for="id_phone_number" class="block text-sm font-semibold text-stone-700 mb-2">Phone Number</label>
+                                {{ form.phone_number }}
+                            </div>
+                            
+                            <div>
+                                <label for="id_whatsapp_number" class="block text-sm font-semibold text-stone-700 mb-2">WhatsApp Number</label>
+                                {{ form.whatsapp_number }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Personal Information -->
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-stone-100">
+                        <h2 class="text-lg font-bold text-stone-900 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+                                </svg>
+                            </div>
+                            Personal Details
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="id_date_of_birth" class="block text-sm font-semibold text-stone-700 mb-2">Date of Birth</label>
+                                {{ form.date_of_birth }}
+                            </div>
+                            <div>
+                                <label for="id_gender" class="block text-sm font-semibold text-stone-700 mb-2">Gender</label>
+                                {{ form.gender }}
+                            </div>
+                            <div>
+                                <label for="id_country" class="block text-sm font-semibold text-stone-700 mb-2">Country</label>
+                                {{ form.country }}
+                            </div>
+                            <div>
+                                <label for="id_city" class="block text-sm font-semibold text-stone-700 mb-2">City</label>
+                                {{ form.city }}
+                            </div>
+                            <div>
+                                <label for="id_timezone" class="block text-sm font-semibold text-stone-700 mb-2">Your Timezone</label>
+                                {{ form.timezone }}
+                            </div>
+                            <div>
+                                <label for="id_preferred_language" class="block text-sm font-semibold text-stone-700 mb-2">Preferred Language</label>
+                                {{ form.preferred_language }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Contact -->
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-stone-100">
+                        <h2 class="text-lg font-bold text-stone-900 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                            </div>
+                            Emergency Contact
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="id_emergency_contact_name" class="block text-sm font-semibold text-stone-700 mb-2">Full Name *</label>
+                                {{ form.emergency_contact_name }}
+                            </div>
+                            <div>
+                                <label for="id_emergency_contact_relation" class="block text-sm font-semibold text-stone-700 mb-2">Relationship *</label>
+                                {{ form.emergency_contact_relation }}
+                            </div>
+                            <div>
+                                <label for="id_emergency_contact_phone" class="block text-sm font-semibold text-stone-700 mb-2">Phone Number *</label>
+                                {{ form.emergency_contact_phone }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medical Information -->
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-stone-100">
+                        <h2 class="text-lg font-bold text-stone-900 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                            </div>
+                            Medical Information
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6 space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="id_current_height" class="block text-sm font-semibold text-stone-700 mb-2">Current Height (cm)</label>
+                                {{ form.current_height }}
+                            </div>
+                            <div>
+                                <label for="id_desired_height_gain" class="block text-sm font-semibold text-stone-700 mb-2">Desired Height Gain (cm)</label>
+                                {{ form.desired_height_gain }}
+                            </div>
+                            <div>
+                                <label for="id_weight" class="block text-sm font-semibold text-stone-700 mb-2">Weight (kg)</label>
+                                {{ form.weight }}
+                            </div>
+                            <div>
+                                <label for="id_blood_type" class="block text-sm font-semibold text-stone-700 mb-2">Blood Type</label>
+                                {{ form.blood_type }}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="id_interested_in_procedure" class="block text-sm font-semibold text-stone-700 mb-2">Procedure of Interest</label>
+                            {{ form.interested_in_procedure }}
+                        </div>
+                        
+                        <div>
+                            <label for="id_medical_conditions" class="block text-sm font-semibold text-stone-700 mb-2">Pre-existing Medical Conditions</label>
+                            {{ form.medical_conditions }}
+                            <p class="text-xs text-stone-500 mt-1">Include any heart conditions, diabetes, bone disorders, etc.</p>
+                        </div>
+                        
+                        <div>
+                            <label for="id_medications" class="block text-sm font-semibold text-stone-700 mb-2">Current Medications</label>
+                            {{ form.medications }}
+                            <p class="text-xs text-stone-500 mt-1">List all medications you are currently taking.</p>
+                        </div>
+                        
+                        <div>
+                            <label for="id_allergies" class="block text-sm font-semibold text-stone-700 mb-2">Known Allergies</label>
+                            {{ form.allergies }}
+                            <p class="text-xs text-stone-500 mt-1">Include drug, food, and material allergies.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Privacy Notice -->
+                <div class="bg-stone-800 rounded-2xl p-5">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-stone-700 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-white">Your Privacy Matters</p>
+                            <p class="text-sm text-stone-400 mt-1">Your medical information is encrypted and stored securely. Only authorized medical staff can access it.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit -->
+                <div class="flex flex-col sm:flex-row justify-end gap-4">
+                    <a href="{% url 'portal:dashboard' %}" class="px-6 py-3 border border-stone-300 text-stone-700 font-semibold rounded-xl hover:bg-stone-50 transition text-center">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-8 py-3 bg-stone-900 text-white font-semibold rounded-xl hover:bg-stone-800 transition shadow-lg">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

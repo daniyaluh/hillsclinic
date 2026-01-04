@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Cancelled - Hills Clinic{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-b from-stone-100 to-white py-20">
+    <div class="container mx-auto px-4">
+        <div class="max-w-lg mx-auto text-center">
+            <!-- Cancelled Icon -->
+            <div class="mb-8">
+                <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto ring-4 ring-red-50">
+                    <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Payment Cancelled</h1>
+            <p class="text-xl text-stone-600 mb-8">Your payment was not completed. Don't worry, you can try again.</p>
+            
+            <!-- Info Card -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8 mb-8 text-left">
+                <h2 class="font-semibold text-lg mb-4 text-stone-900">What Happened?</h2>
+                <p class="text-stone-600 mb-4">The payment process was cancelled. This could happen if:</p>
+                <ul class="space-y-2 text-stone-600">
+                    <li class="flex items-start gap-2">
+                        <span class="text-stone-400">•</span>
+                        You clicked the back button or cancelled the payment
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-stone-400">•</span>
+                        The payment session expired
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-stone-400">•</span>
+                        There was a connection issue
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <a href="{% url 'portal:dashboard' %}" class="w-full inline-flex items-center justify-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                    Go to Dashboard
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+                
+                <p class="text-stone-500 text-sm">
+                    Need help? <a href="{% url 'booking:contact' %}" class="text-amber-700 hover:text-amber-800 font-medium">Contact our support team</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

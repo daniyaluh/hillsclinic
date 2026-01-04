@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Revoke Consent - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 py-10 px-4">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex items-center gap-4 mb-4">
+            <a href="{% url 'portal:consents' %}" class="text-stone-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div class="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-white">Revoke Consent</h1>
+        <p class="text-stone-300 mt-2">{{ consent.get_consent_type_display }}</p>
+    </div>
+</div>
+
+<section class="min-h-screen bg-stone-50 py-8">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+            <!-- Revoke Card -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8">
+                <!-- Warning for Required Consents -->
+                {% if consent.is_required_for_surgery %}
+                <div class="mb-6 p-5 bg-red-50 rounded-2xl ring-1 ring-red-200">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-red-800 text-lg">Important: Surgery Required Consent</p>
+                            <p class="text-red-700 mt-1">This consent is required for your surgery. Revoking it may delay or prevent your procedure from proceeding.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Consent Details -->
+                <div class="mb-6 p-5 bg-stone-50 rounded-2xl ring-1 ring-stone-200">
+                    <h3 class="font-semibold text-stone-900 mb-3">Current Consent</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Type:</span>
+                            <span class="font-medium text-stone-900">{{ consent.get_consent_type_display }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Granted On:</span>
+                            <span class="font-medium text-stone-900">{{ consent.granted_at|date:"M d, Y" }}</span>
+                        </div>
+                        {% if consent.patient_signature %}
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Signature:</span>
+                            <span class="font-medium text-stone-900">{{ consent.patient_signature }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-stone-900">Are you sure you want to revoke this consent?</h2>
+                    <p class="text-stone-600 mt-2">This action requires staff review and cannot be undone immediately.</p>
+                </div>
+                
+                {% if form.errors %}
+                <div class="bg-red-50 ring-1 ring-red-200 text-red-700 px-5 py-4 rounded-2xl mb-6">
+                    <ul class="text-sm list-disc list-inside">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Reason for Revocation -->
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Reason for Revocation (Optional)</label>
+                        <textarea name="revocation_reason" id="id_revocation_reason" rows="3"
+                                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-stone-900 transition-all resize-none"
+                                  placeholder="Please share why you want to revoke this consent..."></textarea>
+                    </div>
+                    
+                    <!-- Confirmation -->
+                    <div class="p-4 bg-stone-50 rounded-2xl ring-1 ring-stone-200">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" name="confirm_revoke" id="id_confirm_revoke" 
+                                   class="w-5 h-5 mt-0.5 rounded border-stone-300 text-red-600 focus:ring-red-500" required>
+                            <span class="text-sm text-stone-700">
+                                I understand that revoking this consent will be reviewed by staff, and I confirm my intention to revoke.
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                        <a href="{% url 'portal:consents' %}" class="flex-1 px-6 py-3.5 bg-stone-100 text-stone-700 font-semibold rounded-full hover:bg-stone-200 transition-all text-center">
+                            Cancel
+                        </a>
+                        <button type="submit" class="flex-1 px-6 py-3.5 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 transition-all shadow-lg">
+                            Revoke Consent
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Info Note -->
+            <div class="mt-6 p-4 bg-blue-50 rounded-2xl ring-1 ring-blue-200">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-blue-800">What happens next?</p>
+                        <p class="text-xs text-blue-700 mt-1">Your revocation request will be reviewed by our staff. You will be notified once it has been processed.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back Link -->
+            <div class="mt-6 text-center">
+                <a href="{% url 'portal:consents' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-stone-900 font-medium transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Consents
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

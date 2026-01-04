@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">Video Consultation</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto">
+            Connect face-to-face with our expert surgeons from anywhere in the world
+        </p>
+    </div>
+</section>
+
+<!-- Booking Form Section -->
+<section class="py-20 bg-stone-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Form -->
+                <div class="md:col-span-2">
+                    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8">
+                        <div class="flex items-center justify-between mb-8">
+                            <h2 class="text-2xl font-serif font-bold text-stone-900">Book Your Consultation</h2>
+                            <div class="bg-amber-100 text-amber-700 px-4 py-2 rounded-full font-semibold">
+                                {{ consultation_fee }}
+                            </div>
+                        </div>
+                        
+                        <form method="post" class="space-y-8">
+                            {% csrf_token %}
+                            
+                            <!-- Personal Information -->
+                            <div class="pb-8 border-b border-stone-100">
+                                <h3 class="text-lg font-semibold mb-6 flex items-center text-stone-900">
+                                    <span class="w-9 h-9 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
+                                    Personal Information
+                                </h3>
+                                
+                                <div class="grid md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Full Name *</label>
+                                        {{ form.patient_name }}
+                                        {% if form.patient_name.errors %}
+                                        <p class="text-red-500 text-sm mt-1">{{ form.patient_name.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Email *</label>
+                                        {{ form.patient_email }}
+                                        {% if form.patient_email.errors %}
+                                        <p class="text-red-500 text-sm mt-1">{{ form.patient_email.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Phone</label>
+                                        {{ form.patient_phone }}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Country</label>
+                                        {{ form.patient_country }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Scheduling -->
+                            <div class="pb-8 border-b border-stone-100">
+                                <h3 class="text-lg font-semibold mb-6 flex items-center text-stone-900">
+                                    <span class="w-9 h-9 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
+                                    Schedule Your Call
+                                </h3>
+                                
+                                <div class="grid md:grid-cols-3 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Preferred Date *</label>
+                                        {{ form.scheduled_date }}
+                                        {% if form.scheduled_date.errors %}
+                                        <p class="text-red-500 text-sm mt-1">{{ form.scheduled_date.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Preferred Time *</label>
+                                        {{ form.scheduled_time }}
+                                        {% if form.scheduled_time.errors %}
+                                        <p class="text-red-500 text-sm mt-1">{{ form.scheduled_time.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Your Timezone</label>
+                                        {{ form.patient_timezone }}
+                                    </div>
+                                </div>
+                                
+                                <p class="text-sm text-stone-500 mt-4">
+                                    Our team operates from 9 AM to 8 PM PKT. We'll confirm your appointment via email.
+                                </p>
+                            </div>
+                            
+                            <!-- Consultation Details -->
+                            <div class="pb-8 border-b border-stone-100">
+                                <h3 class="text-lg font-semibold mb-6 flex items-center text-stone-900">
+                                    <span class="w-9 h-9 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
+                                    Consultation Details
+                                </h3>
+                                
+                                <div class="space-y-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Procedure of Interest *</label>
+                                        {{ form.procedure_interest }}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Desired Height Gain</label>
+                                        {{ form.desired_height_gain }}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-stone-700 mb-2">Reason for Consultation</label>
+                                        {{ form.reason }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit -->
+                            <div class="pt-4">
+                                <button type="submit" class="w-full inline-flex items-center justify-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    Book Video Consultation
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="md:col-span-1 space-y-6">
+                    <!-- What to Expect -->
+                    <div class="bg-white rounded-2xl ring-1 ring-stone-200 p-6">
+                        <h3 class="font-semibold text-stone-900 mb-4">What to Expect</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">30-minute video consultation</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">One-on-one with our surgeon</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Personalized treatment plan</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">All questions answered</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Requirements -->
+                    <div class="bg-amber-50 rounded-2xl ring-1 ring-amber-200 p-6">
+                        <h3 class="font-semibold text-amber-800 mb-4">Requirements</h3>
+                        <ul class="space-y-2 text-sm text-amber-700">
+                            <li class="flex items-start gap-2">
+                                <span class="text-amber-500">•</span>
+                                Stable internet connection
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-amber-500">•</span>
+                                Working camera & microphone
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-amber-500">•</span>
+                                Quiet, private space
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Help -->
+                    <div class="bg-stone-50 rounded-2xl p-6 text-center">
+                        <p class="text-stone-600 text-sm mb-3">Need help booking?</p>
+                        <a href="{% url 'booking:contact' %}" class="text-amber-700 hover:text-amber-800 font-medium text-sm">Contact us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

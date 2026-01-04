@@ -1,0 +1,36 @@
+# Hills Clinic - Python Dependencies
+
+# Core
+Django>=6.0,<7.0
+wagtail>=7.0,<8.0
+djangorestframework>=3.16,<4.0
+
+# Authentication & Authorization
+django-allauth>=65.0,<66.0
+django-guardian>=3.0,<4.0
+
+# Caching & Background Tasks
+django-redis>=6.0,<7.0
+celery>=5.4,<6.0
+redis>=7.0,<8.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+dj-database-url>=2.0,<3.0
+
+# Static Files & Media
+whitenoise>=6.0,<7.0
+pillow>=12.0,<13.0
+
+# Frontend Integration
+django-htmx>=1.20,<2.0
+
+# Payments
+stripe>=7.0,<8.0
+
+# Utilities
+python-dotenv>=1.0,<2.0
+gunicorn>=23.0,<24.0
+
+# Development
+django-debug-toolbar>=4.0,<5.0

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Notifications - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 py-10 px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-4 mb-4">
+            <a href="{% url 'portal:dashboard' %}" class="text-stone-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div class="w-12 h-12 bg-amber-600/20 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-white">Notifications</h1>
+        <p class="text-stone-300 mt-2">
+            {% if unread_count > 0 %}
+                You have <span class="text-amber-400 font-semibold">{{ unread_count }}</span> unread notification{{ unread_count|pluralize }}
+            {% else %}
+                All caught up! No new notifications.
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="min-h-screen bg-stone-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Actions -->
+        {% if unread_count > 0 %}
+        <div class="flex justify-end mb-6">
+            <a href="{% url 'portal:notifications-mark-all-read' %}" 
+               class="inline-flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-full transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Mark all as read
+            </a>
+        </div>
+        {% endif %}
+        
+        <!-- Notifications List -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            {% if notifications %}
+                <ul class="divide-y divide-stone-100">
+                    {% for notification in notifications %}
+                    <li class="{% if not notification.is_read %}bg-amber-50/50{% endif %}">
+                        <a href="{% url 'portal:notification-read' notification.id %}" 
+                           class="block px-6 py-5 hover:bg-stone-50 transition">
+                            <div class="flex items-start gap-4">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0">
+                                    {% if notification.notification_type == 'appointment_confirmed' or notification.notification_type == 'slot_assigned' %}
+                                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </div>
+                                    {% elif notification.notification_type == 'payment_verified' %}
+                                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
+                                    {% elif notification.notification_type == 'payment_rejected' or notification.notification_type == 'appointment_cancelled' %}
+                                        <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </div>
+                                    {% elif notification.notification_type == 'new_appointment' or notification.notification_type == 'payment_submitted' %}
+                                        <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
+                                    {% else %}
+                                        <div class="w-12 h-12 rounded-2xl bg-stone-100 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-base text-stone-900 {% if not notification.is_read %}font-semibold{% else %}font-medium{% endif %}">
+                                        {{ notification.title }}
+                                    </p>
+                                    <p class="text-sm text-stone-600 mt-1 line-clamp-2">
+                                        {{ notification.message }}
+                                    </p>
+                                    <p class="text-xs text-stone-400 mt-2">
+                                        {{ notification.created_at|timesince }} ago
+                                    </p>
+                                </div>
+                                
+                                <!-- Unread indicator -->
+                                {% if not notification.is_read %}
+                                <div class="flex-shrink-0">
+                                    <span class="w-3 h-3 bg-amber-500 rounded-full inline-block shadow-lg shadow-amber-500/50"></span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <div class="px-6 py-4 border-t border-stone-100 flex justify-center gap-3">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" 
+                       class="px-4 py-2 text-sm text-stone-700 bg-stone-100 rounded-full hover:bg-stone-200 transition-all font-medium">
+                        ← Previous
+                    </a>
+                    {% endif %}
+                    
+                    <span class="px-4 py-2 text-sm text-stone-600">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                    
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" 
+                       class="px-4 py-2 text-sm text-stone-700 bg-stone-100 rounded-full hover:bg-stone-200 transition-all font-medium">
+                        Next →
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="px-6 py-16 text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-stone-900">No notifications</h3>
+                    <p class="mt-2 text-stone-500">You'll see notifications here when there's activity on your account.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Back to Portal -->
+        <div class="mt-8 text-center">
+            <a href="{% url 'portal:dashboard' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-stone-900 font-medium transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

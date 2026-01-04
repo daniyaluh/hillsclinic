@@ -1,0 +1,12 @@
+{% load wagtailcore_tags %}
+{% if value.page or value.external_url %}
+<div class="my-6">
+    <a href="{% if value.page %}{% pageurl value.page %}{% else %}{{ value.external_url }}{% endif %}" 
+       class="inline-block px-6 py-3 rounded-lg font-semibold transition-all
+              {% if value.button_style == 'primary' %}bg-blue-600 text-white hover:bg-blue-700
+              {% elif value.button_style == 'secondary' %}bg-green-600 text-white hover:bg-green-700
+              {% else %}border-2 border-blue-600 text-blue-600 hover:bg-blue-50{% endif %}">
+        {{ value.text }}
+    </a>
+</div>
+{% endif %}

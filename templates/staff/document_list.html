@@ -1,0 +1,237 @@
+{% extends "staff/base_staff.html" %}
+{% load static %}
+
+{% block title %}Document Management - Staff Portal{% endblock %}
+
+{% block staff_content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Total Documents</p>
+                <p class="text-2xl font-bold text-stone-900">{{ stats.total }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <a href="?verified=no" class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6 hover:shadow-md transition {% if stats.unverified > 0 %}ring-2 ring-amber-400{% endif %}">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Pending Review</p>
+                <p class="text-2xl font-bold text-amber-600">{{ stats.unverified }}</p>
+            </div>
+        </div>
+    </a>
+    
+    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Verified</p>
+                <p class="text-2xl font-bold text-emerald-600">{{ stats.verified }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-stone-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Patients</p>
+                <p class="text-2xl font-bold text-stone-900">{{ stats.patients_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search & Filter -->
+<div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6 mb-6">
+    <form method="get" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-stone-700 mb-2">Search Patient</label>
+            <input type="text" name="patient" value="{{ filters.patient }}" 
+                   placeholder="Name or email..." 
+                   class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-stone-700 mb-2">Verification</label>
+            <select name="verified" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                <option value="">All Documents</option>
+                <option value="no" {% if filters.verified == 'no' %}selected{% endif %}>Pending Review</option>
+                <option value="yes" {% if filters.verified == 'yes' %}selected{% endif %}>Verified</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-stone-700 mb-2">Document Type</label>
+            <select name="type" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                <option value="">All Types</option>
+                {% for value, label in type_choices %}
+                <option value="{{ value }}" {% if filters.type == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="flex items-end gap-2">
+            <button type="submit" class="flex-1 px-5 py-3 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all">
+                Search
+            </button>
+            <a href="{% url 'staff:document_list' %}" class="px-4 py-3 bg-stone-100 text-stone-700 font-semibold rounded-full hover:bg-stone-200 transition-all">
+                Clear
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Patient List -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-semibold text-stone-900">Patients with Documents</h2>
+                </div>
+            </div>
+            
+            <div class="divide-y divide-stone-100">
+                {% for patient in patients %}
+                <a href="{% url 'staff:patient_documents' patient.id %}" class="block px-6 py-4 hover:bg-stone-50 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-amber-100 to-amber-200 rounded-xl flex items-center justify-center text-amber-700 font-bold">
+                                {{ patient.full_name|default:patient.user.email|slice:":2"|upper }}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-stone-900">{{ patient.full_name|default:"Name not provided" }}</p>
+                                <p class="text-sm text-stone-500">{{ patient.user.email }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-stone-900">{{ patient.doc_count }} document{{ patient.doc_count|pluralize }}</p>
+                                {% if patient.unverified_count > 0 %}
+                                <p class="text-xs text-amber-600 font-medium">{{ patient.unverified_count }} pending</p>
+                                {% else %}
+                                <p class="text-xs text-emerald-600">All verified</p>
+                                {% endif %}
+                            </div>
+                            <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="px-6 py-16 text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="font-medium text-stone-700 mb-1">No documents found</p>
+                    <p class="text-sm text-stone-500">No patients have uploaded documents yet</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if patients.has_other_pages %}
+            <div class="px-6 py-4 border-t border-stone-100 flex items-center justify-between">
+                <p class="text-sm text-stone-500">Showing {{ patients.start_index }} - {{ patients.end_index }} of {{ patients.paginator.count }}</p>
+                <div class="flex gap-2">
+                    {% if patients.has_previous %}
+                    <a href="?page={{ patients.previous_page_number }}&patient={{ filters.patient }}" class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-sm font-medium hover:bg-stone-50 transition-all">← Previous</a>
+                    {% endif %}
+                    {% if patients.has_next %}
+                    <a href="?page={{ patients.next_page_number }}&patient={{ filters.patient }}" class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-sm font-medium hover:bg-stone-50 transition-all">Next →</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Recent Documents Sidebar -->
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-semibold text-stone-900">Recent Uploads</h2>
+                </div>
+            </div>
+            
+            <div class="divide-y divide-stone-100">
+                {% for doc in recent_documents %}
+                <a href="{% url 'staff:document_detail' doc.id %}" class="block px-6 py-4 hover:bg-stone-50 transition-colors">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 
+                            {% if 'image' in doc.mime_type %}bg-blue-100{% elif 'pdf' in doc.mime_type %}bg-red-100{% else %}bg-stone-100{% endif %}">
+                            {% if 'image' in doc.mime_type %}
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            {% elif 'pdf' in doc.mime_type %}
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                            {% else %}
+                            <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-stone-900 truncate">{{ doc.title|default:doc.get_upload_type_display }}</p>
+                            <p class="text-xs text-stone-500 truncate">{{ doc.patient.full_name|default:doc.patient.user.email }}</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                {% if doc.is_verified %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">✓ Verified</span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Pending</span>
+                                {% endif %}
+                                <span class="text-xs text-stone-400">{{ doc.uploaded_at|date:"M d" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="px-6 py-12 text-center">
+                    <p class="text-sm text-stone-500">No recent documents</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

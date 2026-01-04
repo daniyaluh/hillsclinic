@@ -1,0 +1,190 @@
+{% extends "staff/base_staff.html" %}
+{% load i18n %}
+
+{% block title %}Payments - Staff Portal{% endblock %}
+
+{% block staff_content %}
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Verified Payments</p>
+                <p class="text-3xl font-bold text-emerald-600">{{ total_verified }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-stone-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Total Revenue</p>
+                <p class="text-3xl font-bold text-stone-900">${{ total_revenue|floatformat:2 }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-stone-500 font-medium">Pending Payments</p>
+                <p class="text-3xl font-bold text-amber-600">{{ pending_payments }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+    <div class="px-6 py-5 border-b border-stone-100">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-semibold text-stone-900">All Payments</h2>
+            </div>
+            
+            <form method="get" class="flex flex-wrap items-center gap-3">
+                <select name="status" class="px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="submitted" {% if selected_status == 'submitted' %}selected{% endif %}>Submitted</option>
+                    <option value="verified" {% if selected_status == 'verified' %}selected{% endif %}>Verified</option>
+                    <option value="failed" {% if selected_status == 'failed' %}selected{% endif %}>Failed</option>
+                </select>
+                
+                <select name="method" class="px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                    <option value="">All Methods</option>
+                    <option value="easypaisa" {% if selected_method == 'easypaisa' %}selected{% endif %}>EasyPaisa</option>
+                    <option value="jazzcash" {% if selected_method == 'jazzcash' %}selected{% endif %}>JazzCash</option>
+                    <option value="bank" {% if selected_method == 'bank' %}selected{% endif %}>Bank Transfer</option>
+                    <option value="stripe" {% if selected_method == 'stripe' %}selected{% endif %}>Stripe</option>
+                </select>
+                
+                <button type="submit" class="px-5 py-2.5 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all shadow-lg">
+                    Filter
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-stone-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Appointment</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Patient</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Method</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Amount</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Status</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Date</th>
+                    <th class="px-6 py-4 text-right text-xs font-semibold text-stone-500 uppercase tracking-wide">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100">
+                {% for apt in appointments %}
+                <tr class="hover:bg-stone-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <a href="{% url 'staff:appointment_detail' apt.id %}" class="text-amber-600 hover:underline">
+                            <code class="text-sm bg-stone-100 px-2.5 py-1 rounded-lg font-semibold">#{{ apt.id }}</code>
+                        </a>
+                        <p class="text-xs text-stone-500 mt-1">{{ apt.get_appointment_type_display }}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="{% url 'staff:patient_detail' apt.patient.id %}" class="hover:underline">
+                            <p class="font-semibold text-stone-900">{{ apt.patient.user.get_full_name|default:apt.patient.user.email }}</p>
+                        </a>
+                        <p class="text-sm text-stone-500">{{ apt.patient.user.email }}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if apt.payment_method %}
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold 
+                            {% if apt.payment_method == 'easypaisa' %}bg-emerald-100 text-emerald-700
+                            {% elif apt.payment_method == 'jazzcash' %}bg-red-100 text-red-700
+                            {% elif apt.payment_method == 'bank' %}bg-blue-100 text-blue-700
+                            {% else %}bg-purple-100 text-purple-700{% endif %}">
+                            {{ apt.get_payment_method_display }}
+                        </span>
+                        {% else %}
+                        <span class="text-stone-400">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="font-bold text-stone-900">${{ apt.consultation_fee|floatformat:2 }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold 
+                            {% if apt.payment_status == 'verified' %}bg-emerald-100 text-emerald-700
+                            {% elif apt.payment_status == 'submitted' %}bg-amber-100 text-amber-700
+                            {% elif apt.payment_status == 'pending' %}bg-orange-100 text-orange-700
+                            {% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ apt.get_payment_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-stone-500">
+                        {% if apt.payment_confirmed_at %}
+                        {{ apt.payment_confirmed_at|date:"M d, Y" }}
+                        {% else %}
+                        {{ apt.created_at|date:"M d, Y" }}
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <a href="{% url 'staff:appointment_detail' apt.id %}" 
+                           class="inline-flex items-center gap-1 px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-stone-200 transition-all">
+                            View
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-16 text-center">
+                        <div class="w-16 h-16 bg-stone-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            </svg>
+                        </div>
+                        <p class="text-stone-500 font-medium">No payments found</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if appointments.has_other_pages %}
+    <div class="px-6 py-4 border-t border-stone-100 flex items-center justify-between">
+        <p class="text-sm text-stone-500">
+            Showing {{ appointments.start_index }} to {{ appointments.end_index }} of {{ appointments.paginator.count }}
+        </p>
+        <div class="flex gap-2">
+            {% if appointments.has_previous %}
+            <a href="?page={{ appointments.previous_page_number }}&status={{ selected_status }}&method={{ selected_method }}" 
+               class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-sm font-medium hover:bg-stone-50 transition-all">← Previous</a>
+            {% endif %}
+            {% if appointments.has_next %}
+            <a href="?page={{ appointments.next_page_number }}&status={{ selected_status }}&method={{ selected_method }}" 
+               class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-sm font-medium hover:bg-stone-50 transition-all">Next →</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

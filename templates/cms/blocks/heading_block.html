@@ -1,0 +1,4 @@
+{% load wagtailcore_tags %}
+<{{ value.size }} class="font-bold {% if value.size == 'h2' %}text-3xl md:text-4xl{% elif value.size == 'h3' %}text-2xl md:text-3xl{% else %}text-xl md:text-2xl{% endif %} mb-4">
+    {{ value.heading_text }}
+</{{ value.size }}>

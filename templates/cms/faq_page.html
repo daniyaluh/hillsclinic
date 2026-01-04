@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block title %}{{ page.title }} - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">{{ page.title }}</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto">Find answers to commonly asked questions about limb lengthening surgery</p>
+    </div>
+</section>
+
+<!-- Search Bar -->
+<section class="bg-white py-8 border-b border-stone-200 sticky top-0 z-10 shadow-sm">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+            <div class="relative">
+                <input type="text" 
+                       id="faq-search"
+                       placeholder="Search FAQs..." 
+                       class="w-full pl-12 pr-4 py-4 border border-stone-300 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg bg-stone-50"
+                       x-data
+                       @input="filterFAQs($event.target.value)">
+                <svg class="w-6 h-6 text-stone-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links -->
+<section class="py-8 bg-stone-50 border-b border-stone-200">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="#general" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
+                General
+            </a>
+            <a href="#procedures" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
+                Procedures
+            </a>
+            <a href="#cost" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
+                Cost & Payment
+            </a>
+            <a href="#recovery" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
+                Recovery
+            </a>
+            <a href="#international" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
+                International Patients
+            </a>
+            <a href="#risks" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
+                Risks & Safety
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction -->
+{% if page.introduction %}
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="prose prose-lg prose-stone max-w-3xl mx-auto text-center">
+            {{ page.introduction|richtext }}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- FAQ Sections -->
+<section class="py-16 bg-white" x-data="{ openItem: null }">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto space-y-12">
+            
+            <!-- General Questions -->
+            <div id="general" class="scroll-mt-32">
+                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
+                    <span class="w-10 h-10 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    General Questions
+                </h2>
+                <div class="space-y-4">
+                    {% for item in page.faq_items.all %}
+                    {% if item.category == "general" %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ item.question|lower }}">
+                        <button @click="openItem = openItem === '{{ item.id }}' ? null : '{{ item.id }}'" 
+                                class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition">
+                            <span class="font-medium text-stone-900 pr-4">{{ item.question }}</span>
+                            <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform" 
+                                 :class="{ 'rotate-180': openItem === '{{ item.id }}' }" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openItem === '{{ item.id }}'" 
+                             x-collapse
+                             class="px-6 pb-4 text-stone-600">
+                            {{ item.answer|richtext }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Procedures -->
+            <div id="procedures" class="scroll-mt-32">
+                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
+                    <span class="w-10 h-10 bg-stone-100 text-stone-700 rounded-xl flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                    </span>
+                    Procedures
+                </h2>
+                <div class="space-y-4">
+                    {% for item in page.faq_items.all %}
+                    {% if item.category == "procedures" %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ item.question|lower }}">
+                        <button @click="openItem = openItem === '{{ item.id }}' ? null : '{{ item.id }}'" 
+                                class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition">
+                            <span class="font-medium text-stone-900 pr-4">{{ item.question }}</span>
+                            <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform" 
+                                 :class="{ 'rotate-180': openItem === '{{ item.id }}' }" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openItem === '{{ item.id }}'" 
+                             x-collapse
+                             class="px-6 pb-4 text-stone-600">
+                            {{ item.answer|richtext }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Cost & Payment -->
+            <div id="cost" class="scroll-mt-32">
+                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
+                    <span class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    Cost & Payment
+                </h2>
+                <div class="space-y-4">
+                    {% for item in page.faq_items.all %}
+                    {% if item.category == "cost" %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ item.question|lower }}">
+                        <button @click="openItem = openItem === '{{ item.id }}' ? null : '{{ item.id }}'" 
+                                class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition">
+                            <span class="font-medium text-stone-900 pr-4">{{ item.question }}</span>
+                            <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform" 
+                                 :class="{ 'rotate-180': openItem === '{{ item.id }}' }" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openItem === '{{ item.id }}'" 
+                             x-collapse
+                             class="px-6 pb-4 text-stone-600">
+                            {{ item.answer|richtext }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Recovery -->
+            <div id="recovery" class="scroll-mt-32">
+                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
+                    <span class="w-10 h-10 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                    </span>
+                    Recovery
+                </h2>
+                <div class="space-y-4">
+                    {% for item in page.faq_items.all %}
+                    {% if item.category == "recovery" %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ item.question|lower }}">
+                        <button @click="openItem = openItem === '{{ item.id }}' ? null : '{{ item.id }}'" 
+                                class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition">
+                            <span class="font-medium text-stone-900 pr-4">{{ item.question }}</span>
+                            <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform" 
+                                 :class="{ 'rotate-180': openItem === '{{ item.id }}' }" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openItem === '{{ item.id }}'" 
+                             x-collapse
+                             class="px-6 pb-4 text-stone-600">
+                            {{ item.answer|richtext }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- International Patients -->
+            <div id="international" class="scroll-mt-32">
+                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
+                    <span class="w-10 h-10 bg-stone-100 text-stone-700 rounded-xl flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    International Patients
+                </h2>
+                <div class="space-y-4">
+                    {% for item in page.faq_items.all %}
+                    {% if item.category == "international" %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ item.question|lower }}">
+                        <button @click="openItem = openItem === '{{ item.id }}' ? null : '{{ item.id }}'" 
+                                class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition">
+                            <span class="font-medium text-stone-900 pr-4">{{ item.question }}</span>
+                            <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform" 
+                                 :class="{ 'rotate-180': openItem === '{{ item.id }}' }" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openItem === '{{ item.id }}'" 
+                             x-collapse
+                             class="px-6 pb-4 text-stone-600">
+                            {{ item.answer|richtext }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Risks & Safety -->
+            <div id="risks" class="scroll-mt-32">
+                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
+                    <span class="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </span>
+                    Risks & Safety
+                </h2>
+                <div class="space-y-4">
+                    {% for item in page.faq_items.all %}
+                    {% if item.category == "risks" %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ item.question|lower }}">
+                        <button @click="openItem = openItem === '{{ item.id }}' ? null : '{{ item.id }}'" 
+                                class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition">
+                            <span class="font-medium text-stone-900 pr-4">{{ item.question }}</span>
+                            <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform" 
+                                 :class="{ 'rotate-180': openItem === '{{ item.id }}' }" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openItem === '{{ item.id }}'" 
+                             x-collapse
+                             class="px-6 pb-4 text-stone-600">
+                            {{ item.answer|richtext }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Still Have Questions CTA -->
+<section class="py-16 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-serif font-bold mb-4">Still Have Questions?</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Schedule a consultation to discuss your specific situation with our team.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'booking:consultation' %}" class="inline-flex items-center justify-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                Book Consultation
+            </a>
+            <a href="{% url 'booking:contact' %}" class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-stone-900 transition-all">
+                Contact Us
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+function filterFAQs(query) {
+    const items = document.querySelectorAll('.faq-item');
+    query = query.toLowerCase();
+    
+    items.forEach(item => {
+        const question = item.dataset.question;
+        if (question.includes(query) || query === '') {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

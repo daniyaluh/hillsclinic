@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign Out" %} - Hills Clinic{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-br from-stone-100 via-stone-50 to-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-md mx-auto">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <a href="/" class="inline-block">
+                    <span class="text-3xl font-serif font-bold text-stone-900">Hills Clinic</span>
+                </a>
+            </div>
+            
+            <!-- Logout Confirmation Card -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 shadow-sm p-8">
+                <div class="text-center">
+                    <!-- Warning Icon -->
+                    <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </div>
+                    
+                    <h1 class="text-2xl font-serif font-bold text-stone-900 mb-2">{% trans "Sign Out" %}</h1>
+                    <p class="text-stone-600 mb-6">{% trans "Are you sure you want to sign out of your account?" %}</p>
+                    
+                    <!-- Logout Form -->
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        <div class="flex flex-col gap-3">
+                            <button type="submit" class="w-full py-3 px-6 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 transition-all shadow-lg shadow-red-600/25">
+                                {% trans "Yes, Sign Out" %}
+                            </button>
+                            <a href="javascript:history.back()" class="w-full py-3 px-6 bg-white text-stone-700 font-semibold rounded-full border border-stone-300 hover:border-stone-400 transition-colors text-center">
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Security Note -->
+            <p class="text-center text-sm text-stone-500 mt-6">
+                {% trans "For your security, always sign out when using a shared computer." %}
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

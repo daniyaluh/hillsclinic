@@ -1,0 +1,8 @@
+{% load wagtailimages_tags %}
+<figure class="my-8">
+    {% image value.image fill-1200x600 as img %}
+    <img src="{{ img.url }}" alt="{{ value.image.title }}" class="w-full rounded-lg shadow-lg" loading="lazy">
+    {% if value.caption %}
+    <figcaption class="text-sm text-gray-600 mt-2 text-center">{{ value.caption }}</figcaption>
+    {% endif %}
+</figure>
