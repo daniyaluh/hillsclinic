@@ -367,11 +367,10 @@ LOGGING = {
 # =============================================================================
 # DJANGO TASKS (for Wagtail search indexing)
 # =============================================================================
-# DummyBackend avoids a bug with Python 3.12 typing system.
-# Search indexing still works, just synchronously during save.
+# Custom backend to avoid Python 3.12 typing bug in django_tasks
 TASKS = {
     "default": {
-        "BACKEND": "django_tasks.backends.dummy.DummyBackend"
+        "BACKEND": "hillsclinic.tasks_backend.SafeDummyBackend"
     }
 }
 
