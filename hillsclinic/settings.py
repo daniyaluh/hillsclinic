@@ -365,6 +365,17 @@ LOGGING = {
 }
 
 # =============================================================================
+# DJANGO TASKS (for Wagtail search indexing)
+# =============================================================================
+# DummyBackend avoids a bug with Python 3.12 typing system.
+# Search indexing still works, just synchronously during save.
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks.backends.dummy.DummyBackend"
+    }
+}
+
+# =============================================================================
 # CELERY (for background tasks)
 # =============================================================================
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
