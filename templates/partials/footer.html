@@ -1,5 +1,5 @@
 <!-- Footer - Elegant Design -->
-{% load i18n %}
+{% load i18n wagtailimages_tags %}
 <footer class="bg-stone-900 text-stone-300">
     <!-- Main Footer -->
     <div class="container mx-auto px-4 py-16 lg:py-20">
@@ -7,7 +7,12 @@
             <!-- Brand & About -->
             <div class="lg:col-span-1">
                 <div class="flex items-center gap-3 mb-6">
-                    <img src="/media/logo.png" alt="Hills Clinic Logo" class="h-12 w-auto">
+                    {% if settings.core.SiteSettings.logo %}
+                        {% image settings.core.SiteSettings.logo height-48 as footer_logo %}
+                        <img src="{{ footer_logo.url }}" alt="Hills Clinic Logo" class="h-12 w-auto">
+                    {% else %}
+                        <img src="/static/images/logo.png" alt="Hills Clinic Logo" class="h-12 w-auto">
+                    {% endif %}
                     <span class="font-serif font-bold text-2xl text-white">Hills Clinic</span>
                 </div>
                 <p class="text-stone-400 leading-relaxed mb-6">

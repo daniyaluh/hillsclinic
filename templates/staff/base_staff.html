@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n wagtailimages_tags %}
 
 {% block content %}
 <div class="min-h-screen flex" x-data="{ sidebarOpen: false }">
@@ -29,7 +29,12 @@
             <!-- Logo & Close -->
             <div class="px-6 py-5 border-b border-stone-800 flex items-center justify-between">
                 <a href="{% url 'staff:dashboard' %}" class="flex items-center gap-3">
-                    <img src="/media/logo.png" alt="Hills Clinic Logo" class="h-10 w-auto">
+                    {% if settings.core.SiteSettings.logo %}
+                        {% image settings.core.SiteSettings.logo height-40 as staff_logo %}
+                        <img src="{{ staff_logo.url }}" alt="Hills Clinic Logo" class="h-10 w-auto">
+                    {% else %}
+                        <img src="{% static 'images/logo.png' %}" alt="Hills Clinic Logo" class="h-10 w-auto">
+                    {% endif %}
                     <div>
                         <span class="font-serif font-bold text-white text-lg">Hills Clinic</span>
                         <p class="text-xs text-stone-500">Staff Portal</p>
@@ -147,7 +152,12 @@
                     </button>
                     <!-- Logo in header -->
                     <a href="{% url 'staff:dashboard' %}" class="flex items-center gap-2">
-                        <img src="/media/logo.png" alt="Hills Clinic Logo" class="h-8 w-auto">
+                        {% if settings.core.SiteSettings.logo %}
+                            {% image settings.core.SiteSettings.logo height-32 as header_staff_logo %}
+                            <img src="{{ header_staff_logo.url }}" alt="Hills Clinic Logo" class="h-8 w-auto">
+                        {% else %}
+                            <img src="{% static 'images/logo.png' %}" alt="Hills Clinic Logo" class="h-8 w-auto">
+                        {% endif %}
                         <span class="font-serif font-bold text-stone-900 hidden sm:inline">Staff Portal</span>
                     </a>
                     <div class="hidden md:block pl-4 border-l border-stone-200">
