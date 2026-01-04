@@ -9,7 +9,7 @@ services:
     name: hillsclinic
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py setup_homepage && python manage.py setup_doctors && python manage.py create_superuser_if_not_exists"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py set_site_domain && python manage.py setup_homepage && python manage.py setup_doctors && python manage.py create_superuser_if_not_exists"
     startCommand: "gunicorn hillsclinic.wsgi:application"
     envVars:
       - key: DATABASE_URL
@@ -26,6 +26,8 @@ services:
         value: "https://hillsclinic.onrender.com"
       - key: PYTHON_VERSION
         value: "3.12.0"
+      - key: SITE_DOMAIN
+        value: "hillsclinic.onrender.com"
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
@@ -35,4 +37,17 @@ services:
       - key: DJANGO_SUPERUSER_EMAIL
         sync: false
       - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
+      # Email settings - set these in Render dashboard
+      - key: EMAIL_BACKEND
+        sync: false
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
         sync: false

@@ -190,7 +190,7 @@ ACCOUNT_FORMS = {
 }
 LOGIN_REDIRECT_URL = "/login-redirect/"  # Smart redirect: staff → /staff/, patients → /portal/
 LOGOUT_REDIRECT_URL = "/"
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = os.getenv("ACCOUNT_DEFAULT_HTTP_PROTOCOL", "http")
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https" if not DEBUG else "http"
 
 # Session settings for "Remember Me"
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days when "Remember Me" is checked
