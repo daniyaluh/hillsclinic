@@ -2,6 +2,7 @@
 Django management command to set up initial Wagtail site and homepage.
 """
 from django.core.management.base import BaseCommand
+from django.db.models.signals import post_save
 from wagtail.models import Page, Site, Locale
 from cms.models import HomePage
 
@@ -10,6 +11,14 @@ class Command(BaseCommand):
     help = 'Creates initial Wagtail homepage and site configuration'
 
     def handle(self, *args, **options):
+        # Disconnect modelsearch signal to avoid Python 3.12 bug
+        try:
+            from modelsearch.signal_handlers import post_save_signal_handler
+            post_save.disconnect(post_save_signal_handler)
+            self.stdout.write("Disconnected modelsearch signals")
+        except Exception:
+            pass
+        
         # Fix the page tree first (in case previous operations corrupted it)
         self.stdout.write("Fixing page tree structure...")
         Page.fix_tree()
