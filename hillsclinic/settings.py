@@ -190,6 +190,7 @@ ACCOUNT_SESSION_REMEMBER = None  # None = show checkbox, True = always remember,
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CustomSignupForm",
 }
+ACCOUNT_ADAPTER = "accounts.adapter.CustomAccountAdapter"
 LOGIN_REDIRECT_URL = "/login-redirect/"  # Smart redirect: staff → /staff/, patients → /portal/
 ACCOUNT_SIGNUP_REDIRECT_URL = "/portal/"  # Go directly to portal after signup
 LOGOUT_REDIRECT_URL = "/"
