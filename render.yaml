@@ -9,7 +9,7 @@ services:
     name: hillsclinic
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && python manage.py setup_homepage"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py setup_homepage"
     startCommand: "gunicorn hillsclinic.wsgi:application"
     envVars:
       - key: DATABASE_URL
