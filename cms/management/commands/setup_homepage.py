@@ -32,6 +32,10 @@ class Command(BaseCommand):
         if homepage:
             self.stdout.write(f"Homepage already exists: {homepage.title}")
         else:
+            # First, delete all sites so we can delete the welcome page
+            self.stdout.write("Removing existing sites...")
+            Site.objects.all().delete()
+            
             # Delete existing default pages using raw SQL to avoid signal issues
             self.stdout.write("Removing default Wagtail welcome page...")
             with connection.cursor() as cursor:
