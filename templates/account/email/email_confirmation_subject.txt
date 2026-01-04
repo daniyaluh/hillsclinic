@@ -1,1 +1,1 @@
-Please Confirm Your Email - Hills Clinic
+{% load i18n %}{% autoescape off %}Please Confirm Your Email - Hills Clinic{% endautoescape %}
