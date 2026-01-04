@@ -32,6 +32,7 @@ stripe>=7.0,<8.0
 python-dotenv>=1.0,<2.0
 gunicorn>=23.0,<24.0
 pytz
+icalendar>=5.0,<6.0
 
 # Development
 django-debug-toolbar>=4.0,<5.0
