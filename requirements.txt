@@ -31,6 +31,7 @@ stripe>=7.0,<8.0
 # Utilities
 python-dotenv>=1.0,<2.0
 gunicorn>=23.0,<24.0
+pytz
 
 # Development
 django-debug-toolbar>=4.0,<5.0
