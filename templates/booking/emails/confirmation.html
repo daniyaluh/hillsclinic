@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Hills Clinic</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fafaf9;">
+    <div style="background: linear-gradient(135deg, #1c1917 0%, #44403c 100%); padding: 35px 20px; text-align: center; border-radius: 16px 16px 0 0;">
+        <h1 style="color: white; margin: 0; font-size: 28px; font-family: Georgia, serif;">Hills Clinic</h1>
+        <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0;">Height Enhancement Surgery Center</p>
+    </div>
+    
+    <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 80px; height: 80px; background: #fef3c7; border-radius: 50%; margin: 0 auto 20px; display: inline-flex; align-items: center; justify-content: center;">
+                <span style="font-size: 40px;">📋</span>
+            </div>
+            <h2 style="color: #d97706; margin: 0; font-size: 24px; font-family: Georgia, serif;">Booking Request Received</h2>
+        </div>
+        
+        <p style="font-size: 16px;">Dear {{ patient_name }},</p>
+        
+        <p style="font-size: 16px;">Thank you for booking a consultation with Hills Clinic. We have received your request and it's being processed.</p>
+        
+        <!-- Payment Required Box -->
+        <div style="background: #fffbeb; border: 2px solid #fcd34d; border-radius: 12px; padding: 20px; margin: 25px 0;">
+            <h3 style="margin: 0 0 10px; color: #92400e;">⚠️ Payment Required Within 48 Hours</h3>
+            <p style="margin: 0 0 15px; color: #78350f;">To confirm your appointment, please complete the $10 consultation fee payment before:</p>
+            <p style="margin: 0; font-size: 18px; font-weight: bold; color: #b45309; text-align: center;">{{ payment_deadline|date:"F d, Y g:i A" }}</p>
+        </div>
+        
+        <!-- Booking Details -->
+        <div style="background: #fafaf9; border: 2px solid #e7e5e4; border-radius: 12px; padding: 20px; margin: 25px 0;">
+            <h3 style="margin: 0 0 15px; color: #1c1917;">📅 Booking Details</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 8px 0; color: #78716c;">Reference:</td>
+                    <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #1c1917;">#{{ appointment_id }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #78716c;">Type:</td>
+                    <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #1c1917;">{{ appointment_type }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #78716c;">Consultation Method:</td>
+                    <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #1c1917;">{{ consultation_method }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #78716c;">Fee:</td>
+                    <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #d97706;">$10.00 USD</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{{ payment_url }}" style="display: inline-block; padding: 14px 40px; background-color: #d97706; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">Pay Now</a>
+        </div>
+        
+        <p style="font-size: 14px; color: #78716c; text-align: center;">After payment verification, you'll receive a confirmation email with your time slot.</p>
+        
+        <p style="font-size: 16px; margin-top: 30px;">Best regards,<br><strong>Hills Clinic Team</strong></p>
+    </div>
+    
+    <div style="text-align: center; padding: 25px; color: #a8a29e; font-size: 14px;">
+        <p>Hills Clinic | Height Enhancement Surgery<br>
+        <a href="https://hillsclinic.com" style="color: #d97706; text-decoration: none;">hillsclinic.com</a></p>
+    </div>
+</body>
+</html>

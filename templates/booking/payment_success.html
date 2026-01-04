@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful - Hills Clinic{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-b from-emerald-50 to-white py-20">
+    <div class="container mx-auto px-4">
+        <div class="max-w-lg mx-auto text-center">
+            <!-- Success Icon -->
+            <div class="mb-8">
+                <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto ring-4 ring-emerald-50">
+                    <svg class="w-12 h-12 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Payment Successful!</h1>
+            <p class="text-xl text-stone-600 mb-8">Your consultation fee has been received. We'll confirm your appointment shortly.</p>
+            
+            <!-- Confirmation Card -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8 mb-8 text-left">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="font-semibold text-lg text-stone-900">What Happens Next?</h2>
+                </div>
+                
+                <ol class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                        <div>
+                            <p class="font-medium text-stone-900">Payment Verification</p>
+                            <p class="text-sm text-stone-500">Our team will verify your payment (usually within 24 hours)</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-stone-400 text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                        <div>
+                            <p class="font-medium text-stone-900">Time Slot Assignment</p>
+                            <p class="text-sm text-stone-500">The doctor will assign a suitable time slot for your consultation</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-stone-400 text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                        <div>
+                            <p class="font-medium text-stone-900">Confirmation Email</p>
+                            <p class="text-sm text-stone-500">You'll receive an email with your confirmed appointment details</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            
+            <!-- Email Notification -->
+            <div class="bg-amber-50 rounded-2xl ring-1 ring-amber-200 p-6 mb-8">
+                <div class="flex items-center justify-center gap-2 text-amber-800">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="font-medium">Check your email for a receipt</span>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'portal:dashboard' %}" class="inline-flex items-center justify-center px-8 py-3 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                    Go to Dashboard
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+                <a href="/" class="inline-flex items-center justify-center px-6 py-3 border-2 border-stone-300 text-stone-700 font-medium rounded-full hover:border-stone-400 transition-colors">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

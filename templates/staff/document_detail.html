@@ -1,0 +1,138 @@
+{% extends "staff/base_staff.html" %}
+{% load static %}
+
+{% block title %}{{ document.title }} - Staff Portal{% endblock %}
+
+{% block staff_content %}
+<!-- Back Link -->
+<div class="mb-6">
+    <a href="{% url 'staff:patient_documents' document.patient.id %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-amber-700 text-sm font-medium transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Patient Documents
+    </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Document Preview -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-semibold text-stone-900">Document Preview</h2>
+                </div>
+                <a href="{{ document.file.url }}" target="_blank" class="px-4 py-2 bg-stone-100 text-stone-700 font-medium rounded-full hover:bg-stone-200 transition-all text-sm">
+                    Open Full Size
+                </a>
+            </div>
+            
+            <div class="p-6">
+                {% if 'image' in document.mime_type %}
+                <img src="{{ document.file.url }}" alt="{{ document.title }}" class="max-w-full max-h-[600px] mx-auto rounded-2xl shadow-lg">
+                {% elif 'pdf' in document.mime_type %}
+                <iframe src="{{ document.file.url }}" class="w-full h-[600px] rounded-2xl border border-stone-200"></iframe>
+                {% else %}
+                <div class="text-center py-16">
+                    <div class="w-20 h-20 bg-stone-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+                        <svg class="w-10 h-10 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-stone-700 font-medium mb-2">Preview not available</p>
+                    <a href="{{ document.file.url }}" target="_blank" class="text-amber-600 hover:underline">Download file to view</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="lg:col-span-1 space-y-6">
+        <!-- Document Info -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Document Information</h3>
+            
+            <div class="space-y-4">
+                <div class="flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Title</span>
+                    <span class="text-sm font-medium text-stone-900">{{ document.title }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Type</span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-stone-100 text-stone-700">{{ document.get_upload_type_display }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Uploaded</span>
+                    <span class="text-sm text-stone-900">{{ document.uploaded_at|date:"M d, Y H:i" }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Status</span>
+                    {% if document.is_verified %}
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">✓ Verified</span>
+                    {% else %}
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Pending</span>
+                    {% endif %}
+                </div>
+                {% if document.verified_by %}
+                <div class="flex justify-between py-2">
+                    <span class="text-sm text-stone-500">Verified By</span>
+                    <span class="text-sm text-stone-900">{{ document.verified_by.email }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Patient Info -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Patient</h3>
+            
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-100 to-amber-200 rounded-xl flex items-center justify-center">
+                    <span class="text-amber-700 font-bold">{{ document.patient.full_name|default:document.patient.user.email|slice:":2"|upper }}</span>
+                </div>
+                <div>
+                    <a href="{% url 'staff:patient_detail' document.patient.id %}" class="font-semibold text-stone-900 hover:text-amber-700 transition-colors">{{ document.patient.full_name|default:"No name" }}</a>
+                    <p class="text-sm text-stone-500">{{ document.patient.user.email }}</p>
+                </div>
+            </div>
+            
+            <a href="{% url 'staff:patient_detail' document.patient.id %}" class="block w-full px-4 py-2.5 bg-stone-100 text-stone-700 font-medium rounded-full text-center hover:bg-stone-200 transition-all text-sm">
+                View Full Profile
+            </a>
+        </div>
+        
+        <!-- Actions -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Actions</h3>
+            
+            <div class="space-y-3">
+                {% if not document.is_verified %}
+                <form method="post" action="{% url 'staff:verify_document' document.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full px-5 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all shadow-lg">
+                        ✓ Verify Document
+                    </button>
+                </form>
+                {% endif %}
+                
+                <a href="{{ document.file.url }}" download class="block w-full px-5 py-3 bg-stone-100 text-stone-700 font-semibold rounded-full text-center hover:bg-stone-200 transition-all">
+                    Download Document
+                </a>
+            </div>
+        </div>
+        
+        {% if document.notes %}
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Notes</h3>
+            <p class="text-sm text-stone-700">{{ document.notes }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

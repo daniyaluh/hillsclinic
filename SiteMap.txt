@@ -1,0 +1,84 @@
+1. Home Page
+* Hero Section: "Transform Your Height, Transform Your Life" with primary CTAs (Schedule Consultation, View Gallery).
+* Key Statistics: Animated counter for "2-6 inches gain," "98%+ Success Rate," "40+ Countries," "14+ Years".
+* Method Snippets: Brief introduction to Ilizarov vs. Internal Nails.
+* Why Choose Us: "International Standards," "Multilingual Support," "Cost Savings".
+* Testimonial Slider: Featured quotes (Sarah from UK, Ahmed from UAE).
+* Footer: Licensing info, Quick Links, "Licensed Medical Facility" badge.
+2. Procedures & Treatments
+* Limb Lengthening Overview:
+o What is Distraction Osteogenesis?.
+o Am I a Candidate? (Age 18+, realistic expectations, bone growth complete) .
+o Conditions Treated: Short stature, limb discrepancies, dwarfism.
+* Surgical Methods:
+o Ilizarov (External): "Gold Standard," cost-effective, high precision.
+o Internal Nails (PRECICE/STRYDE): No visible hardware, magnetic rod, higher comfort.
+o LON Method: Combined approach for faster external removal.
+* Outcomes & Results:
+o Height Potential: Femur (2-3"), Tibia (2-2.5"), Combined (4-6").
+o Permanence & Biomechanics: "New bone is permanent," "Strong as original".
+* Risks & Safety:
+o Complication Rates (<5% minor).
+o Managing Risks: Pin site infections, stiffness.
+3. International Patient Center
+* Travel Planning:
+o Visa Guide: Tourist (30-90 days) vs. Medical Visa.
+o Airport Services: Free pickup from KHI (closest), ISB, LHE.
+* Accommodation:
+o Hospital Suites: Private rooms, 24/7 nursing, meal service included.
+o Partner Hotels: Budget ($15-25/night) to Premium ($50-80/night).
+o Extended Stay: Apartments ($600-1000/mo) with kitchen.
+* Cultural Support:
+o Translation Services (Arabic, Persian, Turkish).
+o Religious Facilities (Prayer areas, Halal food).
+4. Cost & Financing
+* Pricing Breakdown:
+o Diagnostic Fees: X-rays (PKR 2,500), MRI (PKR 15,000).
+o Surgery Packages: Estimate ranges ($3,000-$6,000 USD).
+* Cost Comparison Calculator:
+o Interactive table comparing Pakistan ($3-6k) vs. USA ($75k+), UK/Europe ($50k+), Turkey ($12k+).
+* Payment Plans:
+o Full Payment: 10% discount upfront.
+o 50-50 Plan: 50% pre-op, 50% post-op.
+o Methods: Int'l Wire Transfer, Credit Cards, Cash.
+5. Recovery & Rehabilitation
+* The Timeline (Interactive Module):
+o Surgery Day: 6:00 AM Prep -> 8:00 AM Surgery.
+o Phase 1 (Hospital): 1 week post-op, pain management.
+o Phase 2 (Lengthening): 1mm/day protocol, 4 quarter-turns.
+o Phase 3 (Consolidation): Hardware removal at Month 10.
+o Phase 4 (Return to Life): Sports/Running at Month 10-12.
+* Exercise Library:
+o Phase-specific activities (e.g., "Ankle pumps" in Week 1, "Swimming" in Month 2).
+o Home Routine: Morning/Evening checklists.
+* Nutrition Guide:
+o Bone Healing Diet: Calcium (1200mg), Protein targets, Vitamin D.
+6. Success Stories (Case Studies)
+* Video Testimonials:
+o Categories: "UK Patient," "Arabic Experience," "Australian Success".
+* Patient Profiles (Detailed Text):
+o International: Ahmed (Saudi Arabia) - 5 inches gained.
+o Medical Professional: Dr. Fatima (Lahore) - Career impact.
+o Complex Case: Hassan - Discrepancy correction.
+o Family Journey: Rahman Father & Son duo.
+o Complication Handling: David (Australia) - Infection management story.
+* Before/After Gallery: Professional photos with face-blurring toggle.
+7. Patient Resources & Articles
+* Blog/Articles:
+o "Height Discrimination: The Hidden Social Challenge" (Career/Dating impact).
+o "Optimal Nutrition for Bone Healing".
+* FAQs:
+o General (Pain, Scars, Methods).
+o International (Visas, Safety).
+* Patient Portal (Login Required):
+o Features: Digital X-ray access, Upload progress photos, Remote PT guidance.
+8. Legal & Compliance (Footer Links)
+* Patient Rights Charter: Right to Information, Consent, Quality Care.
+* Privacy Policy: HIPAA-equivalent standards, Photo consent.
+* Dispute Resolution: Mediation and Arbitration processes.
+* Licensing: PMDC Certified, ISO/WHO standards.
+9. Contact & Booking
+* Online Appointment: Interactive calendar with Time Zone conversion.
+* Emergency: 24/7 Hotline numbers.
+* Direct Contacts: WhatsApp, Email (international@hillsclinic.com).
+ 

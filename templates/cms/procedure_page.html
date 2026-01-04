@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }} - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-20">
+    <div class="container mx-auto px-4">
+        <nav class="text-sm mb-4" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-stone-400">
+                <li><a href="/" class="hover:text-amber-500 transition-colors">Home</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li>Procedures</li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-stone-200">{{ page.title }}</li>
+            </ol>
+        </nav>
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">{{ page.title }}</h1>
+        {% if page.procedure_type %}
+        <span class="inline-block px-4 py-2 bg-amber-600/20 text-amber-400 rounded-full text-sm font-medium border border-amber-600/30">
+            {{ page.get_procedure_type_display }}
+        </span>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Key Stats -->
+<section class="bg-white py-10 border-b border-stone-200">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="p-4">
+                <div class="text-3xl font-bold text-amber-600">{{ page.height_gain_femur|default:"2-3\"" }}</div>
+                <div class="text-stone-500 text-sm">Femur Gain</div>
+            </div>
+            <div class="p-4">
+                <div class="text-3xl font-bold text-emerald-600">{{ page.height_gain_tibia|default:"2-2.5\"" }}</div>
+                <div class="text-stone-500 text-sm">Tibia Gain</div>
+            </div>
+            <div class="p-4">
+                <div class="text-3xl font-bold text-stone-700">{{ page.height_gain_combined|default:"4-6\"" }}</div>
+                <div class="text-stone-500 text-sm">Combined Total</div>
+            </div>
+            <div class="p-4">
+                <div class="text-3xl font-bold text-stone-500">{{ page.complication_rate|default:"<5%" }}</div>
+                <div class="text-stone-500 text-sm">Complication Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="py-20 bg-stone-50">
+    <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-3 gap-12">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                {% if page.introduction %}
+                <div class="prose prose-lg prose-stone max-w-none mb-12">
+                    {{ page.introduction|richtext }}
+                </div>
+                {% endif %}
+                
+                <!-- How It Works -->
+                <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 mb-8">
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6">How It Works</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center font-bold mr-4">1</span>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Initial Consultation</h4>
+                                <p class="text-stone-600 text-sm">Medical evaluation, X-rays, and discussion of goals and expectations.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center font-bold mr-4">2</span>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Surgery Day</h4>
+                                <p class="text-stone-600 text-sm">Procedure performed under general anesthesia. Usually 2-3 hours.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center font-bold mr-4">3</span>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Lengthening Phase</h4>
+                                <p class="text-stone-600 text-sm">Gradual lengthening of 1mm per day. Takes 2-3 months.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center font-bold mr-4">4</span>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Consolidation</h4>
+                                <p class="text-stone-600 text-sm">Bone strengthening period. 3-6 months depending on method.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- StreamField Content -->
+                {% if page.body %}
+                <div class="prose prose-stone max-w-none">
+                    {{ page.body }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <!-- CTA Card -->
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl ring-1 ring-amber-200 p-6 mb-6 sticky top-24">
+                    <h3 class="text-xl font-serif font-bold text-stone-900 mb-4">Ready to Learn More?</h3>
+                    <p class="text-stone-600 text-sm mb-6">Schedule a consultation to discuss if {{ page.title }} is right for you.</p>
+                    <a href="{% url 'booking:consultation' %}" class="block w-full text-center px-6 py-3 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+                        Book Consultation
+                    </a>
+                </div>
+                
+                <!-- Quick Facts -->
+                <div class="bg-white rounded-2xl ring-1 ring-stone-200 p-6 mb-6">
+                    <h3 class="font-semibold text-stone-900 mb-4">Quick Facts</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex justify-between">
+                            <span class="text-stone-500">Surgery Time</span>
+                            <span class="font-medium text-stone-900">{{ page.surgery_duration|default:"2-3 hours" }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-stone-500">Hospital Stay</span>
+                            <span class="font-medium text-stone-900">{{ page.hospital_stay|default:"5-7 days" }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-stone-500">Recovery Time</span>
+                            <span class="font-medium text-stone-900">{{ page.recovery_time|default:"6-12 months" }}</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div class="bg-stone-50 rounded-2xl p-6 text-center">
+                    <p class="text-stone-600 text-sm mb-3">Have questions?</p>
+                    <a href="{% url 'booking:contact' %}" class="text-amber-700 hover:text-amber-800 font-medium text-sm">Contact us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-serif font-bold mb-4">Start Your Journey Today</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Take the first step towards your transformation with a consultation.</p>
+        <a href="{% url 'booking:consultation' %}" class="inline-flex items-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+            Book Consultation
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page.name }} - Limb Lengthening - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-20 lg:py-28">
+    <div class="container mx-auto px-4">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-stone-400">
+                <li><a href="/" class="hover:text-amber-400 transition-colors">Home</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><a href="{% url 'cms:procedures' %}" class="hover:text-amber-400 transition-colors">Procedures</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-amber-400">{{ page.name }}</li>
+            </ol>
+        </nav>
+        <div class="max-w-4xl">
+            <span class="inline-flex items-center px-4 py-1.5 bg-amber-600/20 text-amber-400 text-sm font-medium rounded-full mb-4">
+                Limb Lengthening Procedure
+            </span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-4">{{ page.name }}</h1>
+            {% if page.tagline %}
+            <p class="text-xl lg:text-2xl text-stone-300 mb-6">{{ page.tagline }}</p>
+            {% endif %}
+            <p class="text-lg text-stone-400 max-w-3xl">{{ page.description }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="bg-white py-8 border-b border-stone-200 -mt-8 relative z-10">
+    <div class="container mx-auto px-4">
+        <div class="bg-white rounded-3xl shadow-xl border border-stone-200 p-6 lg:p-8 -mt-16">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6 text-center">
+                <div class="p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl">
+                    <div class="text-xl lg:text-2xl font-bold text-amber-600">{{ page.height_gain_combined }}</div>
+                    <div class="text-stone-500 text-xs mt-1">Total Height Gain</div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl">
+                    <div class="text-xl lg:text-2xl font-bold text-emerald-600">{{ page.complication_rate }}</div>
+                    <div class="text-stone-500 text-xs mt-1">Complication Rate</div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
+                    <div class="text-xl lg:text-2xl font-bold text-blue-600">{{ page.recovery_time }}</div>
+                    <div class="text-stone-500 text-xs mt-1">Recovery Time</div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl">
+                    <div class="text-xl lg:text-2xl font-bold text-purple-600">{{ page.hospital_stay }}</div>
+                    <div class="text-stone-500 text-xs mt-1">Hospital Stay</div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-stone-100 to-stone-50 rounded-2xl">
+                    <div class="text-xl lg:text-2xl font-bold text-stone-700">{{ page.lengthening_rate }}</div>
+                    <div class="text-stone-500 text-xs mt-1">Daily Lengthening</div>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl">
+                    <div class="text-xl lg:text-2xl font-bold text-rose-600">{{ page.consolidation_index }}</div>
+                    <div class="text-stone-500 text-xs mt-1">Consolidation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="py-16 lg:py-20 bg-stone-50">
+    <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Height Gain Details -->
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 p-6 lg:p-8">
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        Expected Height Gain
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-gradient-to-br from-stone-50 to-stone-100 rounded-2xl p-5 text-center">
+                            <div class="w-12 h-12 bg-stone-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <span class="text-stone-600 text-lg font-bold">F</span>
+                            </div>
+                            <p class="text-sm text-stone-500 mb-1">Femur (Thigh)</p>
+                            <p class="text-xl font-bold text-stone-900">{{ page.height_gain_femur }}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-stone-50 to-stone-100 rounded-2xl p-5 text-center">
+                            <div class="w-12 h-12 bg-stone-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <span class="text-stone-600 text-lg font-bold">T</span>
+                            </div>
+                            <p class="text-sm text-stone-500 mb-1">Tibia (Shin)</p>
+                            <p class="text-xl font-bold text-stone-900">{{ page.height_gain_tibia }}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-100 rounded-2xl p-5 text-center border-2 border-amber-200">
+                            <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <span class="text-amber-700 text-lg font-bold">+</span>
+                            </div>
+                            <p class="text-sm text-amber-700 mb-1">Combined Total</p>
+                            <p class="text-xl font-bold text-stone-900">{{ page.height_gain_combined }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- How It Works -->
+                {% if page.how_it_works %}
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 p-6 lg:p-8">
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                            </svg>
+                        </div>
+                        How It Works
+                    </h2>
+                    <div class="space-y-4">
+                        {% for step in page.how_it_works %}
+                        <div class="flex items-start gap-4 p-4 bg-stone-50 rounded-2xl hover:bg-stone-100 transition-colors">
+                            <span class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-xl flex items-center justify-center font-bold shadow-lg">{{ forloop.counter }}</span>
+                            <div>
+                                <h4 class="font-bold text-stone-900 mb-1">{{ step.step }}</h4>
+                                <p class="text-stone-600 text-sm leading-relaxed">{{ step.description }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Pros & Cons -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Advantages -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl border border-emerald-200 p-6">
+                        <h3 class="text-xl font-bold text-stone-900 mb-4 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Advantages
+                        </h3>
+                        <ul class="space-y-3">
+                            {% for pro in page.pros %}
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-stone-700 text-sm">{{ pro }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <!-- Considerations -->
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl border border-amber-200 p-6">
+                        <h3 class="text-xl font-bold text-stone-900 mb-4 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            Considerations
+                        </h3>
+                        <ul class="space-y-3">
+                            {% for con in page.cons %}
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-stone-700 text-sm">{{ con }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Ideal Candidate -->
+                {% if page.candidacy %}
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 p-6 lg:p-8">
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        Ideal Candidates
+                    </h2>
+                    <p class="text-stone-600 mb-6">{{ page.ideal_for }}</p>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        {% for criteria in page.candidacy %}
+                        <div class="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="text-stone-700 text-sm">{{ criteria }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- FAQ -->
+                {% if page.faq %}
+                <div class="bg-white rounded-3xl shadow-sm border border-stone-200 p-6 lg:p-8">
+                    <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        Frequently Asked Questions
+                    </h2>
+                    <div class="space-y-4" x-data="{ openFaq: null }">
+                        {% for item in page.faq %}
+                        <div class="border border-stone-200 rounded-2xl overflow-hidden">
+                            <button @click="openFaq = openFaq === {{ forloop.counter }} ? null : {{ forloop.counter }}" 
+                                    class="w-full flex items-center justify-between p-4 text-left bg-stone-50 hover:bg-stone-100 transition-colors">
+                                <span class="font-semibold text-stone-900 pr-4">{{ item.question }}</span>
+                                <svg class="w-5 h-5 text-stone-400 flex-shrink-0 transition-transform" :class="{ 'rotate-180': openFaq === {{ forloop.counter }} }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div x-show="openFaq === {{ forloop.counter }}" x-collapse x-cloak class="p-4 bg-white border-t border-stone-100">
+                                <p class="text-stone-600 leading-relaxed">{{ item.answer }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-24 space-y-6">
+                    <!-- CTA Card -->
+                    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 rounded-3xl p-6 text-white shadow-xl">
+                        <h3 class="text-xl font-serif font-bold mb-3">Interested in {{ page.name }}?</h3>
+                        <p class="text-stone-300 text-sm mb-6">Schedule a personalized consultation to discuss if this procedure is right for you.</p>
+                        <a href="{% url 'booking:consultation' %}" class="block w-full text-center px-6 py-3.5 bg-amber-500 text-stone-900 font-semibold rounded-full hover:bg-amber-400 transition-all shadow-lg">
+                            Book Free Consultation
+                        </a>
+                        <p class="text-center text-stone-400 text-xs mt-3">No obligation • Response within 24hrs</p>
+                    </div>
+                    
+                    <!-- Compare Methods -->
+                    <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                        <h3 class="font-bold text-stone-900 mb-4">Compare Methods</h3>
+                        <div class="space-y-2">
+                            <a href="{% url 'cms:procedure-detail' 'ilizarov' %}" class="flex items-center justify-between p-3 rounded-xl {% if page.procedure_type == 'ilizarov' %}bg-amber-50 border border-amber-200{% else %}hover:bg-stone-50{% endif %} transition-colors">
+                                <span class="font-medium {% if page.procedure_type == 'ilizarov' %}text-amber-800{% else %}text-stone-700{% endif %}">Ilizarov Method</span>
+                                {% if page.procedure_type == 'ilizarov' %}
+                                <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full">Current</span>
+                                {% else %}
+                                <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                                {% endif %}
+                            </a>
+                            <a href="{% url 'cms:procedure-detail' 'internal-nails' %}" class="flex items-center justify-between p-3 rounded-xl {% if page.procedure_type == 'internal' %}bg-amber-50 border border-amber-200{% else %}hover:bg-stone-50{% endif %} transition-colors">
+                                <span class="font-medium {% if page.procedure_type == 'internal' %}text-amber-800{% else %}text-stone-700{% endif %}">Internal Nail (PRECICE)</span>
+                                {% if page.procedure_type == 'internal' %}
+                                <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full">Current</span>
+                                {% else %}
+                                <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                                {% endif %}
+                            </a>
+                            <a href="{% url 'cms:procedure-detail' 'lon' %}" class="flex items-center justify-between p-3 rounded-xl {% if page.procedure_type == 'lon' %}bg-amber-50 border border-amber-200{% else %}hover:bg-stone-50{% endif %} transition-colors">
+                                <span class="font-medium {% if page.procedure_type == 'lon' %}text-amber-800{% else %}text-stone-700{% endif %}">LON Method</span>
+                                {% if page.procedure_type == 'lon' %}
+                                <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full">Current</span>
+                                {% else %}
+                                <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Card -->
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6">
+                        <h3 class="font-bold text-stone-900 mb-3">Have Questions?</h3>
+                        <p class="text-stone-600 text-sm mb-4">Our team is here to answer any questions about the {{ page.name }}.</p>
+                        <div class="space-y-3">
+                            <a href="{% url 'booking:contact' %}" class="flex items-center gap-3 text-amber-700 hover:text-amber-800 font-medium text-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                                Send a Message
+                            </a>
+                            <a href="https://wa.me/923001234567" target="_blank" class="flex items-center gap-3 text-emerald-700 hover:text-emerald-800 font-medium text-sm">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                                WhatsApp Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 lg:py-20 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl lg:text-4xl font-serif font-bold mb-4">Start Your Transformation Journey</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Take the first step towards achieving your height goals with a personalized consultation.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{% url 'booking:consultation' %}" class="inline-flex items-center px-8 py-4 bg-amber-500 text-stone-900 font-semibold rounded-full hover:bg-amber-400 transition-all shadow-lg">
+                Book Consultation
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+            <a href="{% url 'cms:cost' %}" class="inline-flex items-center px-8 py-4 border-2 border-stone-600 text-stone-300 font-semibold rounded-full hover:border-stone-500 hover:text-white transition-all">
+                View Pricing
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

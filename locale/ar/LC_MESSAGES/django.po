@@ -1,0 +1,200 @@
+# Arabic translations for Hills Clinic
+# Copyright (C) 2025 Hills Clinic
+# This file is distributed under the same license as the Hills Clinic package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hills Clinic 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: Hills Clinic Team\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+# Navigation
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "Procedures"
+msgstr "الإجراءات"
+
+msgid "Overview"
+msgstr "نظرة عامة"
+
+msgid "Ilizarov (External)"
+msgstr "إليزاروف (خارجي)"
+
+msgid "Internal Nails"
+msgstr "المسامير الداخلية"
+
+msgid "LON Method"
+msgstr "طريقة LON"
+
+msgid "International Patients"
+msgstr "المرضى الدوليين"
+
+msgid "Cost & Financing"
+msgstr "التكلفة والتمويل"
+
+msgid "Recovery"
+msgstr "التعافي"
+
+msgid "Success Stories"
+msgstr "قصص النجاح"
+
+msgid "Blog"
+msgstr "المدونة"
+
+msgid "Our Team"
+msgstr "فريقنا"
+
+msgid "Patient Portal"
+msgstr "بوابة المرضى"
+
+msgid "My Portal"
+msgstr "بوابتي"
+
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+msgid "Book Consultation"
+msgstr "حجز استشارة"
+
+msgid "Select Language"
+msgstr "اختر اللغة"
+
+msgid "Select language"
+msgstr "اختر اللغة"
+
+# Footer
+msgid "Quick Links"
+msgstr "روابط سريعة"
+
+msgid "Legal"
+msgstr "قانوني"
+
+msgid "Privacy Policy"
+msgstr "سياسة الخصوصية"
+
+msgid "Terms of Service"
+msgstr "شروط الخدمة"
+
+msgid "Cookie Policy"
+msgstr "سياسة ملفات تعريف الارتباط"
+
+msgid "Contact"
+msgstr "اتصل بنا"
+
+msgid "All rights reserved"
+msgstr "جميع الحقوق محفوظة"
+
+# Common
+msgid "Learn More"
+msgstr "اعرف المزيد"
+
+msgid "Read More"
+msgstr "اقرأ المزيد"
+
+msgid "Submit"
+msgstr "إرسال"
+
+msgid "Send"
+msgstr "أرسل"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Back"
+msgstr "رجوع"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "Previous"
+msgstr "السابق"
+
+msgid "Close"
+msgstr "إغلاق"
+
+# Medical
+msgid "Height Lengthening"
+msgstr "إطالة القامة"
+
+msgid "Limb Lengthening"
+msgstr "إطالة الأطراف"
+
+msgid "Leg Lengthening"
+msgstr "إطالة الساق"
+
+msgid "Consultation"
+msgstr "استشارة"
+
+msgid "Free Consultation"
+msgstr "استشارة مجانية"
+
+msgid "Book Your Free Consultation"
+msgstr "احجز استشارتك المجانية"
+
+msgid "Doctor"
+msgstr "طبيب"
+
+msgid "Surgeon"
+msgstr "جراح"
+
+msgid "Medical Team"
+msgstr "الفريق الطبي"
+
+msgid "Surgery"
+msgstr "جراحة"
+
+msgid "Treatment"
+msgstr "علاج"
+
+msgid "Patient"
+msgstr "مريض"
+
+msgid "Results"
+msgstr "النتائج"
+
+# Forms
+msgid "Full Name"
+msgstr "الاسم الكامل"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Phone"
+msgstr "الهاتف"
+
+msgid "Country"
+msgstr "البلد"
+
+msgid "Message"
+msgstr "الرسالة"
+
+msgid "Your message has been sent successfully"
+msgstr "تم إرسال رسالتك بنجاح"
+
+# Video Consultation
+msgid "Video Consultation"
+msgstr "استشارة بالفيديو"
+
+msgid "Book Video Consultation"
+msgstr "حجز استشارة بالفيديو"
+
+msgid "Join Meeting"
+msgstr "انضم للاجتماع"
+
+msgid "Payment"
+msgstr "الدفع"
+
+msgid "Pay Now"
+msgstr "ادفع الآن"

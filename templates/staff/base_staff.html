@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<div class="min-h-screen flex" x-data="{ sidebarOpen: false }">
+    <!-- Sidebar Overlay (works for both mobile and desktop when sidebar is open) -->
+    <div x-show="sidebarOpen" 
+         x-transition:enter="transition-opacity ease-linear duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-linear duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="sidebarOpen = false"
+         class="fixed inset-0 bg-stone-900/50 z-40"
+         x-cloak></div>
+    
+    <!-- Sidebar -->
+    <aside x-show="sidebarOpen"
+           x-transition:enter="transition ease-in-out duration-300 transform"
+           x-transition:enter-start="-translate-x-full"
+           x-transition:enter-end="translate-x-0"
+           x-transition:leave="transition ease-in-out duration-300 transform"
+           x-transition:leave-start="translate-x-0"
+           x-transition:leave-end="-translate-x-full"
+           class="fixed inset-y-0 left-0 w-72 lg:w-64 bg-stone-900 z-50 overflow-y-auto"
+           x-cloak>
+        <div class="flex flex-col h-full">
+            <!-- Logo & Close -->
+            <div class="px-6 py-5 border-b border-stone-800 flex items-center justify-between">
+                <a href="{% url 'staff:dashboard' %}" class="flex items-center gap-3">
+                    <img src="/media/logo.png" alt="Hills Clinic Logo" class="h-10 w-auto">
+                    <div>
+                        <span class="font-serif font-bold text-white text-lg">Hills Clinic</span>
+                        <p class="text-xs text-stone-500">Staff Portal</p>
+                    </div>
+                </a>
+                <button @click="sidebarOpen = false" class="p-2 text-stone-400 hover:text-white rounded-lg hover:bg-stone-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <a href="{% url 'staff:dashboard' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if request.resolver_match.url_name == 'dashboard' %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                
+                <a href="{% url 'staff:patient_list' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'patient' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span class="font-medium">Patients</span>
+                </a>
+                
+                <a href="{% url 'staff:appointment_list' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'appointment' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="font-medium">Appointments</span>
+                </a>
+                
+                <a href="{% url 'staff:calendar' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'calendar' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                    </svg>
+                    <span class="font-medium">Calendar</span>
+                </a>
+                
+                <a href="{% url 'staff:time_slots' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'time_slot' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="font-medium">Time Slots</span>
+                </a>
+                
+                <div class="pt-4 mt-4 border-t border-stone-800">
+                    <p class="px-4 text-xs font-semibold text-stone-600 uppercase tracking-wider mb-2">Management</p>
+                </div>
+                
+                <a href="{% url 'staff:document_list' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'document' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span class="font-medium">Documents</span>
+                </a>
+                
+                <a href="{% url 'staff:consent_list' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'consent' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    <span class="font-medium">Consents</span>
+                </a>
+                
+                <a href="{% url 'staff:payment_list' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'payment' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    </svg>
+                    <span class="font-medium">Payments</span>
+                </a>
+                
+                <a href="{% url 'staff:consultation_list' %}" @click="sidebarOpen = false" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {% if 'consultation' in request.resolver_match.url_name %}bg-stone-800 text-white{% else %}text-stone-400 hover:bg-stone-800 hover:text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="font-medium">Video Calls</span>
+                </a>
+            </nav>
+            
+            <!-- User -->
+            <div class="px-4 py-4 border-t border-stone-800">
+                <div class="flex items-center gap-3 px-4 py-3">
+                    <div class="w-10 h-10 bg-stone-700 rounded-full flex items-center justify-center">
+                        <span class="text-white font-medium">{{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-white truncate">{{ user.get_full_name|default:user.email }}</p>
+                        <p class="text-xs text-stone-500">{% if user.is_superuser %}Administrator{% else %}Staff{% endif %}</p>
+                    </div>
+                </div>
+                <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-4 py-2 mt-2 text-stone-400 hover:text-white hover:bg-stone-800 rounded-xl transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    <span class="font-medium">Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="flex-1 w-full">
+        <!-- Top Header -->
+        <header class="bg-white border-b border-stone-200 px-4 lg:px-8 py-4 sticky top-0 z-20">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <!-- Menu Button (visible on all screens) -->
+                    <button @click="sidebarOpen = true" class="p-2 -ml-2 text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-xl transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <!-- Logo in header -->
+                    <a href="{% url 'staff:dashboard' %}" class="flex items-center gap-2">
+                        <img src="/media/logo.png" alt="Hills Clinic Logo" class="h-8 w-auto">
+                        <span class="font-serif font-bold text-stone-900 hidden sm:inline">Staff Portal</span>
+                    </a>
+                    <div class="hidden md:block pl-4 border-l border-stone-200">
+                        <h1 class="text-lg lg:text-xl font-semibold text-stone-900">{% block page_title %}Dashboard{% endblock %}</h1>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 lg:gap-4">
+                    <a href="/" class="text-sm text-stone-500 hover:text-stone-700 hidden sm:inline-flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                        View Site
+                    </a>
+                    <a href="{% url 'account_logout' %}" class="inline-flex items-center gap-2 px-3 lg:px-4 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-xl transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        <span class="hidden sm:inline">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page Subtitle (mobile) -->
+        <div class="md:hidden bg-white border-b border-stone-200 px-4 py-2">
+            <h1 class="text-lg font-semibold text-stone-900">{% block page_title_mobile %}{% endblock %}</h1>
+            <p class="text-sm text-stone-500">{% block page_subtitle %}Overview of your clinic{% endblock %}</p>
+        </div>
+        
+        <!-- Page Content -->
+        <div class="p-4 lg:p-8 bg-stone-100 min-h-screen">
+            {% block staff_content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% endblock %}

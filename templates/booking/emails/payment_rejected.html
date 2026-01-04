@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Rejected - Hills Clinic</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fafaf9;">
+    <div style="background: linear-gradient(135deg, #1c1917 0%, #44403c 100%); padding: 35px 20px; text-align: center; border-radius: 16px 16px 0 0;">
+        <h1 style="color: white; margin: 0; font-size: 28px; font-family: Georgia, serif;">Hills Clinic</h1>
+        <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0;">Height Enhancement Surgery Center</p>
+    </div>
+    
+    <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 80px; height: 80px; background: #fef2f2; border-radius: 50%; margin: 0 auto 20px; display: inline-flex; align-items: center; justify-content: center;">
+                <span style="font-size: 40px;">⚠️</span>
+            </div>
+            <h2 style="color: #dc2626; margin: 0; font-size: 24px; font-family: Georgia, serif;">Payment Issue</h2>
+        </div>
+        
+        <p style="font-size: 16px;">Dear {{ patient.get_display_name }},</p>
+        
+        <p style="font-size: 16px;">We were unable to verify your payment for appointment #{{ appointment.id }}. This could happen due to:</p>
+        
+        <ul style="margin: 15px 0; padding-left: 20px; color: #57534e;">
+            <li style="margin-bottom: 8px;">The payment screenshot is unclear or incomplete</li>
+            <li style="margin-bottom: 8px;">The payment amount doesn't match the consultation fee</li>
+            <li style="margin-bottom: 8px;">The transaction reference couldn't be verified</li>
+        </ul>
+        
+        {% if rejection_reason %}
+        <div style="background: #fef2f2; border: 2px solid #fecaca; border-radius: 12px; padding: 20px; margin: 25px 0;">
+            <h3 style="margin: 0 0 10px; color: #991b1b;">Reason</h3>
+            <p style="margin: 0; color: #7f1d1d;">{{ rejection_reason }}</p>
+        </div>
+        {% endif %}
+        
+        <div style="background: #fffbeb; border: 2px solid #fcd34d; border-radius: 12px; padding: 20px; margin: 25px 0;">
+            <h3 style="margin: 0 0 10px; color: #92400e;">What to do next?</h3>
+            <p style="margin: 0; color: #78350f;">Please re-upload a clear screenshot of your payment or contact us for assistance. Your appointment will remain pending until payment is verified.</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{{ payment_url }}" style="display: inline-block; padding: 14px 40px; background-color: #d97706; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">Re-upload Payment</a>
+        </div>
+        
+        <p style="font-size: 16px;">Need help? Contact us via WhatsApp at <strong>+92 301 5943329</strong> and we'll assist you right away.</p>
+        
+        <p style="font-size: 16px; margin-top: 30px;">Best regards,<br><strong>Hills Clinic Team</strong></p>
+    </div>
+    
+    <div style="text-align: center; padding: 25px; color: #a8a29e; font-size: 14px;">
+        <p>Hills Clinic | Height Enhancement Surgery<br>
+        <a href="https://hillsclinic.com" style="color: #d97706; text-decoration: none;">hillsclinic.com</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Document - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 py-10 px-4">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex items-center gap-4 mb-4">
+            <a href="{% url 'portal:documents' %}" class="text-stone-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div class="w-12 h-12 bg-amber-600/20 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-white">Upload Document</h1>
+        <p class="text-stone-300 mt-2">Share your medical records securely with our team</p>
+    </div>
+</div>
+
+<section class="min-h-screen bg-stone-50 py-8">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+            <!-- Upload Card -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-8">
+                {% if form.errors %}
+                <div class="bg-red-50 ring-1 ring-red-200 text-red-700 px-5 py-4 rounded-2xl mb-6">
+                    <ul class="text-sm list-disc list-inside">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <form method="post" enctype="multipart/form-data" class="space-y-6" x-data="{ 
+                    fileName: '', 
+                    fileType: '',
+                    previewUrl: '',
+                    showPreview: false,
+                    handleFile(file) {
+                        if (!file) return;
+                        this.fileName = file.name;
+                        this.fileType = file.type;
+                        
+                        if (file.type.startsWith('image/')) {
+                            this.previewUrl = URL.createObjectURL(file);
+                            this.showPreview = true;
+                        } else {
+                            this.showPreview = false;
+                        }
+                    },
+                    clearFile() {
+                        this.fileName = '';
+                        this.fileType = '';
+                        this.previewUrl = '';
+                        this.showPreview = false;
+                        this.$refs.fileInput.value = '';
+                    }
+                }">
+                    {% csrf_token %}
+                    
+                    <!-- Document Type -->
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Document Type <span class="text-red-500">*</span></label>
+                        <select name="upload_type" id="id_upload_type" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-stone-900 transition-all">
+                            {% for value, label in form.upload_type.field.choices %}
+                            <option value="{{ value }}" {% if form.upload_type.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- File Upload -->
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">File <span class="text-red-500">*</span></label>
+                        <div class="border-2 border-dashed border-stone-300 rounded-2xl p-8 text-center hover:border-amber-400 hover:bg-amber-50/30 transition-all cursor-pointer"
+                             @click="$refs.fileInput.click()"
+                             @dragover.prevent="$el.classList.add('border-amber-400', 'bg-amber-50')"
+                             @dragleave.prevent="$el.classList.remove('border-amber-400', 'bg-amber-50')"
+                             @drop.prevent="$el.classList.remove('border-amber-400', 'bg-amber-50'); handleFile($event.dataTransfer.files[0]); $refs.fileInput.files = $event.dataTransfer.files">
+                            
+                            <input type="file" 
+                                   name="file" 
+                                   id="id_file" 
+                                   x-ref="fileInput"
+                                   accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.dcm"
+                                   @change="handleFile($event.target.files[0])"
+                                   class="hidden"
+                                   required>
+                            
+                            <div x-show="!fileName">
+                                <div class="w-16 h-16 bg-stone-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                </div>
+                                <p class="text-stone-600 font-medium mb-1">Click to upload or drag and drop</p>
+                                <p class="text-sm text-stone-500">PDF, Images, or DICOM files up to 10MB</p>
+                            </div>
+                            
+                            <div x-show="fileName" class="text-left">
+                                <!-- Image Preview -->
+                                <div x-show="showPreview" class="mb-4">
+                                    <img :src="previewUrl" class="max-h-48 mx-auto rounded-xl shadow-lg">
+                                </div>
+                                
+                                <!-- File Info -->
+                                <div class="flex items-center justify-between p-4 bg-stone-50 rounded-xl ring-1 ring-stone-200">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                                            <svg x-show="fileType.startsWith('image/')" class="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <svg x-show="fileType === 'application/pdf'" class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <svg x-show="!fileType.startsWith('image/') && fileType !== 'application/pdf'" class="w-6 h-6 text-stone-500" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-stone-900" x-text="fileName"></p>
+                                            <p class="text-sm text-stone-500">Ready to upload</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" @click.stop="clearFile()" class="p-2 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Title (Optional) -->
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Title (Optional)</label>
+                        <input type="text" name="title" id="id_title" 
+                               class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-stone-900 transition-all"
+                               placeholder="e.g., X-ray Left Leg - May 2025"
+                               value="{{ form.title.value|default:'' }}">
+                    </div>
+                    
+                    <!-- Notes (Optional) -->
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Notes (Optional)</label>
+                        <textarea name="notes" id="id_notes" rows="3"
+                                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-stone-900 transition-all resize-none"
+                                  placeholder="Any additional information about this document...">{{ form.notes.value|default:'' }}</textarea>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-stone-900 text-white py-3.5 px-6 rounded-full font-semibold hover:bg-stone-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                        </svg>
+                        Upload Document
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Security Note -->
+            <div class="mt-6 p-4 bg-stone-100 rounded-2xl">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-stone-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-stone-700">Your documents are secure</p>
+                        <p class="text-xs text-stone-500 mt-1">All uploads are encrypted and only accessible by you and authorized medical staff.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back Link -->
+            <div class="mt-6 text-center">
+                <a href="{% url 'portal:documents' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-stone-900 font-medium transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Documents
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

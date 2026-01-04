@@ -1,0 +1,286 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ CURRENT_LANGUAGE_CODE|default:'en' }}" dir="{% if IS_RTL %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{% trans "Hills Clinic - Transform Your Height, Transform Your Life. World-class limb lengthening surgery in Pakistan." %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}limb lengthening surgery, height increase surgery, leg lengthening Pakistan, Ilizarov surgery, LON method, internal nail lengthening, cosmetic limb lengthening{% endblock %}">
+    <meta name="author" content="Hills Clinic">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}Hills Clinic - Limb Lengthening Surgery{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}World-class limb lengthening surgery in Pakistan. Transform your height, transform your life.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/static/images/og-image.jpg{% endblock %}">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Hills Clinic - Limb Lengthening Surgery{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}World-class limb lengthening surgery in Pakistan.{% endblock %}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/media/logo.png">
+    
+    <title>{% block title %}Hills Clinic{% endblock %}</title>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalOrganization",
+        "name": "{{ CLINIC_NAME|default:'Hills Clinic' }}",
+        "description": "World-class limb lengthening surgery center in Pakistan offering Ilizarov, Internal Nail, and LON procedures.",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": "{{ request.scheme }}://{{ request.get_host }}/static/images/logo.png",
+        "telephone": "{{ CLINIC_PHONE|default:'+92-42-35761234' }}",
+        "email": "{{ CLINIC_EMAIL|default:'info@hillsclinic.com' }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "DHA Phase 5",
+            "addressLocality": "Lahore",
+            "addressRegion": "Punjab",
+            "postalCode": "54000",
+            "addressCountry": "PK"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "31.4697",
+            "longitude": "74.4118"
+        },
+        "medicalSpecialty": [
+            "Orthopedic Surgery",
+            "Limb Lengthening",
+            "Reconstructive Surgery"
+        ],
+        "priceRange": "$$$",
+        "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "09:00",
+            "closes": "18:00"
+        },
+        "sameAs": [
+            "https://www.facebook.com/hillsclinic",
+            "https://www.instagram.com/hillsclinic",
+            "https://www.youtube.com/hillsclinic"
+        ]
+    }
+    </script>
+    {% block extra_structured_data %}{% endblock %}
+    
+    <!-- Tailwind CSS (via CDN for now; switch to build pipeline later) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        accent: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        display: ['Poppins', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        /* RTL Support - Comprehensive Styles */
+        [dir="rtl"] {
+            text-align: right;
+        }
+        
+        /* RTL: Flip flex direction for navigation */
+        [dir="rtl"] .flex-row { flex-direction: row-reverse; }
+        [dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 0; margin-right: 0.5rem; }
+        [dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) { margin-left: 0; margin-right: 0.75rem; }
+        [dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-left: 0; margin-right: 1rem; }
+        [dir="rtl"] .space-x-6 > :not([hidden]) ~ :not([hidden]) { margin-left: 0; margin-right: 1.5rem; }
+        [dir="rtl"] .space-x-8 > :not([hidden]) ~ :not([hidden]) { margin-left: 0; margin-right: 2rem; }
+        
+        /* RTL: Flip margins and paddings */
+        [dir="rtl"] .ml-1 { margin-left: 0; margin-right: 0.25rem; }
+        [dir="rtl"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+        [dir="rtl"] .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+        [dir="rtl"] .ml-4 { margin-left: 0; margin-right: 1rem; }
+        [dir="rtl"] .mr-1 { margin-right: 0; margin-left: 0.25rem; }
+        [dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+        [dir="rtl"] .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+        [dir="rtl"] .mr-4 { margin-right: 0; margin-left: 1rem; }
+        [dir="rtl"] .pl-4 { padding-left: 0; padding-right: 1rem; }
+        [dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
+        
+        /* RTL: Flip absolute positioning for dropdowns */
+        [dir="rtl"] .left-0 { left: auto; right: 0; }
+        [dir="rtl"] .right-0 { right: auto; left: 0; }
+        
+        /* RTL: Flip text alignment */
+        [dir="rtl"] .text-left { text-align: right; }
+        [dir="rtl"] .text-right { text-align: left; }
+        
+        /* RTL: Flip transform for icons */
+        [dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+        
+        /* RTL: Arabic/Persian font family */
+        [dir="rtl"] {
+            font-family: 'Noto Sans Arabic', 'Noto Sans', 'Inter', system-ui, sans-serif;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Focus visible for accessibility */
+        :focus-visible {
+            outline: 2px solid #14b8a6;
+            outline-offset: 2px;
+        }
+        
+        /* Language switcher hover effect */
+        .lang-option:hover {
+            background-color: #f0fdf9;
+        }
+    </style>
+    
+    <!-- RTL Font (Arabic/Persian) -->
+    {% if IS_RTL %}
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% endif %}
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="font-sans antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+        Skip to main content
+    </a>
+    
+    <!-- Header / Navigation -->
+    {% include "partials/header.html" %}
+    
+    <!-- Flash Messages -->
+    {% if messages %}
+    <div class="container mx-auto px-4 py-2">
+        {% for message in messages %}
+        <div class="mb-2 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-800{% elif message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    {% include "partials/footer.html" %}
+    
+    <!-- HTMX Config -->
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            // Include CSRF token in HTMX requests
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+    </script>
+    
+    <!-- WhatsApp Floating Chat Widget -->
+    <div x-data="{ showTooltip: false }" class="fixed bottom-6 right-6 z-50">
+        <!-- Tooltip -->
+        <div x-show="showTooltip" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 translate-y-2"
+             class="absolute bottom-16 right-0 bg-white rounded-lg shadow-xl p-4 w-64 mb-2">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-teal-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900 text-sm">{{ CLINIC_NAME }} Support</p>
+                    <p class="text-xs text-green-600">Online now</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-3">Hi! 👋 How can we help you with your limb lengthening journey?</p>
+            <a href="https://wa.me/{{ WHATSAPP_NUMBER|cut:'+' }}?text=Hello%2C%20I%27m%20interested%20in%20limb%20lengthening%20surgery%20at%20Hills%20Clinic" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="block w-full bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-lg text-sm font-medium transition-colors">
+                Start Chat
+            </a>
+            <!-- Arrow pointer -->
+            <div class="absolute -bottom-2 right-6 w-4 h-4 bg-white transform rotate-45 shadow-lg"></div>
+        </div>
+        
+        <!-- WhatsApp Button -->
+        <button @mouseenter="showTooltip = true" 
+                @mouseleave="showTooltip = false"
+                @click="window.open('https://wa.me/{{ WHATSAPP_NUMBER|cut:'+' }}?text=Hello%2C%20I%27m%20interested%20in%20limb%20lengthening%20surgery%20at%20Hills%20Clinic', '_blank')"
+                class="group bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110"
+                aria-label="Chat on WhatsApp">
+            <!-- WhatsApp Icon -->
+            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            
+            <!-- Pulse animation -->
+            <span class="absolute w-full h-full rounded-full bg-green-400 animate-ping opacity-25"></span>
+        </button>
+    </div>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

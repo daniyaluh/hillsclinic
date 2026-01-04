@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }} - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">{{ page.title }}</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto">
+            {% if page.subtitle %}
+            {{ page.subtitle }}
+            {% else %}
+            Your comprehensive guide to recovery after limb lengthening surgery
+            {% endif %}
+        </p>
+    </div>
+</section>
+
+<!-- Recovery Timeline -->
+<section class="py-16 bg-white border-b border-stone-200">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-serif font-bold text-stone-900 text-center mb-12">Recovery Timeline</h2>
+        
+        <div class="max-w-4xl mx-auto">
+            <div class="relative">
+                <!-- Timeline Line -->
+                <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-stone-200 hidden md:block"></div>
+                
+                <!-- Phase 1 -->
+                <div class="relative flex items-start mb-12">
+                    <div class="flex-shrink-0 w-16 h-16 bg-amber-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl z-10">1</div>
+                    <div class="ml-6 bg-white rounded-2xl ring-1 ring-stone-200 p-6 flex-1">
+                        <h3 class="text-xl font-semibold text-stone-900 mb-2">Hospital Stay (Days 1-7)</h3>
+                        <p class="text-stone-600 mb-4">You'll remain in the hospital for monitoring and initial recovery. Our team will teach you how to care for your device and manage pain.</p>
+                        <ul class="text-sm text-stone-600 space-y-1">
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>24/7 nursing care</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Pain management</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Initial physiotherapy</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Phase 2 -->
+                <div class="relative flex items-start mb-12">
+                    <div class="flex-shrink-0 w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl z-10">2</div>
+                    <div class="ml-6 bg-white rounded-2xl ring-1 ring-stone-200 p-6 flex-1">
+                        <h3 class="text-xl font-semibold text-stone-900 mb-2">Lengthening Phase (Weeks 2-12)</h3>
+                        <p class="text-stone-600 mb-4">Daily lengthening of approximately 1mm. Regular check-ups and X-rays to monitor progress. Daily physiotherapy is essential.</p>
+                        <ul class="text-sm text-stone-600 space-y-1">
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>1mm lengthening per day</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Weekly X-ray monitoring</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Daily physiotherapy exercises</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Phase 3 -->
+                <div class="relative flex items-start mb-12">
+                    <div class="flex-shrink-0 w-16 h-16 bg-stone-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl z-10">3</div>
+                    <div class="ml-6 bg-white rounded-2xl ring-1 ring-stone-200 p-6 flex-1">
+                        <h3 class="text-xl font-semibold text-stone-900 mb-2">Consolidation Phase (Months 3-9)</h3>
+                        <p class="text-stone-600 mb-4">The new bone hardens and strengthens. Gradual increase in weight bearing. Frame/nail removal at the end of this phase.</p>
+                        <ul class="text-sm text-stone-600 space-y-1">
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Bone consolidation</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Increased mobility</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Hardware removal</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Phase 4 -->
+                <div class="relative flex items-start">
+                    <div class="flex-shrink-0 w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl z-10">4</div>
+                    <div class="ml-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl ring-1 ring-emerald-200 p-6 flex-1">
+                        <h3 class="text-xl font-semibold text-stone-900 mb-2">Full Recovery (Months 9-12+)</h3>
+                        <p class="text-stone-600 mb-4">Return to normal activities, sports, and full function. Final results are visible and you can enjoy your new height!</p>
+                        <ul class="text-sm text-stone-600 space-y-1">
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Return to sports</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Full weight bearing</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Enjoy your results!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="py-20 bg-stone-50">
+    <div class="container mx-auto px-4">
+        {% if page.introduction %}
+        <div class="prose prose-lg prose-stone max-w-4xl mx-auto mb-16">
+            {{ page.introduction|richtext }}
+        </div>
+        {% endif %}
+        
+        <!-- Tips Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Physiotherapy -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-stone-900 mb-3">Physiotherapy</h3>
+                <p class="text-stone-600">Daily exercises are crucial for maintaining mobility and preventing complications. We provide a comprehensive PT program.</p>
+            </div>
+            
+            <!-- Nutrition -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-stone-900 mb-3">Nutrition</h3>
+                <p class="text-stone-600">A protein-rich diet with adequate calcium and vitamin D supports bone healing. We provide dietary guidelines.</p>
+            </div>
+            
+            <!-- Pain Management -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="w-14 h-14 bg-stone-100 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-stone-900 mb-3">Pain Management</h3>
+                <p class="text-stone-600">Discomfort is normal and manageable. We provide medications and techniques to keep you comfortable throughout recovery.</p>
+            </div>
+            
+            <!-- Wound Care -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-stone-900 mb-3">Wound Care</h3>
+                <p class="text-stone-600">Proper pin site care prevents infection. We teach you exactly how to clean and dress your sites daily.</p>
+            </div>
+            
+            <!-- Mental Health -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-stone-900 mb-3">Mental Wellness</h3>
+                <p class="text-stone-600">Recovery is a journey. Our support team is here to help you stay positive and motivated throughout the process.</p>
+            </div>
+            
+            <!-- Follow-ups -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 p-8 hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-stone-900 mb-3">Regular Check-ups</h3>
+                <p class="text-stone-600">Weekly X-rays and check-ups ensure your progress is on track. Remote consultations available for international patients.</p>
+            </div>
+        </div>
+        
+        <!-- Body Content -->
+        {% if page.body %}
+        <div class="prose prose-lg prose-stone max-w-4xl mx-auto mt-16">
+            {{ page.body|richtext }}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-serif font-bold mb-4">Questions About Recovery?</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Schedule a consultation to discuss the recovery process in detail.</p>
+        <a href="{% url 'booking:consultation' %}" class="inline-flex items-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+            Book Consultation
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Limb Lengthening Procedures - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">Limb Lengthening Procedures</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto">
+            Comprehensive limb lengthening solutions tailored to your goals
+        </p>
+    </div>
+</section>
+
+<!-- Methods Comparison -->
+<section class="py-20 bg-stone-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-serif font-bold text-stone-900 text-center mb-12">Our Methods</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Ilizarov -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 overflow-hidden hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="bg-stone-800 text-white p-6 text-center">
+                    <h3 class="text-2xl font-serif font-bold">Ilizarov Method</h3>
+                    <p class="text-stone-400 text-sm mt-1">External Fixator</p>
+                </div>
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <span class="text-3xl font-bold text-stone-900">$3,000</span>
+                        <span class="text-stone-500">- $4,000</span>
+                    </div>
+                    <ul class="space-y-3 mb-6 text-sm text-stone-600">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Most affordable option
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Proven 70+ year track record
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            2-3" height gain per segment
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-stone-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                            <span class="text-stone-500">External frame for full duration</span>
+                        </li>
+                    </ul>
+                    <a href="{% url 'booking:consultation' %}" class="block w-full text-center py-3 bg-stone-800 text-white font-semibold rounded-full hover:bg-stone-900 transition-colors">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            
+            <!-- LON - Featured -->
+            <div class="bg-white rounded-3xl ring-2 ring-amber-500 overflow-hidden shadow-xl transform md:scale-105 relative">
+                <div class="bg-amber-600 text-white p-6 text-center relative">
+                    <span class="absolute top-3 right-3 bg-white text-amber-700 text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</span>
+                    <h3 class="text-2xl font-serif font-bold">LON Method</h3>
+                    <p class="text-amber-200 text-sm mt-1">Combined Technique</p>
+                </div>
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <span class="text-3xl font-bold text-stone-900">$4,500</span>
+                        <span class="text-stone-500">- $5,500</span>
+                    </div>
+                    <ul class="space-y-3 mb-6 text-sm text-stone-600">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Best value for results
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Internal nail + external frame
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Shorter frame time than Ilizarov
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Better weight bearing support
+                        </li>
+                    </ul>
+                    <a href="{% url 'booking:consultation' %}" class="block w-full text-center py-3 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-colors shadow-lg shadow-amber-600/25">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+            
+            <!-- PRECICE -->
+            <div class="bg-white rounded-3xl ring-1 ring-stone-200 overflow-hidden hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="bg-stone-800 text-white p-6 text-center">
+                    <h3 class="text-2xl font-serif font-bold">PRECICE Method</h3>
+                    <p class="text-stone-400 text-sm mt-1">Fully Internal</p>
+                </div>
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <span class="text-3xl font-bold text-stone-900">$8,000</span>
+                        <span class="text-stone-500">- $12,000</span>
+                    </div>
+                    <ul class="space-y-3 mb-6 text-sm text-stone-600">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            No external frame at all
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Magnetic remote-controlled
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Minimal scarring
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Premium recovery experience
+                        </li>
+                    </ul>
+                    <a href="{% url 'booking:consultation' %}" class="block w-full text-center py-3 bg-stone-800 text-white font-semibold rounded-full hover:bg-stone-900 transition-colors">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Child Procedures -->
+{% if procedures %}
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-serif font-bold text-stone-900 text-center mb-12">Explore Procedures</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for procedure in procedures %}
+            <a href="{% url 'cms:procedure-detail' procedure.slug %}" class="group bg-white rounded-3xl ring-1 ring-stone-200 overflow-hidden hover:ring-amber-300 hover:shadow-lg transition-all">
+                <div class="h-48 bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-stone-900 mb-2 group-hover:text-amber-700 transition-colors">{{ procedure.name }}</h3>
+                    <p class="text-stone-600 text-sm mb-3">{{ procedure.description }}</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-amber-700 font-medium">{{ procedure.height_gain }}</span>
+                        <span class="text-stone-500">{{ procedure.price_range }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="py-16 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-serif font-bold mb-4">Ready to Start Your Journey?</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Schedule a consultation to discuss which procedure is right for you.</p>
+        <a href="{% url 'booking:consultation' %}" class="inline-flex items-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+            Book Consultation
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

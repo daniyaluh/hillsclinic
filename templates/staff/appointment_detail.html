@@ -1,0 +1,379 @@
+{% extends "staff/base_staff.html" %}
+{% load i18n %}
+
+{% block title %}Appointment Details - Staff Portal{% endblock %}
+
+{% block staff_content %}
+<!-- Back Link -->
+<div class="mb-6">
+    <a href="{% url 'staff:appointment_list' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-amber-700 text-sm font-medium transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Appointments
+    </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Appointment Details Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-stone-900">Appointment Details</h2>
+                </div>
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold 
+                    {% if appointment.status == 'confirmed' %}bg-emerald-100 text-emerald-700
+                    {% elif appointment.status == 'pending' %}bg-amber-100 text-amber-700
+                    {% elif appointment.status == 'completed' %}bg-blue-100 text-blue-700
+                    {% elif appointment.status == 'cancelled' %}bg-red-100 text-red-700
+                    {% else %}bg-stone-100 text-stone-700{% endif %}">
+                    {{ appointment.get_status_display }}
+                </span>
+            </div>
+            
+            <div class="p-6">
+                <!-- Info Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Date</p>
+                        {% if appointment.time_slot %}
+                        <p class="text-lg font-semibold text-stone-900">{{ appointment.time_slot.date|date:"M d, Y" }}</p>
+                        {% else %}
+                        <p class="text-lg font-semibold text-amber-600">Not scheduled</p>
+                        {% endif %}
+                    </div>
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Time</p>
+                        {% if appointment.time_slot %}
+                        <p class="text-lg font-semibold text-stone-900">{{ appointment.time_slot.start_time|time:"g:i A" }}</p>
+                        {% else %}
+                        <p class="text-lg font-semibold text-amber-600">—</p>
+                        {% endif %}
+                    </div>
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Type</p>
+                        <p class="text-lg font-semibold text-stone-900">{{ appointment.get_appointment_type_display }}</p>
+                    </div>
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Method</p>
+                        <p class="text-lg font-semibold text-stone-900">{{ appointment.get_consultation_method_display }}</p>
+                    </div>
+                    <div class="bg-stone-50 rounded-2xl p-4 col-span-2">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Requested On</p>
+                        <p class="text-lg font-semibold text-stone-900">{{ appointment.created_at|date:"M d, Y H:i" }}</p>
+                    </div>
+                </div>
+                
+                {% if not appointment.time_slot %}
+                <!-- Assign Time Slot Section -->
+                <div class="mb-6 p-5 rounded-2xl border
+                    {% if appointment.payment_status == 'verified' %}bg-emerald-50 border-emerald-200
+                    {% elif appointment.payment_status == 'submitted' %}bg-amber-50 border-amber-200
+                    {% else %}bg-orange-50 border-orange-200{% endif %}">
+                    
+                    {% if appointment.payment_status == 'verified' %}
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-emerald-800">Payment Verified - Ready to Schedule</p>
+                            <p class="text-sm text-emerald-700">The patient has paid the consultation fee. Assign a time slot to confirm.</p>
+                        </div>
+                    </div>
+                    {% elif appointment.payment_status == 'submitted' %}
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-amber-800">Payment Submitted - Awaiting Verification</p>
+                            <p class="text-sm text-amber-700">Please verify payment first, then assign a time slot.</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-orange-800">New Consultation Request</p>
+                            <p class="text-sm text-orange-700">Awaiting payment. You can assign a time slot after payment is received.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post" class="space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="confirm_with_slot">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-2">Select Time Slot</label>
+                            <select name="time_slot" required class="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                                <option value="">Choose a slot...</option>
+                                {% for slot in available_slots %}
+                                <option value="{{ slot.id }}">{{ slot.date|date:"D, M d, Y" }} at {{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</option>
+                                {% empty %}
+                                <option value="" disabled>No available slots</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% if appointment.payment_status == 'verified' %}
+                        <button type="submit" class="w-full px-5 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all shadow-lg">
+                            Assign Slot & Confirm Appointment
+                        </button>
+                        {% else %}
+                        <button type="submit" disabled class="w-full px-5 py-3 bg-stone-300 text-stone-500 font-semibold rounded-full cursor-not-allowed">
+                            Verify Payment First
+                        </button>
+                        {% endif %}
+                    </form>
+                    <p class="text-xs text-stone-500 mt-3 text-center">
+                        <a href="{% url 'staff:time_slots' %}" class="text-amber-600 hover:underline">Manage time slots →</a>
+                    </p>
+                </div>
+                {% endif %}
+                
+                {% if appointment.meeting_link %}
+                <div class="mb-6 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                    <p class="text-sm text-blue-600 font-medium mb-2">Meeting Link</p>
+                    <a href="{{ appointment.meeting_link }}" target="_blank" class="text-blue-800 hover:underline break-all font-medium">
+                        {{ appointment.meeting_link }}
+                    </a>
+                </div>
+                {% endif %}
+                
+                {% if appointment.patient_notes %}
+                <div class="mb-6">
+                    <p class="text-sm font-medium text-stone-700 mb-3">Patient Notes</p>
+                    <div class="p-4 bg-stone-50 rounded-2xl text-stone-700 whitespace-pre-line">
+                        {{ appointment.patient_notes|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Doctor Notes -->
+                <div>
+                    <p class="text-sm font-medium text-stone-700 mb-3">Doctor Notes</p>
+                    <form method="post" class="space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_notes">
+                        <textarea name="doctor_notes" rows="4" 
+                                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-amber-500 transition-all"
+                                  placeholder="Add your notes here...">{{ appointment.doctor_notes }}</textarea>
+                        <button type="submit" class="px-5 py-2.5 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all">
+                            Save Notes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Payment Information Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-semibold text-stone-900">Payment Information</h2>
+                </div>
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold 
+                    {% if appointment.payment_status == 'verified' %}bg-emerald-100 text-emerald-700
+                    {% elif appointment.payment_status == 'submitted' %}bg-amber-100 text-amber-700
+                    {% elif appointment.payment_status == 'failed' %}bg-red-100 text-red-700
+                    {% else %}bg-stone-100 text-stone-700{% endif %}">
+                    {{ appointment.get_payment_status_display }}
+                </span>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Consultation Fee</p>
+                        <p class="text-2xl font-bold text-stone-900">${{ appointment.consultation_fee }}</p>
+                    </div>
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Payment Method</p>
+                        <p class="text-lg font-semibold text-stone-900">{{ appointment.get_payment_method_display|default:"Not selected" }}</p>
+                    </div>
+                    {% if appointment.payment_deadline %}
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Payment Deadline</p>
+                        <p class="text-lg font-semibold {% if appointment.is_payment_overdue %}text-red-600{% else %}text-stone-900{% endif %}">
+                            {{ appointment.payment_deadline|date:"M d, Y" }}
+                            {% if appointment.is_payment_overdue %}
+                            <span class="text-sm text-red-500 block">Overdue!</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+                    {% if appointment.payment_confirmed_at %}
+                    <div class="bg-stone-50 rounded-2xl p-4">
+                        <p class="text-xs text-stone-500 uppercase tracking-wide mb-1">Verified On</p>
+                        <p class="text-lg font-semibold text-emerald-600">{{ appointment.payment_confirmed_at|date:"M d, Y" }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if appointment.payment_proof %}
+                <!-- Payment Proof -->
+                <div class="mb-6">
+                    <p class="text-sm font-medium text-stone-700 mb-3">Payment Proof</p>
+                    <div class="border border-stone-200 rounded-2xl overflow-hidden">
+                        <a href="{{ appointment.payment_proof.url }}" target="_blank" class="block">
+                            <img src="{{ appointment.payment_proof.url }}" alt="Payment Proof" class="max-w-full max-h-96 mx-auto hover:opacity-90 transition-opacity">
+                        </a>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-2 text-center">Click to view full size</p>
+                </div>
+                
+                {% if appointment.payment_status == 'submitted' and is_staff %}
+                <div class="border-t border-stone-100 pt-6 space-y-3">
+                    <form method="post" class="space-y-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="verify_payment">
+                        <textarea name="payment_notes" rows="2" 
+                                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm"
+                                  placeholder="Optional: Add verification notes..."></textarea>
+                        <button type="submit" class="w-full px-5 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all shadow-lg">
+                            ✓ Verify Payment
+                        </button>
+                    </form>
+                    
+                    <form method="post" onsubmit="return confirm('Are you sure you want to reject this payment?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="reject_payment">
+                        <input type="hidden" name="payment_notes" value="Payment rejected - proof insufficient or invalid">
+                        <button type="submit" class="w-full px-5 py-3 bg-red-50 text-red-700 font-semibold rounded-full hover:bg-red-100 ring-1 ring-red-200 transition-all">
+                            ✗ Reject Payment
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+                {% elif appointment.payment_status == 'pending' %}
+                <div class="bg-stone-50 rounded-2xl p-6 text-center">
+                    <div class="w-12 h-12 bg-stone-100 rounded-xl mx-auto flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <p class="text-stone-500">Patient has not submitted payment yet</p>
+                    {% if appointment.payment_deadline %}
+                    <p class="text-sm text-stone-400 mt-1">Deadline: {{ appointment.payment_deadline|date:"M d, Y H:i" }}</p>
+                    {% endif %}
+                </div>
+                {% elif appointment.payment_status == 'verified' %}
+                <div class="bg-emerald-50 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <p class="text-emerald-700 font-semibold">Payment Verified</p>
+                    </div>
+                    {% if appointment.payment_confirmed_by %}
+                    <p class="text-sm text-emerald-600">By: {{ appointment.payment_confirmed_by.email }}</p>
+                    {% endif %}
+                    {% if appointment.payment_notes %}
+                    <p class="text-sm text-stone-600 mt-2">{{ appointment.payment_notes }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="lg:col-span-1 space-y-6">
+        <!-- Patient Info Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Patient Information</h3>
+            
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="w-14 h-14 bg-gradient-to-br from-amber-100 to-amber-200 rounded-2xl flex items-center justify-center">
+                    <span class="text-amber-700 font-bold text-lg">
+                        {{ appointment.patient.user.first_name|slice:":1"|upper }}{{ appointment.patient.user.last_name|slice:":1"|upper }}
+                    </span>
+                </div>
+                <div>
+                    <a href="{% url 'staff:patient_detail' appointment.patient.id %}" class="font-semibold text-stone-900 hover:text-amber-700 transition-colors">
+                        {{ appointment.patient.user.get_full_name|default:appointment.patient.user.email }}
+                    </a>
+                    <p class="text-sm text-stone-500">{{ appointment.patient.country }}</p>
+                </div>
+            </div>
+            
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center py-2 border-b border-stone-100">
+                    <span class="text-stone-500">Email</span>
+                    <a href="mailto:{{ appointment.patient.user.email }}" class="text-amber-600 hover:underline truncate ml-2">{{ appointment.patient.user.email }}</a>
+                </div>
+                {% if appointment.patient.phone_number %}
+                <div class="flex justify-between items-center py-2">
+                    <span class="text-stone-500">Phone</span>
+                    <a href="tel:{{ appointment.patient.phone_number }}" class="text-stone-900 font-medium">{{ appointment.patient.phone_number }}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Actions Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Actions</h3>
+            
+            <div class="space-y-3">
+                {% if is_staff %}
+                {% if appointment.status == 'pending' %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="confirm">
+                    <button type="submit" class="w-full px-5 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all shadow-lg">
+                        ✓ Confirm Appointment
+                    </button>
+                </form>
+                {% endif %}
+                
+                {% if appointment.status in 'pending,confirmed' %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="complete">
+                    <button type="submit" class="w-full px-5 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg">
+                        ✓ Mark as Completed
+                    </button>
+                </form>
+                
+                <form method="post" onsubmit="return confirm('Are you sure you want to cancel this appointment?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="cancel">
+                    <button type="submit" class="w-full px-5 py-3 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 transition-all shadow-lg">
+                        ✗ Cancel Appointment
+                    </button>
+                </form>
+                {% endif %}
+                {% endif %}
+                
+                <a href="{% url 'staff:patient_detail' appointment.patient.id %}" 
+                   class="block w-full px-5 py-3 bg-white text-stone-700 font-semibold rounded-full ring-1 ring-stone-200 hover:bg-stone-50 text-center transition-all">
+                    View Full Patient Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

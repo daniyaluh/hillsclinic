@@ -1,0 +1,200 @@
+# Persian/Farsi translations for Hills Clinic
+# Copyright (C) 2025 Hills Clinic
+# This file is distributed under the same license as the Hills Clinic package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hills Clinic 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: Hills Clinic Team\n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# Navigation
+msgid "Home"
+msgstr "خانه"
+
+msgid "Procedures"
+msgstr "روش‌ها"
+
+msgid "Overview"
+msgstr "نمای کلی"
+
+msgid "Ilizarov (External)"
+msgstr "ایلیزاروف (خارجی)"
+
+msgid "Internal Nails"
+msgstr "میخ‌های داخلی"
+
+msgid "LON Method"
+msgstr "روش LON"
+
+msgid "International Patients"
+msgstr "بیماران بین‌المللی"
+
+msgid "Cost & Financing"
+msgstr "هزینه و تأمین مالی"
+
+msgid "Recovery"
+msgstr "بهبودی"
+
+msgid "Success Stories"
+msgstr "داستان‌های موفقیت"
+
+msgid "Blog"
+msgstr "وبلاگ"
+
+msgid "Our Team"
+msgstr "تیم ما"
+
+msgid "Patient Portal"
+msgstr "پورتال بیمار"
+
+msgid "My Portal"
+msgstr "پورتال من"
+
+msgid "Logout"
+msgstr "خروج"
+
+msgid "Book Consultation"
+msgstr "رزرو مشاوره"
+
+msgid "Select Language"
+msgstr "انتخاب زبان"
+
+msgid "Select language"
+msgstr "انتخاب زبان"
+
+# Footer
+msgid "Quick Links"
+msgstr "لینک‌های سریع"
+
+msgid "Legal"
+msgstr "قانونی"
+
+msgid "Privacy Policy"
+msgstr "سیاست حفظ حریم خصوصی"
+
+msgid "Terms of Service"
+msgstr "شرایط خدمات"
+
+msgid "Cookie Policy"
+msgstr "سیاست کوکی"
+
+msgid "Contact"
+msgstr "تماس با ما"
+
+msgid "All rights reserved"
+msgstr "تمامی حقوق محفوظ است"
+
+# Common
+msgid "Learn More"
+msgstr "بیشتر بدانید"
+
+msgid "Read More"
+msgstr "ادامه مطلب"
+
+msgid "Submit"
+msgstr "ارسال"
+
+msgid "Send"
+msgstr "ارسال"
+
+msgid "Cancel"
+msgstr "لغو"
+
+msgid "Save"
+msgstr "ذخیره"
+
+msgid "Back"
+msgstr "بازگشت"
+
+msgid "Next"
+msgstr "بعدی"
+
+msgid "Previous"
+msgstr "قبلی"
+
+msgid "Close"
+msgstr "بستن"
+
+# Medical
+msgid "Height Lengthening"
+msgstr "افزایش قد"
+
+msgid "Limb Lengthening"
+msgstr "افزایش طول اندام"
+
+msgid "Leg Lengthening"
+msgstr "افزایش طول پا"
+
+msgid "Consultation"
+msgstr "مشاوره"
+
+msgid "Free Consultation"
+msgstr "مشاوره رایگان"
+
+msgid "Book Your Free Consultation"
+msgstr "مشاوره رایگان خود را رزرو کنید"
+
+msgid "Doctor"
+msgstr "پزشک"
+
+msgid "Surgeon"
+msgstr "جراح"
+
+msgid "Medical Team"
+msgstr "تیم پزشکی"
+
+msgid "Surgery"
+msgstr "جراحی"
+
+msgid "Treatment"
+msgstr "درمان"
+
+msgid "Patient"
+msgstr "بیمار"
+
+msgid "Results"
+msgstr "نتایج"
+
+# Forms
+msgid "Full Name"
+msgstr "نام کامل"
+
+msgid "Email"
+msgstr "ایمیل"
+
+msgid "Phone"
+msgstr "تلفن"
+
+msgid "Country"
+msgstr "کشور"
+
+msgid "Message"
+msgstr "پیام"
+
+msgid "Your message has been sent successfully"
+msgstr "پیام شما با موفقیت ارسال شد"
+
+# Video Consultation
+msgid "Video Consultation"
+msgstr "مشاوره ویدیویی"
+
+msgid "Book Video Consultation"
+msgstr "رزرو مشاوره ویدیویی"
+
+msgid "Join Meeting"
+msgstr "پیوستن به جلسه"
+
+msgid "Payment"
+msgstr "پرداخت"
+
+msgid "Pay Now"
+msgstr "پرداخت"

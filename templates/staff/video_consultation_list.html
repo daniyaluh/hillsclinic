@@ -1,0 +1,124 @@
+{% extends "staff/base_staff.html" %}
+{% load i18n %}
+
+{% block title %}Video Consultations - Staff Portal{% endblock %}
+
+{% block staff_content %}
+<div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+    <div class="px-6 py-5 border-b border-stone-100">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-semibold text-stone-900">Video Consultations</h2>
+            </div>
+            
+            <form method="get" class="flex flex-wrap items-center gap-3">
+                <input type="date" name="date" value="{{ selected_date }}" 
+                       class="px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                <select name="status" class="px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending Payment</option>
+                    <option value="scheduled" {% if selected_status == 'scheduled' %}selected{% endif %}>Scheduled</option>
+                    <option value="in_progress" {% if selected_status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="completed" {% if selected_status == 'completed' %}selected{% endif %}>Completed</option>
+                </select>
+                <button type="submit" class="px-5 py-2.5 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all shadow-lg">
+                    Filter
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-stone-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Patient</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Date & Time</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Room ID</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wide">Status</th>
+                    <th class="px-6 py-4 text-right text-xs font-semibold text-stone-500 uppercase tracking-wide">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100">
+                {% for cons in consultations %}
+                <tr class="hover:bg-stone-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <p class="font-semibold text-stone-900">{{ cons.patient_name }}</p>
+                        <p class="text-sm text-stone-500">{{ cons.patient_email }}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex flex-col items-center justify-center">
+                                <span class="text-lg font-bold text-purple-700">{{ cons.scheduled_date|date:"d" }}</span>
+                                <span class="text-xs text-purple-500 uppercase">{{ cons.scheduled_date|date:"M" }}</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-stone-900">{{ cons.scheduled_time|time:"g:i A" }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <code class="text-sm bg-stone-100 px-3 py-1.5 rounded-lg font-semibold text-stone-700">{{ cons.room_id }}</code>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold 
+                            {% if cons.status == 'scheduled' %}bg-emerald-100 text-emerald-700
+                            {% elif cons.status == 'pending' %}bg-amber-100 text-amber-700
+                            {% elif cons.status == 'in_progress' %}bg-blue-100 text-blue-700
+                            {% elif cons.status == 'completed' %}bg-stone-100 text-stone-700
+                            {% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ cons.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        {% if cons.status == 'scheduled' and cons.can_join %}
+                        <a href="{{ cons.meeting_url }}" target="_blank" 
+                           class="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white text-sm font-semibold rounded-full hover:bg-purple-700 transition-all shadow-lg">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                            Join Call
+                        </a>
+                        {% else %}
+                        <span class="text-sm text-stone-400">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-16 text-center">
+                        <div class="w-16 h-16 bg-stone-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <p class="text-stone-500 font-medium">No video consultations found</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if consultations.has_other_pages %}
+    <div class="px-6 py-4 border-t border-stone-100 flex items-center justify-between">
+        <p class="text-sm text-stone-500">
+            Showing {{ consultations.start_index }} to {{ consultations.end_index }} of {{ consultations.paginator.count }}
+        </p>
+        <div class="flex gap-2">
+            {% if consultations.has_previous %}
+            <a href="?page={{ consultations.previous_page_number }}" class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-sm font-medium hover:bg-stone-50 transition-all">← Previous</a>
+            {% endif %}
+            {% if consultations.has_next %}
+            <a href="?page={{ consultations.next_page_number }}" class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-sm font-medium hover:bg-stone-50 transition-all">Next →</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

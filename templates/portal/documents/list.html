@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}My Documents - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 py-10 px-4">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex items-center gap-4 mb-4">
+            <a href="{% url 'portal:dashboard' %}" class="text-stone-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div class="w-12 h-12 bg-amber-600/20 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-white">My Documents</h1>
+        <p class="text-stone-300 mt-2">Upload and manage your medical files</p>
+    </div>
+</div>
+
+<section class="min-h-screen bg-stone-50 py-8">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Action Bar -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+            <!-- Filters -->
+            <div class="flex flex-wrap gap-2">
+                <a href="{% url 'portal:documents' %}" 
+                   class="px-4 py-2 rounded-full text-sm font-medium transition-all
+                   {% if not current_type %}bg-stone-900 text-white{% else %}bg-white text-stone-600 ring-1 ring-stone-200 hover:bg-stone-50{% endif %}">
+                    All Documents
+                </a>
+                {% for value, label in upload_types %}
+                <a href="{% url 'portal:documents' %}?type={{ value }}" 
+                   class="px-4 py-2 rounded-full text-sm font-medium transition-all
+                   {% if current_type == value %}bg-stone-900 text-white{% else %}bg-white text-stone-600 ring-1 ring-stone-200 hover:bg-stone-50{% endif %}">
+                    {{ label }}
+                </a>
+                {% endfor %}
+            </div>
+            
+            <!-- Upload Button -->
+            <a href="{% url 'portal:document-upload' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+                Upload Document
+            </a>
+        </div>
+        
+        <!-- Documents Grid -->
+        {% if documents %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for doc in documents %}
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden hover:shadow-md transition-all group">
+                <!-- Preview -->
+                <div class="aspect-[4/3] bg-stone-100 flex items-center justify-center relative">
+                    {% if 'image' in doc.mime_type %}
+                    <img src="{{ doc.file.url }}" alt="{{ doc.title }}" class="w-full h-full object-cover">
+                    {% elif doc.mime_type == 'application/pdf' %}
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-100 rounded-2xl mx-auto flex items-center justify-center mb-3">
+                            <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-stone-500 font-medium">PDF Document</p>
+                    </div>
+                    {% else %}
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-stone-200 rounded-2xl mx-auto flex items-center justify-center mb-3">
+                            <svg class="w-8 h-8 text-stone-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-stone-500 font-medium">{{ doc.get_upload_type_display }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Status Badge -->
+                    {% if doc.is_verified %}
+                    <div class="absolute top-3 right-3 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        Verified
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Hover Actions -->
+                    <div class="absolute inset-0 bg-stone-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                        <div class="flex gap-3">
+                            <a href="{{ doc.file.url }}" target="_blank" class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="View">
+                                <svg class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </a>
+                            <a href="{{ doc.file.url }}" download class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="Download">
+                                <svg class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                            </a>
+                            <a href="{% url 'portal:document-delete' doc.pk %}" class="p-3 bg-white rounded-xl hover:bg-red-50 transition-all shadow-lg" title="Delete">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Info -->
+                <div class="p-4">
+                    <p class="font-semibold text-stone-900 truncate">{{ doc.title|default:doc.get_upload_type_display }}</p>
+                    <div class="flex items-center justify-between mt-3 text-sm">
+                        <span class="text-stone-500">{{ doc.uploaded_at|date:"M d, Y" }}</span>
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-600 rounded-full text-xs font-medium">{{ doc.get_upload_type_display }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="flex justify-center mt-10">
+            <nav class="flex items-center gap-2">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}" 
+                   class="px-4 py-2 rounded-full bg-white ring-1 ring-stone-200 hover:bg-stone-50 font-medium text-stone-700 transition-all">
+                    ← Previous
+                </a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="px-4 py-2 rounded-full bg-stone-900 text-white font-medium">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if current_type %}&type={{ current_type }}{% endif %}" 
+                   class="px-4 py-2 rounded-full bg-white ring-1 ring-stone-200 hover:bg-stone-50 font-medium text-stone-700 transition-all">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}" 
+                   class="px-4 py-2 rounded-full bg-white ring-1 ring-stone-200 hover:bg-stone-50 font-medium text-stone-700 transition-all">
+                    Next →
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-16 text-center">
+            <div class="w-20 h-20 bg-stone-100 rounded-2xl mx-auto flex items-center justify-center mb-6">
+                <svg class="w-10 h-10 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-stone-900 mb-2">No Documents Yet</h3>
+            <p class="text-stone-500 mb-8 max-w-md mx-auto">Upload your X-rays, medical records, and photos to share with our medical team.</p>
+            <a href="{% url 'portal:document-upload' %}" class="inline-flex items-center gap-2 px-6 py-3 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+                Upload Your First Document
+            </a>
+        </div>
+        {% endif %}
+        
+        <!-- Back to Portal -->
+        <div class="mt-8 text-center">
+            <a href="{% url 'portal:dashboard' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-stone-900 font-medium transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

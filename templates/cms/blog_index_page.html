@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}{{ page.title }} - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">{{ page.title }}</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto">
+            {% if page.introduction %}
+            {{ page.introduction|striptags }}
+            {% else %}
+            Insights, updates, and educational content about limb lengthening surgery
+            {% endif %}
+        </p>
+    </div>
+</section>
+
+<!-- Search and Filter -->
+<section class="bg-white py-8 border-b border-stone-200 sticky top-0 z-10">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+            <!-- Search -->
+            <div class="w-full md:w-auto">
+                <div class="relative">
+                    <input type="text" 
+                           placeholder="Search articles..." 
+                           class="w-full md:w-80 pl-10 pr-4 py-2 border border-stone-300 rounded-full focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-stone-50"
+                           hx-get="{{ page.url }}"
+                           hx-trigger="keyup changed delay:300ms"
+                           hx-target="#articles-container"
+                           hx-select="#articles-container"
+                           hx-push-url="true"
+                           name="q"
+                           value="{{ search_query|default:'' }}">
+                    <svg class="w-5 h-5 text-stone-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Category Filter -->
+            <div class="flex flex-wrap gap-2" x-data="{ active: '{{ category|default:'all' }}' }">
+                <a href="{{ page.url }}?category=all"
+                   hx-get="{{ page.url }}?category=all"
+                   hx-target="#articles-container"
+                   hx-select="#articles-container"
+                   hx-push-url="true"
+                   @click="active = 'all'"
+                   :class="active === 'all' ? 'bg-amber-600 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'"
+                   class="px-4 py-2 rounded-full text-sm font-medium transition cursor-pointer">
+                    All
+                </a>
+                {% for value, label in categories %}
+                <a href="{{ page.url }}?category={{ value }}"
+                   hx-get="{{ page.url }}?category={{ value }}"
+                   hx-target="#articles-container"
+                   hx-select="#articles-container"
+                   hx-push-url="true"
+                   @click="active = '{{ value }}'"
+                   :class="active === '{{ value }}' ? 'bg-amber-600 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'"
+                   class="px-4 py-2 rounded-full text-sm font-medium transition cursor-pointer">
+                    {{ label }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Articles Section -->
+<section class="py-16 bg-stone-50" id="articles-container">
+    <div class="container mx-auto px-4">
+        
+        <!-- Current filter display -->
+        {% if category and category != 'all' or search_query %}
+        <div class="mb-8 flex items-center gap-2 text-stone-600">
+            <span>Showing:</span>
+            {% if search_query %}
+            <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm">
+                Search: "{{ search_query }}"
+            </span>
+            {% endif %}
+            {% if category and category != 'all' %}
+            <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm">
+                {{ category|title }}
+            </span>
+            {% endif %}
+            <a href="{{ page.url }}" class="text-amber-700 hover:underline text-sm ml-2">Clear filters</a>
+        </div>
+        {% endif %}
+        
+        <div id="articles-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for article in articles %}
+            <article class="bg-white rounded-3xl ring-1 ring-stone-200 overflow-hidden hover:ring-amber-300 hover:shadow-lg transition-all group">
+                <div class="h-48 bg-stone-100 overflow-hidden">
+                    {% if article.featured_image %}
+                    {% image article.featured_image fill-400x250 as article_img %}
+                    <img src="{{ article_img.url }}" alt="{{ article.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-6">
+                    {% if article.category %}
+                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium mb-3">{{ article.category }}</span>
+                    {% endif %}
+                    <h3 class="text-lg font-semibold text-stone-900 mb-2 group-hover:text-amber-700 transition-colors">
+                        <a href="{% pageurl article %}">{{ article.title }}</a>
+                    </h3>
+                    <p class="text-stone-600 text-sm line-clamp-2 mb-4">{{ article.excerpt|default:article.body|striptags|truncatewords:20 }}</p>
+                    <div class="flex items-center justify-between text-sm text-stone-500">
+                        <time datetime="{{ article.date|date:'Y-m-d' }}">{{ article.date|date:"M d, Y" }}</time>
+                        {% if article.read_time %}
+                        <span>{{ article.read_time }} min read</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <svg class="w-16 h-16 text-stone-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                </svg>
+                <h3 class="text-xl font-semibold text-stone-900 mb-2">No articles found</h3>
+                <p class="text-stone-600">Check back soon for new content.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if articles.paginator.num_pages > 1 %}
+        <nav class="mt-12 flex justify-center">
+            <div class="flex items-center gap-2">
+                {% if articles.has_previous %}
+                <a href="?page={{ articles.previous_page_number }}" class="px-4 py-2 bg-white ring-1 ring-stone-200 rounded-full text-stone-700 hover:bg-stone-50 transition">Previous</a>
+                {% endif %}
+                
+                <span class="px-4 py-2 text-stone-600">
+                    Page {{ articles.number }} of {{ articles.paginator.num_pages }}
+                </span>
+                
+                {% if articles.has_next %}
+                <a href="?page={{ articles.next_page_number }}" class="px-4 py-2 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition">Next</a>
+                {% endif %}
+            </div>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-serif font-bold mb-4">Have Questions?</h2>
+        <p class="text-xl text-stone-300 mb-8 max-w-2xl mx-auto">Schedule a consultation to discuss your goals and learn more about limb lengthening surgery.</p>
+        <a href="{% url 'booking:consultation' %}" class="inline-flex items-center px-8 py-4 bg-amber-600 text-white font-semibold rounded-full hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/25">
+            Book Consultation
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

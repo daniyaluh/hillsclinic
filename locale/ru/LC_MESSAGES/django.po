@@ -1,0 +1,200 @@
+# Russian translations for Hills Clinic
+# Copyright (C) 2025 Hills Clinic
+# This file is distributed under the same license as the Hills Clinic package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hills Clinic 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: Hills Clinic Team\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+# Navigation
+msgid "Home"
+msgstr "Главная"
+
+msgid "Procedures"
+msgstr "Процедуры"
+
+msgid "Overview"
+msgstr "Обзор"
+
+msgid "Ilizarov (External)"
+msgstr "Илизаров (внешний)"
+
+msgid "Internal Nails"
+msgstr "Внутренние гвозди"
+
+msgid "LON Method"
+msgstr "Метод LON"
+
+msgid "International Patients"
+msgstr "Международные пациенты"
+
+msgid "Cost & Financing"
+msgstr "Стоимость и финансирование"
+
+msgid "Recovery"
+msgstr "Восстановление"
+
+msgid "Success Stories"
+msgstr "Истории успеха"
+
+msgid "Blog"
+msgstr "Блог"
+
+msgid "Our Team"
+msgstr "Наша команда"
+
+msgid "Patient Portal"
+msgstr "Портал пациента"
+
+msgid "My Portal"
+msgstr "Мой портал"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Book Consultation"
+msgstr "Записаться на консультацию"
+
+msgid "Select Language"
+msgstr "Выберите язык"
+
+msgid "Select language"
+msgstr "Выберите язык"
+
+# Footer
+msgid "Quick Links"
+msgstr "Быстрые ссылки"
+
+msgid "Legal"
+msgstr "Правовая информация"
+
+msgid "Privacy Policy"
+msgstr "Политика конфиденциальности"
+
+msgid "Terms of Service"
+msgstr "Условия использования"
+
+msgid "Cookie Policy"
+msgstr "Политика cookies"
+
+msgid "Contact"
+msgstr "Контакты"
+
+msgid "All rights reserved"
+msgstr "Все права защищены"
+
+# Common
+msgid "Learn More"
+msgstr "Узнать больше"
+
+msgid "Read More"
+msgstr "Читать далее"
+
+msgid "Submit"
+msgstr "Отправить"
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "Previous"
+msgstr "Предыдущий"
+
+msgid "Close"
+msgstr "Закрыть"
+
+# Medical
+msgid "Height Lengthening"
+msgstr "Увеличение роста"
+
+msgid "Limb Lengthening"
+msgstr "Удлинение конечностей"
+
+msgid "Leg Lengthening"
+msgstr "Удлинение ног"
+
+msgid "Consultation"
+msgstr "Консультация"
+
+msgid "Free Consultation"
+msgstr "Бесплатная консультация"
+
+msgid "Book Your Free Consultation"
+msgstr "Запишитесь на бесплатную консультацию"
+
+msgid "Doctor"
+msgstr "Врач"
+
+msgid "Surgeon"
+msgstr "Хирург"
+
+msgid "Medical Team"
+msgstr "Медицинская команда"
+
+msgid "Surgery"
+msgstr "Операция"
+
+msgid "Treatment"
+msgstr "Лечение"
+
+msgid "Patient"
+msgstr "Пациент"
+
+msgid "Results"
+msgstr "Результаты"
+
+# Forms
+msgid "Full Name"
+msgstr "Полное имя"
+
+msgid "Email"
+msgstr "Электронная почта"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Country"
+msgstr "Страна"
+
+msgid "Message"
+msgstr "Сообщение"
+
+msgid "Your message has been sent successfully"
+msgstr "Ваше сообщение успешно отправлено"
+
+# Video Consultation
+msgid "Video Consultation"
+msgstr "Видеоконсультация"
+
+msgid "Book Video Consultation"
+msgstr "Записаться на видеоконсультацию"
+
+msgid "Join Meeting"
+msgstr "Присоединиться к встрече"
+
+msgid "Payment"
+msgstr "Оплата"
+
+msgid "Pay Now"
+msgstr "Оплатить сейчас"

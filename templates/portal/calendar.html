@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}My Calendar - Hills Clinic{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 py-10 px-4">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-4 mb-4">
+            <a href="{% url 'portal:dashboard' %}" class="text-stone-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div class="w-12 h-12 bg-amber-600/20 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-white">Appointment Calendar</h1>
+        <p class="text-stone-300 mt-2">View and manage your scheduled appointments</p>
+    </div>
+</div>
+
+<section class="min-h-screen bg-stone-50 py-8">
+    <div class="container mx-auto px-4">
+        <div class="max-w-5xl mx-auto">
+            <!-- Action Buttons -->
+            <div class="flex justify-end gap-3 mb-6">
+                <a href="{% url 'portal:appointments' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white ring-1 ring-stone-200 text-stone-700 rounded-full hover:bg-stone-50 transition text-sm font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                    </svg>
+                    List View
+                </a>
+                <a href="{% url 'portal:appointment-book' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-stone-900 text-white rounded-full hover:bg-stone-800 transition text-sm font-semibold shadow-lg">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Book New
+                </a>
+            </div>
+            
+            <!-- Calendar Navigation -->
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 mb-6 overflow-hidden">
+                <div class="px-6 py-5 border-b border-stone-100 flex items-center justify-between bg-stone-50">
+                    <a href="?month={{ prev_month|date:'Y-m' }}" class="p-2.5 hover:bg-stone-200 rounded-xl transition-all">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
+                    <h2 class="text-xl font-serif font-bold text-stone-900">{{ current_month|date:"F Y" }}</h2>
+                    <a href="?month={{ next_month|date:'Y-m' }}" class="p-2.5 hover:bg-stone-200 rounded-xl transition-all">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- Calendar Grid -->
+                <div class="p-6">
+                    <!-- Day Headers -->
+                    <div class="grid grid-cols-7 gap-2 mb-4">
+                        {% for day in weekdays %}
+                        <div class="text-center text-sm font-semibold text-stone-500 py-2">{{ day }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Calendar Days -->
+                    <div class="grid grid-cols-7 gap-2">
+                        {% for day in calendar_days %}
+                        <div class="min-h-24 p-2 {% if day.is_current_month %}bg-white{% else %}bg-stone-50{% endif %} ring-1 ring-stone-100 rounded-xl {% if day.is_today %}ring-2 ring-amber-500 bg-amber-50/30{% endif %}">
+                            <div class="text-right mb-2">
+                                <span class="text-sm {% if day.is_today %}bg-amber-500 text-white px-2.5 py-1 rounded-full font-semibold{% elif day.is_current_month %}text-stone-900 font-medium{% else %}text-stone-400{% endif %}">
+                                    {{ day.date.day }}
+                                </span>
+                            </div>
+                            
+                            {% for apt in day.appointments %}
+                            <a href="{% url 'portal:appointments' %}" 
+                               class="block text-xs p-1.5 mb-1 rounded-lg truncate font-medium
+                                   {% if apt.status == 'confirmed' and apt.payment_status == 'verified' %}bg-emerald-100 text-emerald-700
+                                   {% elif apt.status == 'confirmed' %}bg-emerald-100 text-emerald-700
+                                   {% elif apt.payment_status == 'failed' %}bg-red-100 text-red-700
+                                   {% else %}bg-amber-100 text-amber-700{% endif %}">
+                                {% if apt.time_slot %}{{ apt.time_slot.start_time|time:"g:iA" }}{% endif %}
+                                {{ apt.get_appointment_type_display|truncatechars:10 }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upcoming Appointments List -->
+            {% if appointments_this_month %}
+            <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900">Appointments This Month</h3>
+                </div>
+                <div class="space-y-3">
+                    {% for apt in appointments_this_month %}
+                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-stone-50 ring-1 ring-stone-100">
+                        <div class="w-14 h-14 rounded-xl flex flex-col items-center justify-center flex-shrink-0
+                            {% if apt.status == 'confirmed' and apt.payment_status == 'verified' %}bg-emerald-100 text-emerald-600
+                            {% elif apt.payment_status == 'failed' %}bg-red-100 text-red-600
+                            {% else %}bg-amber-100 text-amber-600{% endif %}">
+                            <span class="text-lg font-bold">{{ apt.time_slot.date|date:"d" }}</span>
+                            <span class="text-xs font-medium uppercase">{{ apt.time_slot.date|date:"M" }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-stone-900">{{ apt.get_appointment_type_display }}</p>
+                            <p class="text-sm text-stone-500 mt-0.5">
+                                {{ apt.time_slot.start_time|time:"g:i A" }} - {{ apt.time_slot.end_time|time:"g:i A" }}
+                                <span class="text-stone-300 mx-1">•</span>
+                                {{ apt.get_consultation_method_display }}
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block px-3 py-1.5 text-xs font-semibold rounded-full 
+                                {% if apt.payment_status == 'verified' %}bg-emerald-100 text-emerald-700
+                                {% elif apt.payment_status == 'failed' %}bg-red-100 text-red-700
+                                {% elif apt.payment_status == 'submitted' %}bg-amber-100 text-amber-700
+                                {% else %}bg-orange-100 text-orange-700{% endif %}">
+                                {{ apt.get_payment_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Legend -->
+            <div class="mt-8 flex flex-wrap gap-6 justify-center text-sm">
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 rounded-lg bg-emerald-100 ring-1 ring-emerald-300"></span>
+                    <span class="text-stone-600">Confirmed & Paid</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 rounded-lg bg-amber-100 ring-1 ring-amber-300"></span>
+                    <span class="text-stone-600">Pending</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 rounded-lg bg-red-100 ring-1 ring-red-300"></span>
+                    <span class="text-stone-600">Payment Issue</span>
+                </div>
+            </div>
+            
+            <!-- Back to Portal -->
+            <div class="mt-8 text-center">
+                <a href="{% url 'portal:dashboard' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-stone-900 font-medium transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

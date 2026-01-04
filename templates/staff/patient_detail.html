@@ -1,0 +1,550 @@
+{% extends "staff/base_staff.html" %}
+{% load i18n %}
+
+{% block title %}{{ patient.get_display_name }} - Staff Portal{% endblock %}
+
+{% block staff_content %}
+<!-- Back Link -->
+<div class="mb-6">
+    <a href="{% url 'staff:patient_list' %}" class="inline-flex items-center gap-2 text-stone-600 hover:text-amber-700 text-sm font-medium transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Patients
+    </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Patient Info Sidebar -->
+    <div class="lg:col-span-1 space-y-6">
+        <!-- Profile Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <div class="text-center mb-6">
+                {% if patient.profile_picture %}
+                <img src="{{ patient.profile_picture.url }}" alt="{{ patient.get_display_name }}" 
+                     class="w-24 h-24 rounded-2xl object-cover mx-auto mb-4 ring-4 ring-stone-100">
+                {% else %}
+                <div class="w-24 h-24 bg-gradient-to-br from-amber-100 to-amber-200 rounded-2xl flex items-center justify-center mx-auto mb-4 ring-4 ring-stone-100">
+                    <span class="text-amber-700 font-bold text-2xl">
+                        {{ patient.get_display_name|slice:":2"|upper }}
+                    </span>
+                </div>
+                {% endif %}
+                <h2 class="text-xl font-bold text-stone-900" id="patient-name-display">{{ patient.get_display_name }}</h2>
+                <p class="text-stone-500">{{ patient.country }}</p>
+                
+                <button onclick="toggleNameEdit()" class="mt-3 inline-flex items-center gap-1 px-3 py-1.5 bg-stone-100 text-stone-600 text-xs font-medium rounded-full hover:bg-stone-200 transition-all">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                    Edit Name
+                </button>
+                
+                <form method="post" action="{% url 'staff:patient_update_name' patient.id %}" id="name-edit-form" class="hidden mt-4">
+                    {% csrf_token %}
+                    <input type="text" name="full_name" value="{{ patient.full_name }}" placeholder="Enter full name" 
+                           class="w-full px-4 py-2 bg-stone-50 border border-stone-200 rounded-xl text-center text-sm focus:ring-2 focus:ring-amber-500 transition-all">
+                    <div class="mt-3 flex justify-center gap-2">
+                        <button type="submit" class="px-4 py-2 bg-stone-900 text-white text-xs font-semibold rounded-full hover:bg-stone-800 transition-all">Save</button>
+                        <button type="button" onclick="toggleNameEdit()" class="px-4 py-2 bg-stone-100 text-stone-700 text-xs font-semibold rounded-full hover:bg-stone-200 transition-all">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Email</span>
+                    <a href="mailto:{{ patient.user.email }}" class="text-sm text-amber-600 hover:underline truncate ml-2">{{ patient.user.email }}</a>
+                </div>
+                
+                {% if patient.phone_number %}
+                <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Phone</span>
+                    <a href="tel:{{ patient.phone_number }}" class="text-sm text-stone-900 font-medium">{{ patient.phone_number }}</a>
+                </div>
+                {% endif %}
+                
+                {% if patient.whatsapp_number %}
+                <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">WhatsApp</span>
+                    <a href="https://wa.me/{{ patient.whatsapp_number|cut:'+' }}" target="_blank" class="text-sm text-emerald-600 font-medium hover:underline">{{ patient.whatsapp_number }}</a>
+                </div>
+                {% endif %}
+                
+                <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Language</span>
+                    <span class="text-sm text-stone-900">{{ patient.preferred_language|default:"English" }}</span>
+                </div>
+                
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm text-stone-500">Registered</span>
+                    <span class="text-sm text-stone-900">{{ patient.created_at|date:"M d, Y" }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Consent Status Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-stone-900">Consent Status</h3>
+                <a href="{% url 'staff:patient_consents' patient.id %}" class="text-xs text-amber-600 hover:underline font-medium">View All →</a>
+            </div>
+            
+            {% if surgery_status.ready %}
+            <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 mb-4 flex items-center gap-3">
+                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-semibold text-emerald-800 text-sm">Surgery Ready</p>
+                    <p class="text-xs text-emerald-700">All required consents completed</p>
+                </div>
+            </div>
+            {% else %}
+            <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100 mb-4 flex items-center gap-3">
+                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-semibold text-amber-800 text-sm">Consents Needed</p>
+                    <p class="text-xs text-amber-700">{{ surgery_status.completed }}/{{ surgery_status.total_required }} surgery consents</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-2">
+                {% for consent_type in surgery_status.missing %}
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                    <span class="text-stone-700">{{ consent_type }}</span>
+                </div>
+                {% empty %}
+                <p class="text-sm text-stone-500">All surgery consents granted ✓</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Medical Info Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Medical Information</h3>
+            
+            <div class="space-y-3">
+                {% if patient.date_of_birth %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Date of Birth</span>
+                    <span class="text-sm text-stone-900">{{ patient.date_of_birth|date:"M d, Y" }}</span>
+                </div>
+                {% endif %}
+                
+                {% if patient.gender %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Gender</span>
+                    <span class="text-sm text-stone-900">{{ patient.get_gender_display }}</span>
+                </div>
+                {% endif %}
+                
+                {% if patient.blood_type %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Blood Type</span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                        {{ patient.blood_type }}
+                    </span>
+                </div>
+                {% endif %}
+                
+                {% if patient.interested_in_procedure %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Procedure Interest</span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                        {{ patient.get_interested_in_procedure_display }}
+                    </span>
+                </div>
+                {% endif %}
+                
+                {% if patient.current_height %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Current Height</span>
+                    <span class="text-sm text-stone-900 font-medium">{{ patient.current_height }} cm</span>
+                </div>
+                {% endif %}
+                
+                {% if patient.weight %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Weight</span>
+                    <span class="text-sm text-stone-900 font-medium">{{ patient.weight }} kg</span>
+                </div>
+                {% endif %}
+                
+                {% if patient.desired_height_gain %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Desired Gain</span>
+                    <span class="text-sm text-emerald-600 font-semibold">+{{ patient.desired_height_gain }} cm</span>
+                </div>
+                {% endif %}
+                
+                {% if patient.medical_conditions %}
+                <div class="py-3">
+                    <span class="text-sm text-stone-500 block mb-2">Medical Conditions</span>
+                    <p class="text-sm text-stone-900 bg-stone-50 rounded-xl p-3">{{ patient.medical_conditions }}</p>
+                </div>
+                {% endif %}
+                
+                {% if patient.medications %}
+                <div class="py-3">
+                    <span class="text-sm text-stone-500 block mb-2">Current Medications</span>
+                    <p class="text-sm text-stone-900 bg-stone-50 rounded-xl p-3">{{ patient.medications }}</p>
+                </div>
+                {% endif %}
+                
+                {% if patient.allergies %}
+                <div class="py-3">
+                    <span class="text-sm text-stone-500 block mb-2">Allergies</span>
+                    <p class="text-sm text-red-700 bg-red-50 rounded-xl p-3 border border-red-100">{{ patient.allergies }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Emergency Contact -->
+        {% if patient.emergency_contact_name %}
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 p-6">
+            <h3 class="font-semibold text-stone-900 mb-4">Emergency Contact</h3>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Name</span>
+                    <span class="text-sm text-stone-900 font-medium">{{ patient.emergency_contact_name }}</span>
+                </div>
+                
+                {% if patient.emergency_contact_relation %}
+                <div class="flex items-center justify-between py-2 border-b border-stone-100">
+                    <span class="text-sm text-stone-500">Relationship</span>
+                    <span class="text-sm text-stone-900">{{ patient.emergency_contact_relation }}</span>
+                </div>
+                {% endif %}
+                
+                {% if patient.emergency_contact_phone %}
+                <div class="flex items-center justify-between py-2">
+                    <span class="text-sm text-stone-500">Phone</span>
+                    <a href="tel:{{ patient.emergency_contact_phone }}" class="text-sm text-amber-600 hover:underline font-medium">{{ patient.emergency_contact_phone }}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Appointments Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900">Appointments ({{ appointments.count }})</h3>
+                </div>
+                {% if is_staff %}
+                <button onclick="document.getElementById('newAppointmentModal').classList.remove('hidden')" 
+                        class="px-4 py-2 bg-stone-900 text-white text-sm font-semibold rounded-full hover:bg-stone-800 transition-all">
+                    + Schedule New
+                </button>
+                {% endif %}
+            </div>
+            <div class="divide-y divide-stone-100">
+                {% for apt in appointments %}
+                <a href="{% url 'staff:appointment_detail' apt.id %}" class="block px-6 py-4 hover:bg-stone-50 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-stone-100 rounded-xl flex flex-col items-center justify-center">
+                                {% if apt.time_slot %}
+                                <span class="text-lg font-bold text-stone-900">{{ apt.time_slot.date|date:"d" }}</span>
+                                <span class="text-xs text-stone-500 uppercase">{{ apt.time_slot.date|date:"M" }}</span>
+                                {% else %}
+                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-stone-900">{{ apt.get_appointment_type_display }}</p>
+                                <p class="text-sm text-stone-500">
+                                    {% if apt.time_slot %}
+                                        {{ apt.time_slot.start_time|time:"g:i A" }}
+                                    {% else %}
+                                        <span class="text-amber-600">Not scheduled yet</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold 
+                            {% if apt.status == 'confirmed' %}bg-emerald-100 text-emerald-700
+                            {% elif apt.status == 'pending' %}bg-amber-100 text-amber-700
+                            {% elif apt.status == 'completed' %}bg-blue-100 text-blue-700
+                            {% elif apt.status == 'cancelled' %}bg-red-100 text-red-700
+                            {% else %}bg-stone-100 text-stone-700{% endif %}">
+                            {{ apt.get_status_display }}
+                        </span>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="px-6 py-12 text-center">
+                    <div class="w-12 h-12 bg-stone-100 rounded-xl mx-auto flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-stone-500">No appointments yet</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Video Consultations Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900">Video Consultations ({{ consultations.count }})</h3>
+                </div>
+            </div>
+            <div class="divide-y divide-stone-100">
+                {% for cons in consultations %}
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-stone-900">{{ cons.scheduled_date|date:"M d, Y" }} at {{ cons.scheduled_time|time:"g:i A" }}</p>
+                                <p class="text-sm text-stone-500">Room: {{ cons.room_id }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold 
+                                {% if cons.status == 'scheduled' %}bg-emerald-100 text-emerald-700
+                                {% elif cons.status == 'pending' %}bg-amber-100 text-amber-700
+                                {% elif cons.status == 'completed' %}bg-blue-100 text-blue-700
+                                {% else %}bg-stone-100 text-stone-700{% endif %}">
+                                {{ cons.get_status_display }}
+                            </span>
+                            {% if cons.status == 'scheduled' and cons.can_join %}
+                            <a href="{{ cons.meeting_url }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-full hover:bg-blue-700 transition-all">
+                                Join
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="px-6 py-12 text-center">
+                    <div class="w-12 h-12 bg-stone-100 rounded-xl mx-auto flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-stone-500">No video consultations yet</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Documents Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900">Documents ({{ documents.count }})</h3>
+                </div>
+            </div>
+            <div class="divide-y divide-stone-100">
+                {% for doc in documents %}
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-stone-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-stone-900">{{ doc.title }}</p>
+                            <p class="text-sm text-stone-500">{{ doc.get_upload_type_display }} • {{ doc.uploaded_at|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        {% if doc.is_verified %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                            ✓ Verified
+                        </span>
+                        {% else %}
+                        <form method="post" action="{% url 'staff:verify_document' doc.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-full hover:bg-emerald-700 transition-all">
+                                Verify
+                            </button>
+                        </form>
+                        {% endif %}
+                        <a href="{{ doc.file.url }}" target="_blank" class="px-4 py-2 bg-stone-100 text-stone-700 text-xs font-semibold rounded-full hover:bg-stone-200 transition-all">
+                            View
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="px-6 py-12 text-center">
+                    <div class="w-12 h-12 bg-stone-100 rounded-xl mx-auto flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-stone-500">No documents uploaded</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Payments Card -->
+        <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden">
+            <div class="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900">Payments ({{ payments|length }})</h3>
+                </div>
+                {% if paid_amount %}
+                <span class="text-emerald-600 font-bold text-lg">${{ paid_amount|floatformat:2 }}</span>
+                {% endif %}
+            </div>
+            <div class="divide-y divide-stone-100">
+                {% for apt in payments %}
+                <a href="{% url 'staff:appointment_detail' apt.id %}" class="block px-6 py-4 hover:bg-stone-50 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-stone-900">Appointment #{{ apt.id }} - {{ apt.get_appointment_type_display }}</p>
+                                <p class="text-sm text-stone-500">
+                                    {% if apt.payment_method %}Paid via {{ apt.get_payment_method_display }} • {% endif %}
+                                    {{ apt.created_at|date:"M d, Y" }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-stone-900">${{ apt.consultation_fee|floatformat:2 }}</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold 
+                                {% if apt.payment_status == 'verified' %}bg-emerald-100 text-emerald-700
+                                {% elif apt.payment_status == 'submitted' %}bg-amber-100 text-amber-700
+                                {% elif apt.payment_status == 'pending' %}bg-orange-100 text-orange-700
+                                {% else %}bg-red-100 text-red-700{% endif %}">
+                                {{ apt.get_payment_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="px-6 py-12 text-center">
+                    <div class="w-12 h-12 bg-stone-100 rounded-xl mx-auto flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                    <p class="text-stone-500">No payments yet</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleNameEdit() {
+    const form = document.getElementById('name-edit-form');
+    form.classList.toggle('hidden');
+}
+</script>
+
+<!-- New Appointment Modal -->
+{% if is_staff %}
+<div id="newAppointmentModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+        <div class="fixed inset-0 bg-stone-900/50 transition-opacity" onclick="document.getElementById('newAppointmentModal').classList.add('hidden')"></div>
+        
+        <div class="relative bg-white rounded-3xl shadow-xl transform transition-all sm:max-w-lg sm:w-full ring-1 ring-stone-200">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create_appointment">
+                
+                <div class="px-6 py-5 border-b border-stone-100">
+                    <h3 class="text-lg font-semibold text-stone-900">Schedule New Appointment</h3>
+                    <p class="text-sm text-stone-500">For {{ patient.get_display_name }}</p>
+                </div>
+                
+                <div class="px-6 py-6 space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-2">Appointment Type</label>
+                        <select name="appointment_type" required class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                            <option value="follow_up">Follow-up</option>
+                            <option value="pre_op">Pre-operative Assessment</option>
+                            <option value="surgery">Surgery</option>
+                            <option value="post_op">Post-operative Check</option>
+                            <option value="consultation">Initial Consultation</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-2">Consultation Method</label>
+                        <select name="consultation_method" required class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all">
+                            <option value="video">Video Call</option>
+                            <option value="phone">Phone Call</option>
+                            <option value="whatsapp">WhatsApp Chat</option>
+                            <option value="in_clinic">In-Person at Clinic</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-2">Notes (optional)</label>
+                        <textarea name="notes" rows="3" 
+                                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 transition-all"
+                                  placeholder="Any notes about this appointment..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="px-6 py-4 border-t border-stone-100 flex justify-end gap-3">
+                    <button type="button" onclick="document.getElementById('newAppointmentModal').classList.add('hidden')" 
+                            class="px-5 py-2.5 text-stone-700 bg-stone-100 font-semibold rounded-full hover:bg-stone-200 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800 transition-all">
+                        Create & Assign Time Slot
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
