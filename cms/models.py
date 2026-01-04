@@ -113,6 +113,40 @@ class HomePage(Page):
     stat_countries = models.CharField(max_length=50, default="20+")
     stat_years = models.CharField(max_length=50, default="40+")
     
+    # Before/After Images
+    before_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Before surgery image"
+    )
+    after_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="After surgery image"
+    )
+    
+    # Doctor Section
+    doctor_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Main doctor photo"
+    )
+    doctor_name = models.CharField(max_length=255, default="Dr. Khaqan Jahangir Janjua")
+    doctor_title = models.CharField(max_length=255, default="Pakistan's Premier Limb Lengthening Specialist")
+    doctor_description = models.TextField(
+        blank=True,
+        default="At Hills Clinic, our lead surgeon Dr. Khaqan Jahangir Janjua brings over 40 years of specialized experience in orthopedic and trauma surgery. With training from world-renowned institutions and hundreds of successful procedures, you're in expert hands."
+    )
+    
     # Content
     body = StreamField([
         ('heading', HeadingBlock()),
@@ -134,6 +168,16 @@ class HomePage(Page):
             FieldPanel('stat_countries'),
             FieldPanel('stat_years'),
         ], heading="Statistics"),
+        MultiFieldPanel([
+            FieldPanel('before_image'),
+            FieldPanel('after_image'),
+        ], heading="Before & After Images"),
+        MultiFieldPanel([
+            FieldPanel('doctor_image'),
+            FieldPanel('doctor_name'),
+            FieldPanel('doctor_title'),
+            FieldPanel('doctor_description'),
+        ], heading="Doctor Section"),
         FieldPanel('body'),
     ]
     

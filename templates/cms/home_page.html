@@ -54,7 +54,7 @@
                 <!-- Main Image Container -->
                 <div class="relative rounded-[2rem] overflow-hidden shadow-2xl">
                     {% if page.hero_image %}
-                        {% image page.hero_image fill-800x600 as hero_img %}
+                        {% image page.hero_image width-800 as hero_img %}
                         <img src="{{ hero_img.url }}" alt="{{ page.hero_title }}" class="w-full h-auto object-cover">
                     {% else %}
                         <img src="{% static 'images/hero-placeholder.jpg' %}" alt="Hills Clinic - Limb Lengthening Surgery" class="w-full h-auto object-cover">
@@ -227,7 +227,12 @@
                     <!-- Before Image -->
                     <div class="relative flex-1">
                         <div class="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
-                            <img src= "media/before.png" alt="Before surgery" class="w-full h-full object-cover grayscale">
+                            {% if page.before_image %}
+                                {% image page.before_image fill-400x533 as before_img %}
+                                <img src="{{ before_img.url }}" alt="Before surgery" class="w-full h-full object-cover grayscale">
+                            {% else %}
+                                <img src="{% static 'images/before-placeholder.jpg' %}" alt="Before surgery" class="w-full h-full object-cover grayscale">
+                            {% endif %}
                         </div>
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
                             <span class="text-sm font-semibold text-stone-700">Before</span>
@@ -237,7 +242,12 @@
                     <!-- After Image -->
                     <div class="relative flex-1">
                         <div class="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
-                            <img src="media/after.png" alt="After surgery" class="w-full h-full object-cover">
+                            {% if page.after_image %}
+                                {% image page.after_image fill-400x533 as after_img %}
+                                <img src="{{ after_img.url }}" alt="After surgery" class="w-full h-full object-cover">
+                            {% else %}
+                                <img src="{% static 'images/after-placeholder.jpg' %}" alt="After surgery" class="w-full h-full object-cover">
+                            {% endif %}
                         </div>
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-stone-900 px-4 py-2 rounded-full">
                             <span class="text-sm font-semibold text-white">After</span>
@@ -484,17 +494,22 @@
             <!-- Doctor Image -->
             <div class="relative">
                 <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                    <img src="/media/img5.png" alt="Dr. Khaqan Jahangir Janjua" class="w-full h-full object-cover">
+                    {% if page.doctor_image %}
+                        {% image page.doctor_image fill-600x750 as doctor_img %}
+                        <img src="{{ doctor_img.url }}" alt="{{ page.doctor_name }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <img src="{% static 'images/doctor-placeholder.jpg' %}" alt="Doctor" class="w-full h-full object-cover">
+                    {% endif %}
                 </div>
             </div>
             
             <!-- Content -->
             <div class="bg-stone-100 rounded-3xl p-8 lg:p-12">
                 <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-6">
-                    Pakistan's Premier<br><span class="text-amber-700">Limb Lengthening</span> Specialist
+                    {{ page.doctor_title|default:"Pakistan's Premier Limb Lengthening Specialist"|linebreaksbr }}
                 </h2>
                 <p class="text-lg text-stone-600 leading-relaxed mb-8">
-                    At Hills Clinic, our lead surgeon Dr. Khaqan Jahangir Janjua brings over 40 years of specialized experience in orthopedic and trauma surgery. With training from world-renowned institutions and hundreds of successful procedures, you're in expert hands.
+                    {{ page.doctor_description|default:"At Hills Clinic, our lead surgeon brings decades of specialized experience in orthopedic and trauma surgery. With training from world-renowned institutions and hundreds of successful procedures, you're in expert hands." }}
                 </p>
                 <div class="grid grid-cols-2 gap-6 mb-8">
                     <div>
