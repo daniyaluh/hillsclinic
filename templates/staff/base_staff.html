@@ -29,12 +29,14 @@
             <!-- Logo & Close -->
             <div class="px-6 py-5 border-b border-stone-800 flex items-center justify-between">
                 <a href="{% url 'staff:dashboard' %}" class="flex items-center gap-3">
-                    {% if settings.core.SiteSettings.logo %}
-                        {% image settings.core.SiteSettings.logo height-40 as staff_logo %}
+                    {% with site_settings=settings.core.SiteSettings %}
+                    {% if site_settings and site_settings.logo %}
+                        {% image site_settings.logo height-40 as staff_logo %}
                         <img src="{{ staff_logo.url }}" alt="Hills Clinic Logo" class="h-10 w-auto">
                     {% else %}
                         <img src="{% static 'images/logo.png' %}" alt="Hills Clinic Logo" class="h-10 w-auto">
                     {% endif %}
+                    {% endwith %}
                     <div>
                         <span class="font-serif font-bold text-white text-lg">Hills Clinic</span>
                         <p class="text-xs text-stone-500">Staff Portal</p>
