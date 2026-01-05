@@ -7,12 +7,16 @@
             <!-- Brand & About -->
             <div class="lg:col-span-1">
                 <div class="flex items-center gap-3 mb-6">
-                    {% if settings.core.SiteSettings.logo %}
-                        {% image settings.core.SiteSettings.logo height-48 as footer_logo %}
+                    {% with site_settings=settings.core.SiteSettings %}
+                    {% if site_settings and site_settings.logo %}
+                        {% image site_settings.logo height-48 as footer_logo %}
                         <img src="{{ footer_logo.url }}" alt="Hills Clinic Logo" class="h-12 w-auto">
                     {% else %}
-                        <img src="/static/images/logo.png" alt="Hills Clinic Logo" class="h-12 w-auto">
+                        <div class="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">H</span>
+                        </div>
                     {% endif %}
+                    {% endwith %}
                     <span class="font-serif font-bold text-2xl text-white">Hills Clinic</span>
                 </div>
                 <p class="text-stone-400 leading-relaxed mb-6">

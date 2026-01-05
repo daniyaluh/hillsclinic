@@ -34,7 +34,9 @@
                         {% image site_settings.logo height-40 as staff_logo %}
                         <img src="{{ staff_logo.url }}" alt="Hills Clinic Logo" class="h-10 w-auto">
                     {% else %}
-                        <img src="{% static 'images/logo.png' %}" alt="Hills Clinic Logo" class="h-10 w-auto">
+                        <div class="w-10 h-10 bg-amber-600 rounded-xl flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">H</span>
+                        </div>
                     {% endif %}
                     {% endwith %}
                     <div>
@@ -154,12 +156,16 @@
                     </button>
                     <!-- Logo in header -->
                     <a href="{% url 'staff:dashboard' %}" class="flex items-center gap-2">
-                        {% if settings.core.SiteSettings.logo %}
-                            {% image settings.core.SiteSettings.logo height-32 as header_staff_logo %}
+                        {% with site_settings=settings.core.SiteSettings %}
+                        {% if site_settings and site_settings.logo %}
+                            {% image site_settings.logo height-32 as header_staff_logo %}
                             <img src="{{ header_staff_logo.url }}" alt="Hills Clinic Logo" class="h-8 w-auto">
                         {% else %}
-                            <img src="{% static 'images/logo.png' %}" alt="Hills Clinic Logo" class="h-8 w-auto">
+                            <div class="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">H</span>
+                            </div>
                         {% endif %}
+                        {% endwith %}
                         <span class="font-serif font-bold text-stone-900 hidden sm:inline">Staff Portal</span>
                     </a>
                     <div class="hidden md:block pl-4 border-l border-stone-200">
