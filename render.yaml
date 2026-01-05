@@ -38,18 +38,18 @@ services:
         sync: false
       - key: DJANGO_SUPERUSER_PASSWORD
         sync: false
-      # Email settings (Gmail SMTP)
+      # Email settings (Resend SMTP - get API key from https://resend.com)
       - key: EMAIL_BACKEND
         value: "django.core.mail.backends.smtp.EmailBackend"
       - key: EMAIL_HOST
-        value: "smtp.gmail.com"
+        value: "smtp.resend.com"
       - key: EMAIL_PORT
         value: "587"
       - key: EMAIL_USE_TLS
         value: "True"
       - key: EMAIL_HOST_USER
-        value: "darkiegaming21@gmail.com"
+        value: "resend"
       - key: EMAIL_HOST_PASSWORD
-        value: "tofp ahnv bmwg bmcd"
+        sync: false
       - key: DEFAULT_FROM_EMAIL
-        value: "Hills Clinic <darkiegaming21@gmail.com>"
+        value: "Hills Clinic <noreply@hillsclinic.onrender.com>"
