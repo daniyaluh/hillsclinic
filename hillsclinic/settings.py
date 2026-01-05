@@ -180,7 +180,7 @@ SITE_ID = 1
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 # Email verification: "mandatory", "optional", or "none"
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Disabled until email is properly configured
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Requires email verification before login
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # POST-only confirmation (secure)
