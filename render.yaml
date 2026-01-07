@@ -21,13 +21,13 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: ".onrender.com"
+        value: ".onrender.com,hillsclinic.daniyaluh.me"
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://hillsclinic.onrender.com"
+        value: "https://hillsclinic.onrender.com,https://hillsclinic.daniyaluh.me"
       - key: PYTHON_VERSION
         value: "3.12.0"
       - key: SITE_DOMAIN
-        value: "hillsclinic.onrender.com"
+        value: "hillsclinic.daniyaluh.me"
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
