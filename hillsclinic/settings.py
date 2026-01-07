@@ -179,8 +179,8 @@ SITE_ID = 1
 # django-allauth settings (production-grade email verification)
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-# Email verification: "mandatory", "optional", or "none"
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Requires email verification before login
+# Email verification: "optional" allows login without verification, sends email if possible
+ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # POST-only confirmation (secure)
@@ -189,6 +189,7 @@ ACCOUNT_SESSION_REMEMBER = None  # None = show checkbox, True = always remember,
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CustomSignupForm",
 }
+ACCOUNT_ADAPTER = "accounts.adapter.CustomAccountAdapter"  # Custom adapter to handle email errors
 LOGIN_REDIRECT_URL = "/login-redirect/"  # Smart redirect: staff → /staff/, patients → /portal/
 ACCOUNT_SIGNUP_REDIRECT_URL = "/portal/"  # Go directly to portal after signup
 LOGOUT_REDIRECT_URL = "/"
