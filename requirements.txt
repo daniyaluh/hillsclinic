@@ -34,6 +34,9 @@ gunicorn>=23.0,<24.0
 pytz
 icalendar>=5.0,<6.0
 
+# Email (Resend HTTP API - bypasses SMTP port blocking)
+resend>=2.0,<3.0
+
 # Cloud Storage
 cloudinary
 django-cloudinary-storage

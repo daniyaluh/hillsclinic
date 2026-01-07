@@ -38,10 +38,11 @@ services:
         sync: false
       - key: DJANGO_SUPERUSER_PASSWORD
         sync: false
-      # Email disabled for now - using dummy backend (no emails sent)
-      # SMTP times out on Render free tier. To enable email later:
-      # 1. Get your own domain with DNS access
-      # 2. Set up Resend with verified domain
-      # 3. Change EMAIL_BACKEND to django.core.mail.backends.smtp.EmailBackend
+      # Email via Resend HTTP API (bypasses SMTP port blocking on Render)
+      # Get your API key from https://resend.com/api-keys
       - key: EMAIL_BACKEND
-        value: "django.core.mail.backends.dummy.EmailBackend"
+        value: "accounts.email_backend.ResendEmailBackend"
+      - key: RESEND_API_KEY
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: "Hills Clinic <onboarding@resend.dev>"
