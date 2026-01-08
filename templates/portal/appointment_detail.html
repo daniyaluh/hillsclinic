@@ -85,7 +85,7 @@
                     </div>
                     <div class="p-4 bg-stone-50 rounded-xl">
                         <p class="text-sm text-stone-500 mb-1">Procedure Interest</p>
-                        <p class="font-semibold text-stone-900">{{ appointment.patient.interested_in_procedure|default:"Not specified" }}</p>
+                        <p class="font-semibold text-stone-900">{{ appointment.patient.interested_in_procedure|default:"General Consultation" }}</p>
                     </div>
                     <div class="p-4 bg-stone-50 rounded-xl">
                         <p class="text-sm text-stone-500 mb-1">Booking Reference</p>
@@ -146,7 +146,7 @@
                 <div class="space-y-3">
                     <div class="flex justify-between items-center">
                         <span class="text-stone-500">Consultation Fee</span>
-                        <span class="font-bold text-stone-900">${{ appointment.consultation_fee|default:"50" }}</span>
+                        <span class="font-bold text-stone-900">${{ appointment.consultation_fee|default:"0" }}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-stone-500">Status</span>
@@ -155,7 +155,7 @@
                             {% elif appointment.payment_status == 'pending' %}bg-amber-100 text-amber-800
                             {% elif appointment.payment_status == 'submitted' %}bg-blue-100 text-blue-800
                             {% else %}bg-stone-100 text-stone-600{% endif %}">
-                            {{ appointment.get_payment_status_display|default:"Pending" }}
+                            {{ appointment.get_payment_status_display|default:"Not Required" }}
                         </span>
                     </div>
                 </div>
