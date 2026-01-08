@@ -1,0 +1,98 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Confirm User Deletion{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; <a href="{% url 'admin:accounts_customuser_changelist' %}">Users</a>
+    &rsaquo; Confirm Deletion
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h1 style="color: #c41e1e; margin-bottom: 20px;">
+        ⚠️ Confirm User Deletion
+    </h1>
+    
+    <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <p style="color: #991b1b; font-weight: bold; margin: 0 0 10px 0;">
+            🚨 WARNING: This action is IRREVERSIBLE!
+        </p>
+        <p style="color: #7f1d1d; margin: 0;">
+            You are about to permanently delete <strong>{{ user_count }}</strong> user(s) and ALL their associated data including:
+        </p>
+        <ul style="color: #7f1d1d; margin: 10px 0 0 20px;">
+            <li>Patient profile and medical history</li>
+            <li>All appointments (past and future)</li>
+            <li>All uploaded documents</li>
+            <li>All consent records</li>
+            <li>All notifications</li>
+            <li>Payment records</li>
+        </ul>
+    </div>
+    
+    <h2 style="margin-bottom: 15px;">Users to be deleted:</h2>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background: #f3f4f6;">
+                <th style="padding: 10px; text-align: left; border: 1px solid #d1d5db;">Email/Username</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #d1d5db;">Name</th>
+                <th style="padding: 10px; text-align: center; border: 1px solid #d1d5db;">Patient Profile</th>
+                <th style="padding: 10px; text-align: center; border: 1px solid #d1d5db;">Appointments</th>
+                <th style="padding: 10px; text-align: center; border: 1px solid #d1d5db;">Uploads</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #d1d5db;">{{ user.email }}</td>
+                <td style="padding: 10px; border: 1px solid #d1d5db;">{{ user.name }}</td>
+                <td style="padding: 10px; text-align: center; border: 1px solid #d1d5db;">
+                    {% if user.has_patient %}
+                        <span style="color: #059669;">✓</span>
+                    {% else %}
+                        <span style="color: #9ca3af;">—</span>
+                    {% endif %}
+                </td>
+                <td style="padding: 10px; text-align: center; border: 1px solid #d1d5db;">{{ user.appointments }}</td>
+                <td style="padding: 10px; text-align: center; border: 1px solid #d1d5db;">{{ user.uploads }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+        <h3 style="margin: 0 0 15px 0;">🔐 Enter your password to confirm:</h3>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_password" style="display: block; font-weight: bold; margin-bottom: 5px;">
+                    {{ form.password.label }}
+                </label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <p style="color: #dc2626; margin: 5px 0 0 0;">{{ form.password.errors.0 }}</p>
+                {% endif %}
+                <p style="color: #6b7280; font-size: 0.875rem; margin: 5px 0 0 0;">
+                    {{ form.password.help_text }}
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" style="background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    🗑️ Delete {{ user_count }} User(s) Permanently
+                </button>
+                <a href="{% url 'admin:accounts_customuser_changelist' %}" style="background: #6b7280; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
