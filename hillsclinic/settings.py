@@ -263,11 +263,11 @@ if os.getenv("CLOUDINARY_CLOUD_NAME"):
         secure=True
     )
     
-    # Use RawMediaCloudinaryStorage - works for ALL file types (images, PDFs, docs)
-    # Files are stored as 'raw' type which Cloudinary accepts for any file format
+    # MediaCloudinaryStorage for site images (doctor photos, logos, before/after)
+    # Patient uploads use RawMediaCloudinaryStorage via custom storage in portal/models.py
     STORAGES = {
         "default": {
-            "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
         },
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",

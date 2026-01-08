@@ -13,6 +13,8 @@ from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 import os
 
+from portal.storage import PatientUploadStorage
+
 User = get_user_model()
 
 
@@ -48,6 +50,7 @@ class PortalUpload(models.Model):
     
     file = models.FileField(
         upload_to=upload_to_patient_folder,
+        storage=PatientUploadStorage(),
         validators=[
             FileExtensionValidator(
                 allowed_extensions=['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'dcm']
