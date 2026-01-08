@@ -15,6 +15,15 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     If email fails, signup still completes - user can request new verification later.
     """
     
+    def is_email_verified(self, request, email):
+        """
+        Superusers and staff don't need email verification.
+        """
+        user = getattr(request, 'user', None)
+        if user and user.is_authenticated and (user.is_superuser or user.is_staff):
+            return True
+        return super().is_email_verified(request, email)
+    
     def send_mail(self, template_prefix, email, context):
         """
         Override send_mail to catch and log email errors instead of crashing.
