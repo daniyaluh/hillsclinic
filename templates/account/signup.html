@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailimages_tags wagtail_settings %}
 
 {% block title %}Create Account - Hills Clinic{% endblock %}
 
@@ -9,7 +9,16 @@
         <!-- Logo -->
         <div class="text-center mb-8">
             <a href="/" class="inline-flex items-center gap-3">
-                <img src="/media/logo.png" alt="Hills Clinic Logo" class="h-12 w-auto">
+                {% with site_settings=settings.core.SiteSettings %}
+                {% if site_settings and site_settings.logo %}
+                    {% image site_settings.logo height-48 as signup_logo %}
+                    <img src="{{ signup_logo.url }}" alt="Hills Clinic Logo" class="h-12 w-auto">
+                {% else %}
+                    <div class="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">H</span>
+                    </div>
+                {% endif %}
+                {% endwith %}
                 <span class="font-serif font-bold text-2xl text-stone-900">Hills Clinic</span>
             </a>
         </div>
