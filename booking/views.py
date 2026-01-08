@@ -13,6 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
 import pytz
+import logging
+
+logger = logging.getLogger(__name__)
 from datetime import datetime, timedelta
 from icalendar import Calendar, Event
 import uuid
@@ -132,6 +135,7 @@ Consultation Request:
     def _send_confirmation_email(self, patient, appointment, data):
         """Send confirmation email to patient."""
         try:
+            logger.info(f"Sending booking confirmation email to {patient.user.email}")
             subject = 'Hills Clinic - Consultation Request Received'
             html_message = render_to_string('booking/emails/confirmation.html', {
                 'patient': patient,
@@ -141,15 +145,16 @@ Consultation Request:
             
             send_mail(
                 subject=subject,
-                message='',
+                message=f'Your consultation request #{appointment.id} has been received. Please complete payment within 48 hours.',
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[patient.user.email],
                 html_message=html_message,
-                fail_silently=True,
+                fail_silently=False,
             )
+            logger.info(f"Booking confirmation email sent successfully to {patient.user.email}")
         except Exception as e:
             # Log error but don't fail the booking
-            print(f"Email sending failed: {e}")
+            logger.error(f"Email sending failed for {patient.user.email}: {e}", exc_info=True)
 
 
 class BookingSuccessView(TemplateView):
