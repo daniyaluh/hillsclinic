@@ -307,6 +307,12 @@ WAGTAILSEARCH_BACKENDS = {
 # Image settings
 WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
+# Use Cloudinary for Wagtail images in production
+# This ensures logo, favicon, and other CMS images persist across deploys
+if os.getenv("CLOUDINARY_CLOUD_NAME"):
+    # Store Wagtail image renditions in Cloudinary
+    WAGTAILIMAGES_RENDITION_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
 # Embeds (for video testimonials)
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
