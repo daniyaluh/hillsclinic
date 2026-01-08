@@ -2,6 +2,8 @@
 Admin configuration for accounts app.
 """
 
+import os
+import logging
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -12,6 +14,50 @@ from django.urls import path
 from django.http import HttpResponseRedirect
 from allauth.account.models import EmailAddress
 from .models import CustomUser
+
+logger = logging.getLogger(__name__)
+
+
+def delete_cloudinary_file(file_field):
+    """Delete a file from Cloudinary storage."""
+    if not file_field:
+        return False
+    
+    try:
+        # Get the public_id from the file path
+        file_name = file_field.name
+        if not file_name:
+            return False
+        
+        # Only delete if using Cloudinary (check env variable)
+        if not os.getenv("CLOUDINARY_CLOUD_NAME"):
+            return False
+        
+        import cloudinary.uploader
+        
+        # Extract public_id from the file path
+        # Cloudinary stores files like: media/patient_uploads/1/xray_20260109.pdf
+        # The public_id would be: patient_uploads/1/xray_20260109
+        public_id = file_name
+        
+        # Remove extension for images (Cloudinary doesn't need it)
+        if '.' in public_id:
+            public_id = public_id.rsplit('.', 1)[0]
+        
+        # Determine resource type based on file extension
+        ext = file_name.rsplit('.', 1)[-1].lower() if '.' in file_name else ''
+        if ext in ['pdf', 'doc', 'docx', 'dcm']:
+            resource_type = 'raw'
+        else:
+            resource_type = 'image'
+        
+        result = cloudinary.uploader.destroy(public_id, resource_type=resource_type)
+        logger.info(f"Cloudinary delete result for {public_id}: {result}")
+        return result.get('result') == 'ok'
+        
+    except Exception as e:
+        logger.error(f"Failed to delete from Cloudinary: {e}")
+        return False
 
 
 class PasswordConfirmForm(forms.Form):
@@ -124,6 +170,7 @@ class CustomUserAdmin(BaseUserAdmin):
                     # Password verified - proceed with deletion
                     count = 0
                     deleted_info = []
+                    files_deleted = 0
                     
                     for user in users:
                         try:
@@ -137,6 +184,23 @@ class CustomUserAdmin(BaseUserAdmin):
                             if patient:
                                 appointments_count = patient.appointments.count()
                                 uploads_count = patient.uploads.count()
+                                
+                                # Delete profile picture from Cloudinary
+                                if patient.profile_picture:
+                                    if delete_cloudinary_file(patient.profile_picture):
+                                        files_deleted += 1
+                                
+                                # Delete all uploaded documents from Cloudinary
+                                for upload in patient.uploads.all():
+                                    if upload.file:
+                                        if delete_cloudinary_file(upload.file):
+                                            files_deleted += 1
+                                
+                                # Delete payment proofs from appointments
+                                for appointment in patient.appointments.all():
+                                    if appointment.payment_proof:
+                                        if delete_cloudinary_file(appointment.payment_proof):
+                                            files_deleted += 1
                             
                             # Delete allauth email addresses
                             EmailAddress.objects.filter(user=user).delete()
@@ -150,6 +214,7 @@ class CustomUserAdmin(BaseUserAdmin):
                             count += 1
                             
                         except Exception as e:
+                            logger.error(f"Error deleting user {user.email}: {e}", exc_info=True)
                             messages.error(request, f"Error deleting {user.email}: {str(e)}")
                     
                     # Clear session
@@ -158,7 +223,7 @@ class CustomUserAdmin(BaseUserAdmin):
                     
                     messages.success(
                         request,
-                        f"✅ Successfully deleted {count} user(s) and ALL their data: {', '.join(deleted_info)}"
+                        f"✅ Successfully deleted {count} user(s), {files_deleted} file(s) from cloud storage, and ALL their data: {', '.join(deleted_info)}"
                     )
                     return redirect('..')
                 else:
