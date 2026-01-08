@@ -13,8 +13,6 @@ from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 import os
 
-from portal.storage import PatientUploadStorage
-
 User = get_user_model()
 
 
@@ -50,7 +48,6 @@ class PortalUpload(models.Model):
     
     file = models.FileField(
         upload_to=upload_to_patient_folder,
-        storage=PatientUploadStorage(),
         validators=[
             FileExtensionValidator(
                 allowed_extensions=['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'dcm']
@@ -115,6 +112,29 @@ class PortalUpload(models.Model):
     
     def __str__(self):
         return f"{self.patient.user.email} - {self.get_upload_type_display()} ({self.uploaded_at.date()})"
+    
+    def get_file_url(self):
+        """Get the correct Cloudinary URL for the file."""
+        if not self.file:
+            return None
+        
+        url = self.file.url
+        
+        # If using Cloudinary and URL contains /raw/upload/ or /image/upload/
+        # Try to get the file from either location
+        if 'cloudinary.com' in url:
+            # For PDFs and docs, try both raw and image URLs
+            ext = os.path.splitext(self.file.name)[1].lower()
+            if ext in ['.pdf', '.doc', '.docx', '.dcm']:
+                # Return raw URL for documents
+                if '/image/upload/' in url:
+                    url = url.replace('/image/upload/', '/raw/upload/')
+            else:
+                # Return image URL for images
+                if '/raw/upload/' in url:
+                    url = url.replace('/raw/upload/', '/image/upload/')
+        
+        return url
     
     def save(self, *args, **kwargs):
         """Auto-populate file metadata on save."""
