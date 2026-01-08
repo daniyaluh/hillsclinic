@@ -28,9 +28,9 @@
             <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-stone-100 text-stone-700">
                 {{ documents.count }} Document{{ documents.count|pluralize }}
             </span>
-            {% if unverified_count > 0 %}
+            {% if stats.unverified > 0 %}
             <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-amber-100 text-amber-700">
-                {{ unverified_count }} Pending
+                {{ stats.unverified }} Pending
             </span>
             {% endif %}
         </div>
