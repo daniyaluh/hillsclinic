@@ -114,27 +114,10 @@ class PortalUpload(models.Model):
         return f"{self.patient.user.email} - {self.get_upload_type_display()} ({self.uploaded_at.date()})"
     
     def get_file_url(self):
-        """Get the correct Cloudinary URL for the file."""
+        """Get the file URL. Using RawMediaCloudinaryStorage, all files use /raw/upload/."""
         if not self.file:
             return None
-        
-        url = self.file.url
-        
-        # If using Cloudinary and URL contains /raw/upload/ or /image/upload/
-        # Try to get the file from either location
-        if 'cloudinary.com' in url:
-            # For PDFs and docs, try both raw and image URLs
-            ext = os.path.splitext(self.file.name)[1].lower()
-            if ext in ['.pdf', '.doc', '.docx', '.dcm']:
-                # Return raw URL for documents
-                if '/image/upload/' in url:
-                    url = url.replace('/image/upload/', '/raw/upload/')
-            else:
-                # Return image URL for images
-                if '/raw/upload/' in url:
-                    url = url.replace('/raw/upload/', '/image/upload/')
-        
-        return url
+        return self.file.url
     
     def save(self, *args, **kwargs):
         """Auto-populate file metadata on save."""
