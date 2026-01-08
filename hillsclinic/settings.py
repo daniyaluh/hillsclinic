@@ -405,6 +405,16 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "booking": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "accounts": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
     },
 }
 

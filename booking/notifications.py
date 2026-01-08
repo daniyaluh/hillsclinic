@@ -4,9 +4,12 @@ Booking notifications for Hills Clinic.
 Functions to send email notifications for appointment status changes.
 """
 
+import logging
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 
 def send_appointment_confirmed(appointment):
@@ -14,6 +17,8 @@ def send_appointment_confirmed(appointment):
     try:
         patient = appointment.patient
         subject = f'Hills Clinic - Your Appointment #{appointment.id} is Confirmed!'
+        
+        logger.info(f"Sending appointment confirmation email to {patient.user.email}")
         
         html_message = render_to_string('booking/emails/appointment_confirmed.html', {
             'patient': patient,
@@ -26,11 +31,12 @@ def send_appointment_confirmed(appointment):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[patient.user.email],
             html_message=html_message,
-            fail_silently=True,
+            fail_silently=False,
         )
+        logger.info(f"Appointment confirmation email sent successfully to {patient.user.email}")
         return True
     except Exception as e:
-        print(f"Failed to send confirmation email: {e}")
+        logger.error(f"Failed to send confirmation email to {patient.user.email}: {e}", exc_info=True)
         return False
 
 
@@ -39,6 +45,8 @@ def send_payment_rejected(appointment, reason=None):
     try:
         patient = appointment.patient
         subject = f'Hills Clinic - Payment Verification Failed for Appointment #{appointment.id}'
+        
+        logger.info(f"Sending payment rejected email to {patient.user.email}")
         
         # Build payment URL
         payment_url = f"{settings.SITE_URL}/portal/appointments/{appointment.id}/payment/" if hasattr(settings, 'SITE_URL') else "#"
@@ -56,11 +64,12 @@ def send_payment_rejected(appointment, reason=None):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[patient.user.email],
             html_message=html_message,
-            fail_silently=True,
+            fail_silently=False,
         )
+        logger.info(f"Payment rejected email sent successfully to {patient.user.email}")
         return True
     except Exception as e:
-        print(f"Failed to send payment rejected email: {e}")
+        logger.error(f"Failed to send payment rejected email to {patient.user.email}: {e}", exc_info=True)
         return False
 
 
@@ -69,6 +78,8 @@ def send_appointment_cancelled(appointment, reason='unpaid'):
     try:
         patient = appointment.patient
         subject = f'Hills Clinic - Appointment #{appointment.id} Cancelled'
+        
+        logger.info(f"Sending appointment cancelled email to {patient.user.email}")
         
         # Build booking URL
         booking_url = f"{settings.SITE_URL}/consultation/" if hasattr(settings, 'SITE_URL') else "#"
@@ -86,9 +97,10 @@ def send_appointment_cancelled(appointment, reason='unpaid'):
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[patient.user.email],
             html_message=html_message,
-            fail_silently=True,
+            fail_silently=False,
         )
+        logger.info(f"Appointment cancelled email sent successfully to {patient.user.email}")
         return True
     except Exception as e:
-        print(f"Failed to send cancellation email: {e}")
+        logger.error(f"Failed to send cancellation email to {patient.user.email}: {e}", exc_info=True)
         return False
