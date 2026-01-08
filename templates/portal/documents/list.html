@@ -59,8 +59,8 @@
             <div class="bg-white rounded-3xl shadow-sm ring-1 ring-stone-200 overflow-hidden hover:shadow-md transition-all group">
                 <!-- Preview -->
                 <div class="aspect-[4/3] bg-stone-100 flex items-center justify-center relative">
-                    {% if 'image' in doc.mime_type %}
-                    <img src="{{ doc.get_file_url }}" alt="{{ doc.title }}" class="w-full h-full object-cover">
+                    {% if doc.is_image %}
+                    <img src="{{ doc.file.url }}" alt="{{ doc.title }}" class="w-full h-full object-cover">
                     {% elif doc.mime_type == 'application/pdf' %}
                     <div class="text-center">
                         <div class="w-16 h-16 bg-red-100 rounded-2xl mx-auto flex items-center justify-center mb-3">
@@ -94,13 +94,7 @@
                     <!-- Hover Actions -->
                     <div class="absolute inset-0 bg-stone-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
                         <div class="flex gap-3">
-                            <a href="{{ doc.get_file_url }}" target="_blank" class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="View">
-                                <svg class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </a>
-                            <a href="{{ doc.get_file_url }}" download class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="Download">
+                            <a href="{{ doc.file.url }}" download class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="Download">
                                 <svg class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                 </svg>
