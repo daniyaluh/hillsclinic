@@ -263,9 +263,11 @@ if os.getenv("CLOUDINARY_CLOUD_NAME"):
         secure=True
     )
     
+    # Use RawMediaCloudinaryStorage - works for ALL file types (images, PDFs, docs)
+    # MediaCloudinaryStorage only works for images
     STORAGES = {
         "default": {
-            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+            "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
         },
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
