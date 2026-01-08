@@ -383,7 +383,7 @@ class LegalPageView(TemplateView):
         legal_content = {
             'privacy': {
                 'title': 'Privacy Policy',
-                'last_updated': '2024-12-30',
+                'last_updated': '2026-01-09',
                 'sections': [
                     {
                         'id': 'overview',
@@ -500,7 +500,7 @@ class LegalPageView(TemplateView):
             },
             'terms': {
                 'title': 'Terms of Service',
-                'last_updated': '2024-12-30',
+                'last_updated': '2026-01-09',
                 'sections': [
                     {
                         'id': 'overview',
@@ -615,7 +615,7 @@ class LegalPageView(TemplateView):
             },
             'cookies': {
                 'title': 'Cookie Policy',
-                'last_updated': '2024-12-30',
+                'last_updated': '2026-01-09',
                 'sections': [
                     {
                         'id': 'overview',
