@@ -93,7 +93,7 @@ class CustomUserAdmin(BaseUserAdmin):
         request.session['users_to_delete_info'] = [
             f"{u.email or u.username}" for u in queryset
         ]
-        return HttpResponseRedirect('../delete-users-confirm/')
+        return HttpResponseRedirect('delete-users-confirm/')
     
     delete_users_with_confirmation.short_description = "🗑️ Delete users completely (requires password)"
     
