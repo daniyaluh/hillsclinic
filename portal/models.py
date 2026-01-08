@@ -114,10 +114,24 @@ class PortalUpload(models.Model):
         return f"{self.patient.user.email} - {self.get_upload_type_display()} ({self.uploaded_at.date()})"
     
     def get_file_url(self):
-        """Get the file URL. Using RawMediaCloudinaryStorage, all files use /raw/upload/."""
+        """Get the file URL."""
         if not self.file:
             return None
         return self.file.url
+    
+    def is_image(self):
+        """Check if file is an image."""
+        if not self.file:
+            return False
+        ext = os.path.splitext(self.file.name)[1].lower()
+        return ext in ['.jpg', '.jpeg', '.png', '.gif']
+    
+    def is_document(self):
+        """Check if file is a document (PDF, DOC, etc.)."""
+        if not self.file:
+            return False
+        ext = os.path.splitext(self.file.name)[1].lower()
+        return ext in ['.pdf', '.doc', '.docx', '.dcm']
     
     def save(self, *args, **kwargs):
         """Auto-populate file metadata on save."""
