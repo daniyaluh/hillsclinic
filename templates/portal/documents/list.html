@@ -94,7 +94,7 @@
                     <!-- Hover Actions -->
                     <div class="absolute inset-0 bg-stone-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
                         <div class="flex gap-3">
-                            <a href="{{ doc.file.url }}" download class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="Download">
+                            <a href="{% url 'portal:document-download' doc.pk %}" class="p-3 bg-white rounded-xl hover:bg-stone-100 transition-all shadow-lg" title="Download">
                                 <svg class="w-5 h-5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                 </svg>

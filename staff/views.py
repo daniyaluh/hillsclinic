@@ -13,8 +13,9 @@ from django.utils import timezone
 from django.db.models import Count, Q, Sum
 from django.db import models
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from datetime import timedelta
+import mimetypes
 
 from .decorators import staff_required, doctor_required, is_staff_user, is_doctor_only
 from booking.models import Patient, Appointment, TimeSlot, VideoConsultation, Payment
@@ -669,6 +670,34 @@ def verify_document(request, document_id):
         return redirect('staff:patient_documents', patient_id=document.patient.id)
     
     return redirect('staff:document_list')
+
+
+@doctor_required
+def download_document(request, document_id):
+    """Download a patient document - serves file directly."""
+    document = get_object_or_404(PortalUpload, id=document_id)
+    
+    try:
+        # Get the file
+        file = document.file
+        
+        # Determine content type
+        content_type = document.mime_type or 'application/octet-stream'
+        
+        # Get filename
+        filename = document.title or f"{document.get_upload_type_display()}_{document.id}"
+        ext = file.name.split('.')[-1] if '.' in file.name else ''
+        if ext and not filename.endswith(f'.{ext}'):
+            filename = f"{filename}.{ext}"
+        
+        # Create response
+        response = HttpResponse(file.read(), content_type=content_type)
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+        
+    except Exception as e:
+        messages.error(request, f"Could not download file: {str(e)}")
+        return redirect('staff:document_detail', document_id=document_id)
 
 
 @staff_required

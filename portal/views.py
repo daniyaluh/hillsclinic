@@ -13,7 +13,7 @@ from django.views.generic import TemplateView, ListView, CreateView, UpdateView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 from django.utils import timezone
 from django.db.models import Count, Q
 
@@ -208,6 +208,34 @@ class DocumentDeleteView(PatientRequiredMixin, DeleteView):
         
         messages.success(request, 'Document deleted successfully.')
         return super().delete(request, *args, **kwargs)
+
+
+class DocumentDownloadView(PatientRequiredMixin, DetailView):
+    """Download a document - serves file directly."""
+    
+    def get_queryset(self):
+        # Only allow downloading own documents
+        return PortalUpload.objects.filter(patient=self.request.user.patient_profile)
+    
+    def get(self, request, *args, **kwargs):
+        document = self.get_object()
+        
+        try:
+            file = document.file
+            content_type = document.mime_type or 'application/octet-stream'
+            
+            filename = document.title or f"{document.get_upload_type_display()}_{document.id}"
+            ext = file.name.split('.')[-1] if '.' in file.name else ''
+            if ext and not filename.endswith(f'.{ext}'):
+                filename = f"{filename}.{ext}"
+            
+            response = HttpResponse(file.read(), content_type=content_type)
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+            
+        except Exception as e:
+            messages.error(request, f"Could not download file: {str(e)}")
+            return redirect('portal:documents')
 
 
 class ConsentListView(PatientRequiredMixin, ListView):

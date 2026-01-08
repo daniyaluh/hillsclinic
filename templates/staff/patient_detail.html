@@ -402,7 +402,7 @@
                             </button>
                         </form>
                         {% endif %}
-                        <a href="{{ doc.file.url }}" download class="px-4 py-2 bg-stone-100 text-stone-700 text-xs font-semibold rounded-full hover:bg-stone-200 transition-all">
+                        <a href="{% url 'staff:download_document' doc.id %}" class="px-4 py-2 bg-stone-100 text-stone-700 text-xs font-semibold rounded-full hover:bg-stone-200 transition-all">
                             Download
                         </a>
                     </div>

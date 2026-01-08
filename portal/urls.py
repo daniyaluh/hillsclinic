@@ -14,6 +14,7 @@ urlpatterns = [
     path("documents/", views.DocumentListView.as_view(), name="documents"),
     path("documents/upload/", views.DocumentUploadView.as_view(), name="document-upload"),
     path("documents/<int:pk>/delete/", views.DocumentDeleteView.as_view(), name="document-delete"),
+    path("documents/<int:pk>/download/", views.DocumentDownloadView.as_view(), name="document-download"),
     
     # Consents
     path("consents/", views.ConsentListView.as_view(), name="consents"),

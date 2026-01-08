@@ -28,6 +28,7 @@ urlpatterns = [
     path('documents/', views.document_list, name='document_list'),
     path('documents/<int:document_id>/', views.document_detail, name='document_detail'),
     path('documents/<int:document_id>/verify/', views.verify_document, name='verify_document'),
+    path('documents/<int:document_id>/download/', views.download_document, name='download_document'),
     path('patients/<int:patient_id>/documents/', views.patient_documents, name='patient_documents'),
     
     # Payments
