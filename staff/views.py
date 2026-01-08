@@ -13,9 +13,8 @@ from django.utils import timezone
 from django.db.models import Count, Q, Sum
 from django.db import models
 from django.core.paginator import Paginator
-from django.http import JsonResponse, HttpResponse, FileResponse
+from django.http import JsonResponse, HttpResponse
 from datetime import timedelta
-import mimetypes
 
 from .decorators import staff_required, doctor_required, is_staff_user, is_doctor_only
 from booking.models import Patient, Appointment, TimeSlot, VideoConsultation, Payment
