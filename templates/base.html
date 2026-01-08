@@ -204,6 +204,21 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+    <!-- Beta/Testing Banner -->
+    <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white text-center py-2 px-4 text-sm font-medium relative" x-data="{ show: true }" x-show="show">
+        <div class="flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span>🚧 <strong>Beta Version</strong> — This site is currently under testing. Some features may not work as expected.</span>
+        </div>
+        <button @click="show = false" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
     <!-- Skip to main content (accessibility) -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
         Skip to main content
