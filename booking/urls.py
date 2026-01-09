@@ -13,7 +13,7 @@ urlpatterns = [
     
     # Contact
     path('contact/', views.ContactView.as_view(), name='contact'),
-    path('contact/success/', views.ContactView.as_view(), name='contact_success'),
+    path('contact/success/', views.ContactSuccessView.as_view(), name='contact_success'),
     
     # Video Consultation
     path('video-consultation/', views.VideoConsultationBookingView.as_view(), name='video_consultation_booking'),

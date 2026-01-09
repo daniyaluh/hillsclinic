@@ -154,7 +154,7 @@
                             <div class="flex items-start">
                                 {{ form.privacy_consent }}
                                 <label class="ml-3 text-sm text-stone-600">
-                                    I agree to the <a href="/privacy-policy/" class="text-amber-700 hover:text-amber-800 font-medium">Privacy Policy</a> and consent to Hills Clinic contacting me. *
+                                    I agree to the <a href="{% url 'cms:privacy' %}" class="text-amber-700 hover:text-amber-800 font-medium">Privacy Policy</a> and consent to Hills Clinic contacting me. *
                                 </label>
                             </div>
                             {% if form.privacy_consent.errors %}
