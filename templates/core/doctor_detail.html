@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load wagtailimages_tags %}
 
 {% block title %}{{ doctor.name }}, {{ doctor.title }} - Hills Clinic{% endblock %}
 
@@ -12,7 +13,7 @@
     "jobTitle": "{{ doctor.role }}",
     "description": "{{ doctor.short_bio }}",
     "medicalSpecialty": "{{ doctor.get_specialty_display }}",
-    {% if doctor.photo %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ doctor.photo.url }}",{% endif %}
+    {% if doctor.photo %}{% image doctor.photo width-400 as schema_img %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ schema_img.url }}",{% endif %}
     "worksFor": {
         "@type": "MedicalOrganization",
         "name": "Hills Clinic"
@@ -48,9 +49,12 @@
                 <div class="md:col-span-1">
                     <div class="aspect-square bg-gradient-to-br from-stone-100 to-stone-200 rounded-3xl overflow-hidden shadow-xl ring-1 ring-stone-200">
                         {% if doctor.photo %}
-                        <img src="{{ doctor.photo.url }}" alt="{{ doctor.name }}" class="w-full h-full object-cover">
+                        {% image doctor.photo fill-500x500 as doctor_img %}
+                        <img src="{{ doctor_img.url }}" alt="{{ doctor.name }}" class="w-full h-full object-cover">
                         {% else %}
-                        <img src="/media/dr.png" alt="{{ doctor.name }}" class="w-full h-full object-cover">
+                        <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                            <span class="text-6xl font-bold text-amber-600">{{ doctor.name|slice:":2"|upper }}</span>
+                        </div>
                         {% endif %}
                     </div>
                     
@@ -217,7 +221,8 @@
                     <div class="bg-white rounded-2xl p-4 text-center ring-1 ring-stone-200 hover:ring-amber-300 hover:shadow-lg transition-all">
                         <div class="w-16 h-16 bg-stone-100 rounded-2xl flex items-center justify-center mx-auto mb-3 overflow-hidden">
                             {% if staff.photo %}
-                            <img src="{{ staff.photo.url }}" alt="{{ staff.name }}" class="w-full h-full object-cover">
+                            {% image staff.photo fill-100x100 as staff_img %}
+                            <img src="{{ staff_img.url }}" alt="{{ staff.name }}" class="w-full h-full object-cover">
                             {% else %}
                             <span class="text-lg font-bold text-amber-600">{{ staff.name|slice:":2"|upper }}</span>
                             {% endif %}
