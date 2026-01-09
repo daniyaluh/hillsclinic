@@ -91,17 +91,17 @@
         <h3 class="text-center text-lg font-semibold text-stone-900 mb-6">Other Legal Documents</h3>
         <div class="flex flex-wrap justify-center gap-4">
             {% if page_type != 'privacy' %}
-            <a href="{% url 'cms:legal_page' page_type='privacy' %}" class="px-5 py-2 bg-stone-100 text-stone-700 rounded-full hover:bg-stone-200 transition text-sm font-medium">
+            <a href="{% url 'cms:privacy' %}" class="px-5 py-2 bg-stone-100 text-stone-700 rounded-full hover:bg-stone-200 transition text-sm font-medium">
                 Privacy Policy
             </a>
             {% endif %}
             {% if page_type != 'terms' %}
-            <a href="{% url 'cms:legal_page' page_type='terms' %}" class="px-5 py-2 bg-stone-100 text-stone-700 rounded-full hover:bg-stone-200 transition text-sm font-medium">
+            <a href="{% url 'cms:terms' %}" class="px-5 py-2 bg-stone-100 text-stone-700 rounded-full hover:bg-stone-200 transition text-sm font-medium">
                 Terms of Service
             </a>
             {% endif %}
             {% if page_type != 'cookies' %}
-            <a href="{% url 'cms:legal_page' page_type='cookies' %}" class="px-5 py-2 bg-stone-100 text-stone-700 rounded-full hover:bg-stone-200 transition text-sm font-medium">
+            <a href="{% url 'cms:cookies' %}" class="px-5 py-2 bg-stone-100 text-stone-700 rounded-full hover:bg-stone-200 transition text-sm font-medium">
                 Cookie Policy
             </a>
             {% endif %}
