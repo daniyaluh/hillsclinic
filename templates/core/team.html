@@ -142,7 +142,7 @@
         
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {% for member in support_team %}
-            <div class="group">
+            <a href="{{ member.get_absolute_url }}" class="group">
                 <div class="bg-stone-50 rounded-2xl p-6 hover:bg-emerald-50 transition-all text-center ring-1 ring-stone-200 hover:ring-emerald-300 hover:shadow-lg">
                     <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm ring-1 ring-stone-200 overflow-hidden">
                         {% if member.photo %}
@@ -155,11 +155,14 @@
                     </div>
                     <h3 class="font-bold text-stone-900 group-hover:text-emerald-700 transition">{{ member.name }}</h3>
                     <p class="text-emerald-600 text-sm">{{ member.job_title }}</p>
+                    {% if member.experience_years %}
+                    <p class="text-stone-500 text-xs mt-1">{{ member.experience_years }}+ years experience</p>
+                    {% endif %}
                     {% if member.languages %}
-                    <p class="text-stone-500 text-xs mt-2">{{ member.languages }}</p>
+                    <p class="text-stone-400 text-xs mt-1">{{ member.languages }}</p>
                     {% endif %}
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
     </div>

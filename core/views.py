@@ -75,3 +75,24 @@ class DoctorDetailView(DetailView):
         ).exclude(pk=self.object.pk)[:4]
         return context
 
+
+class SupportMemberDetailView(DetailView):
+    """Individual support team member profile page."""
+    model = SupportTeamMember
+    template_name = 'core/support_member_detail.html'
+    context_object_name = 'member'
+    slug_url_kwarg = 'slug'
+    
+    def get_queryset(self):
+        return SupportTeamMember.objects.filter(is_active=True)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get other team members
+        context['other_members'] = SupportTeamMember.objects.filter(
+            is_active=True
+        ).exclude(pk=self.object.pk)[:4]
+        # Get doctors for the team section
+        context['doctors'] = Doctor.objects.filter(is_active=True)[:2]
+        return context
+

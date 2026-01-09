@@ -10,4 +10,5 @@ urlpatterns = [
     path('login-redirect/', views.login_redirect_view, name='login-redirect'),
     path('team/', views.TeamPageView.as_view(), name='team'),
     path('team/<slug:slug>/', views.DoctorDetailView.as_view(), name='doctor-detail'),
+    path('team/support/<slug:slug>/', views.SupportMemberDetailView.as_view(), name='support-member-detail'),
 ]
