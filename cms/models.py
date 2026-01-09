@@ -628,6 +628,48 @@ class FAQItem(models.Model):
         verbose_name_plural = "FAQs"
 
 
+# Legal Page Content Snippet
+@register_snippet
+class LegalPageSection(models.Model):
+    """Section of a legal page (Privacy Policy, Terms, Cookies)."""
+    
+    PAGE_TYPE_CHOICES = [
+        ('privacy', 'Privacy Policy'),
+        ('terms', 'Terms of Service'),
+        ('cookies', 'Cookie Policy'),
+    ]
+    
+    page_type = models.CharField(
+        max_length=50,
+        choices=PAGE_TYPE_CHOICES,
+        default='privacy',
+        help_text="Which legal page this section belongs to"
+    )
+    section_id = models.SlugField(
+        max_length=100,
+        help_text="URL-friendly ID for this section (e.g., 'data-protection')"
+    )
+    title = models.CharField(max_length=255)
+    content = RichTextField(help_text="Section content with formatting")
+    order = models.IntegerField(default=0, help_text="Display order within the page")
+    
+    panels = [
+        FieldPanel('page_type'),
+        FieldPanel('section_id'),
+        FieldPanel('title'),
+        FieldPanel('content'),
+        FieldPanel('order'),
+    ]
+    
+    def __str__(self):
+        return f"{self.get_page_type_display()} - {self.title}"
+    
+    class Meta:
+        ordering = ['page_type', 'order', 'title']
+        verbose_name = "Legal Page Section"
+        verbose_name_plural = "Legal Page Sections"
+
+
 # Patient Review Snippet
 @register_snippet
 class PatientReview(models.Model):
