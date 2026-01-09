@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
-from .models import Doctor
+from .models import Doctor, SupportTeamMember
 
 
 @login_required
@@ -51,7 +51,9 @@ class TeamPageView(ListView):
         # Group doctors by specialty for the page
         doctors = self.get_queryset()
         context['surgeons'] = doctors.filter(specialty='orthopedic-surgeon')
-        context['support_staff'] = doctors.exclude(specialty='orthopedic-surgeon')
+        context['medical_staff'] = doctors.exclude(specialty='orthopedic-surgeon')
+        # Add support team members
+        context['support_team'] = SupportTeamMember.objects.filter(is_active=True)
         return context
 
 
