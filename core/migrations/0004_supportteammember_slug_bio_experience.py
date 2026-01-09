@@ -6,21 +6,6 @@ from django.utils.text import slugify
 from django.db.utils import ProgrammingError
 
 
-def generate_slugs(apps, schema_editor):
-    """Generate slugs for existing support team members."""
-    SupportTeamMember = apps.get_model('core', 'SupportTeamMember')
-    for member in SupportTeamMember.objects.all():
-        if not member.slug:
-            base_slug = slugify(member.name) if member.name else 'member'
-            slug = base_slug
-            counter = 1
-            while SupportTeamMember.objects.filter(slug=slug).exclude(pk=member.pk).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            member.slug = slug
-            member.save()
-
-
 def add_fields_safely(apps, schema_editor):
     """Add fields safely, ignoring if they already exist."""
     from django.db import connection
@@ -55,6 +40,39 @@ def add_fields_safely(apps, schema_editor):
             """)
 
 
+def generate_slugs(apps, schema_editor):
+    """Generate slugs for existing support team members using raw SQL."""
+    from django.db import connection
+    
+    with connection.cursor() as cursor:
+        # Get all members
+        cursor.execute("SELECT id, name, slug FROM core_supportteammember")
+        members = cursor.fetchall()
+        
+        for member_id, name, current_slug in members:
+            if not current_slug:  # Empty slug
+                base_slug = slugify(name) if name else 'member'
+                slug = base_slug
+                counter = 1
+                
+                # Check for uniqueness
+                while True:
+                    cursor.execute(
+                        "SELECT COUNT(*) FROM core_supportteammember WHERE slug = %s AND id != %s",
+                        [slug, member_id]
+                    )
+                    count = cursor.fetchone()[0]
+                    if count == 0:
+                        break
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                
+                cursor.execute(
+                    "UPDATE core_supportteammember SET slug = %s WHERE id = %s",
+                    [slug, member_id]
+                )
+
+
 def make_slug_unique_safely(apps, schema_editor):
     """Add unique constraint to slug, ignoring if already exists."""
     from django.db import connection
@@ -77,13 +95,17 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Use RunPython to handle existing fields/indexes gracefully
+        # Step 1: Add columns at DB level safely
         migrations.RunPython(add_fields_safely, migrations.RunPython.noop),
+        
+        # Step 2: Generate slugs using raw SQL (no model dependency)
         migrations.RunPython(generate_slugs, migrations.RunPython.noop),
+        
+        # Step 3: Add unique constraint safely
         migrations.RunPython(make_slug_unique_safely, migrations.RunPython.noop),
         
-        # Use SeparateDatabaseAndState to sync Django's state with actual DB
-        # The database operations are handled above, this just updates Django's knowledge
+        # Step 4: Update Django's state to know about these fields
+        # No DB operations - just syncing Django's knowledge
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AddField(
