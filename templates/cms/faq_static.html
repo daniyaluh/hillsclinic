@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags %}
 
 {% block title %}Frequently Asked Questions - Hills Clinic{% endblock %}
 
@@ -33,21 +34,26 @@
 <section class="py-8 bg-stone-50 border-b border-stone-200">
     <div class="container mx-auto px-4">
         <div class="flex flex-wrap justify-center gap-3">
+            {% if faqs_by_category.general %}
             <a href="#general" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
                 General
             </a>
-            <a href="#procedures" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
-                Procedures
-            </a>
+            {% endif %}
+            {% if faqs_by_category.cost %}
             <a href="#cost" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
-                Cost & Payment
+                Cost & Financing
             </a>
+            {% endif %}
+            {% if faqs_by_category.recovery %}
             <a href="#recovery" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
                 Recovery
             </a>
+            {% endif %}
+            {% if faqs_by_category.international %}
             <a href="#international" class="px-5 py-2 bg-white border border-stone-200 rounded-full text-stone-700 hover:border-amber-500 hover:text-amber-700 transition text-sm font-medium">
                 International Patients
             </a>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -57,6 +63,7 @@
     <div class="container mx-auto px-4">
         <div class="max-w-3xl mx-auto space-y-12">
             
+            {% if faqs_by_category.general %}
             <!-- General Questions -->
             <div id="general" class="scroll-mt-32">
                 <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
@@ -68,76 +75,27 @@
                     General Questions
                 </h2>
                 <div class="space-y-4">
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="what is limb lengthening surgery">
+                    {% for faq in faqs_by_category.general %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ faq.question|lower }}">
                         <details class="group">
                             <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">What is limb lengthening surgery?</span>
+                                <span class="font-medium text-stone-900 pr-4">{{ faq.question }}</span>
                                 <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Limb lengthening surgery is a procedure that gradually increases the length of bones in the legs or arms. The surgery involves cutting the bone and using a device to slowly separate the bone ends, allowing new bone to form in the gap.</p>
+                            <div class="px-6 pb-4 text-stone-600 prose prose-stone max-w-none">
+                                {{ faq.answer|richtext }}
                             </div>
                         </details>
                     </div>
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="am i a candidate for limb lengthening">
-                        <details class="group">
-                            <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">Am I a candidate for limb lengthening?</span>
-                                <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Good candidates are typically adults aged 18-50 in good overall health. We evaluate bone health, medical history, and psychological readiness. A consultation with our team will determine your suitability for the procedure.</p>
-                            </div>
-                        </details>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
             
-            <!-- Procedures -->
-            <div id="procedures" class="scroll-mt-32">
-                <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
-                    <span class="w-10 h-10 bg-stone-100 text-stone-700 rounded-xl flex items-center justify-center mr-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                        </svg>
-                    </span>
-                    Procedures
-                </h2>
-                <div class="space-y-4">
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="what methods do you offer ilizarov lon precice">
-                        <details class="group">
-                            <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">What methods do you offer?</span>
-                                <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>We offer three main methods: <strong>Ilizarov</strong> (external frame), <strong>LON</strong> (combined internal nail + external frame), and <strong>PRECICE</strong> (fully internal magnetic nail). Each has different benefits, costs, and recovery times.</p>
-                            </div>
-                        </details>
-                    </div>
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="how much height can i gain">
-                        <details class="group">
-                            <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">How much height can I gain?</span>
-                                <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Typical gains are 2-3 inches (5-8 cm) per bone segment. Femur (thigh) and tibia (shin) can each be lengthened. Combined procedures can achieve 4-6 inches total, done in stages for safety.</p>
-                            </div>
-                        </details>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Cost & Payment -->
+            {% if faqs_by_category.cost %}
+            <!-- Cost & Financing -->
             <div id="cost" class="scroll-mt-32">
                 <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
                     <span class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center mr-3">
@@ -145,38 +103,29 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </span>
-                    Cost & Payment
+                    Cost & Financing
                 </h2>
                 <div class="space-y-4">
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="how much does limb lengthening cost price">
+                    {% for faq in faqs_by_category.cost %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ faq.question|lower }}">
                         <details class="group">
                             <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">How much does limb lengthening cost?</span>
+                                <span class="font-medium text-stone-900 pr-4">{{ faq.question }}</span>
                                 <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Prices range from $3,000-$12,000 depending on the method chosen. Ilizarov is the most affordable ($3,000-4,000), LON is mid-range ($4,500-5,500), and PRECICE is premium ($8,000-12,000). All packages include surgery, hospital stay, and follow-up care.</p>
+                            <div class="px-6 pb-4 text-stone-600 prose prose-stone max-w-none">
+                                {{ faq.answer|richtext }}
                             </div>
                         </details>
                     </div>
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="payment plans financing options">
-                        <details class="group">
-                            <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">Do you offer payment plans?</span>
-                                <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Yes, we offer flexible payment options. A deposit is required to secure your surgery date, with the balance due before the procedure. Full payment upfront receives a discount. Contact us for personalized payment arrangements.</p>
-                            </div>
-                        </details>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
             
+            {% if faqs_by_category.recovery %}
             <!-- Recovery -->
             <div id="recovery" class="scroll-mt-32">
                 <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
@@ -188,22 +137,26 @@
                     Recovery
                 </h2>
                 <div class="space-y-4">
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="how long is recovery time">
+                    {% for faq in faqs_by_category.recovery %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ faq.question|lower }}">
                         <details class="group">
                             <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">How long is recovery?</span>
+                                <span class="font-medium text-stone-900 pr-4">{{ faq.question }}</span>
                                 <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Total recovery takes 6-12 months. The lengthening phase is 2-3 months (1mm/day), followed by a consolidation phase of 3-6 months for bone to fully heal. Most patients return to normal activities within 12 months.</p>
+                            <div class="px-6 pb-4 text-stone-600 prose prose-stone max-w-none">
+                                {{ faq.answer|richtext }}
                             </div>
                         </details>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
             
+            {% if faqs_by_category.international %}
             <!-- International Patients -->
             <div id="international" class="scroll-mt-32">
                 <h2 class="text-2xl font-serif font-bold text-stone-900 mb-6 flex items-center">
@@ -215,21 +168,35 @@
                     International Patients
                 </h2>
                 <div class="space-y-4">
-                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="visa assistance international travel">
+                    {% for faq in faqs_by_category.international %}
+                    <div class="faq-item border border-stone-200 rounded-2xl overflow-hidden hover:border-amber-300 transition-colors" data-question="{{ faq.question|lower }}">
                         <details class="group">
                             <summary class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-stone-50 transition cursor-pointer list-none">
-                                <span class="font-medium text-stone-900 pr-4">Do you help with visa and travel?</span>
+                                <span class="font-medium text-stone-900 pr-4">{{ faq.question }}</span>
                                 <svg class="w-5 h-5 text-stone-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </summary>
-                            <div class="px-6 pb-4 text-stone-600">
-                                <p>Yes! We provide medical visa invitation letters, airport pickup, accommodation recommendations, and translation services. Our international patient coordinators will guide you through every step of the process.</p>
+                            <div class="px-6 pb-4 text-stone-600 prose prose-stone max-w-none">
+                                {{ faq.answer|richtext }}
                             </div>
                         </details>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
+            
+            {% if not all_faqs %}
+            <!-- Empty State -->
+            <div class="text-center py-16">
+                <svg class="w-16 h-16 text-stone-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <h3 class="text-xl font-semibold text-stone-900 mb-2">No FAQs yet</h3>
+                <p class="text-stone-600">Frequently asked questions will be added soon.</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </section>

@@ -7,7 +7,7 @@ Wagtail CMS pages haven't been created yet.
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from cms.models import PatientReview
+from cms.models import PatientReview, FAQItem
 
 
 class ProceduresOverviewView(TemplateView):
@@ -292,40 +292,18 @@ class FAQView(TemplateView):
         context['page'] = {
             'title': 'Frequently Asked Questions',
         }
-        context['faqs'] = [
-            {
-                'question': 'What is the maximum height I can gain?',
-                'answer': 'Most patients can safely gain 4-6 inches (10-15cm) through combined femur and tibia lengthening. Individual results depend on your bone health, age, and other factors.',
-            },
-            {
-                'question': 'How long does the entire process take?',
-                'answer': 'The complete journey typically takes 6-12 months, including 2-3 months of lengthening and 4-8 months of consolidation. You can return home after the lengthening phase.',
-            },
-            {
-                'question': 'Is limb lengthening surgery painful?',
-                'answer': 'During the lengthening phase, most patients experience mild to moderate discomfort, which is well-managed with pain medication. The gradual 1mm/day lengthening minimizes pain.',
-            },
-            {
-                'question': 'What is the age limit for limb lengthening?',
-                'answer': 'We typically perform surgery on patients aged 18-50. Bone density and overall health are more important factors than age alone.',
-            },
-            {
-                'question': 'Can I walk during the lengthening process?',
-                'answer': 'Yes! Patients are encouraged to walk with crutches or a walker during lengthening. Weight-bearing helps stimulate bone growth.',
-            },
-            {
-                'question': 'What are the risks and complications?',
-                'answer': 'The most common complications include pin site infections (easily treated with antibiotics), muscle tightness (managed with physiotherapy), and slow bone healing (monitored with X-rays).',
-            },
-            {
-                'question': 'How much does limb lengthening cost at Hills Clinic?',
-                'answer': 'Our all-inclusive packages start from $3,000-$6,000 USD depending on the method chosen. This is significantly more affordable than Western countries where costs can exceed $100,000.',
-            },
-            {
-                'question': 'Do you provide accommodation for international patients?',
-                'answer': 'Yes, we have partnerships with nearby hotels and recovery apartments. We also offer airport pickup, visa assistance, and translation services.',
-            },
-        ]
+        # Get FAQs from database grouped by category
+        all_faqs = FAQItem.objects.all().order_by('category', 'order', 'question')
+        
+        # Group FAQs by category
+        faqs_by_category = {}
+        for faq in all_faqs:
+            if faq.category not in faqs_by_category:
+                faqs_by_category[faq.category] = []
+            faqs_by_category[faq.category].append(faq)
+        
+        context['faqs_by_category'] = faqs_by_category
+        context['all_faqs'] = all_faqs
         return context
 
 
