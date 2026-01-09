@@ -159,6 +159,7 @@ class SupportTeamMember(models.Model):
     
     # Basic Info
     name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True, help_text="URL-friendly name (auto-generated if blank)")
     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
     job_title = models.CharField(max_length=100, help_text="Specific job title")
     
@@ -172,6 +173,10 @@ class SupportTeamMember(models.Model):
         help_text="Team member's photo"
     )
     description = models.TextField(help_text="Brief description of their role and responsibilities")
+    bio = models.TextField(blank=True, help_text="Full biography (optional)")
+    
+    # Experience
+    experience_years = models.PositiveIntegerField(default=0, help_text="Years of experience")
     
     # Languages (important for international patients)
     languages = models.CharField(max_length=200, blank=True, help_text="Languages spoken, comma-separated")
@@ -188,12 +193,15 @@ class SupportTeamMember(models.Model):
     panels = [
         MultiFieldPanel([
             FieldPanel('name'),
+            FieldPanel('slug'),
             FieldPanel('role'),
             FieldPanel('job_title'),
+            FieldPanel('experience_years'),
         ], heading="Basic Information"),
         MultiFieldPanel([
             FieldPanel('photo'),
             FieldPanel('description'),
+            FieldPanel('bio'),
             FieldPanel('languages'),
         ], heading="Profile"),
         MultiFieldPanel([
@@ -214,6 +222,21 @@ class SupportTeamMember(models.Model):
     
     def __str__(self):
         return f"{self.name} - {self.job_title}"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+            while SupportTeamMember.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse('core:support-member-detail', kwargs={'slug': self.slug})
     
     @property
     def languages_list(self):
