@@ -446,6 +446,9 @@ class SuccessStoriesIndexPage(Page):
             consent_testimonial_published=True,
             consent_revocation_date__isnull=True
         ).order_by('-first_published_at')
+        # Add patient reviews (CMS-managed testimonials)
+        context['reviews'] = PatientReview.objects.filter(is_published=True)
+        context['featured_reviews'] = PatientReview.objects.filter(is_published=True, is_featured=True)
         return context
     
     class Meta:
@@ -616,6 +619,110 @@ class FAQItem(models.Model):
         ordering = ['category', 'order', 'question']
         verbose_name = "FAQ"
         verbose_name_plural = "FAQs"
+
+
+# Patient Review Snippet
+@register_snippet
+class PatientReview(models.Model):
+    """Patient review/testimonial for success stories page."""
+    
+    PROCEDURE_CHOICES = [
+        ('ilizarov', 'Ilizarov Method'),
+        ('internal', 'Internal Nail (PRECICE)'),
+        ('lon', 'LON Method'),
+    ]
+    
+    # Patient info (privacy-focused - no photos)
+    patient_initials = models.CharField(
+        max_length=10, 
+        help_text="Patient initials for privacy (e.g., 'J.S.')"
+    )
+    country = models.CharField(
+        max_length=100, 
+        blank=True,
+        help_text="Patient's country (e.g., 'United States', 'UAE')"
+    )
+    age = models.PositiveIntegerField(
+        null=True, 
+        blank=True,
+        validators=[MinValueValidator(18), MaxValueValidator(100)],
+        help_text="Patient's age at time of surgery"
+    )
+    
+    # Procedure details
+    procedure_type = models.CharField(
+        max_length=50,
+        choices=PROCEDURE_CHOICES,
+        default='ilizarov'
+    )
+    height_gained = models.CharField(
+        max_length=50, 
+        blank=True,
+        help_text="Height gained (e.g., '+3 inches', '+8cm')"
+    )
+    surgery_year = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Year of surgery"
+    )
+    
+    # Review content
+    review_text = models.TextField(
+        help_text="The patient's review/testimonial text"
+    )
+    rating = models.PositiveIntegerField(
+        default=5,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text="Rating out of 5 stars"
+    )
+    
+    # Display settings
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Feature this review prominently"
+    )
+    is_published = models.BooleanField(
+        default=True,
+        help_text="Show this review on the website"
+    )
+    display_order = models.PositiveIntegerField(
+        default=0,
+        help_text="Lower numbers appear first"
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    panels = [
+        MultiFieldPanel([
+            FieldPanel('patient_initials'),
+            FieldPanel('country'),
+            FieldPanel('age'),
+        ], heading="Patient Information"),
+        MultiFieldPanel([
+            FieldPanel('procedure_type'),
+            FieldPanel('height_gained'),
+            FieldPanel('surgery_year'),
+        ], heading="Procedure Details"),
+        MultiFieldPanel([
+            FieldPanel('review_text'),
+            FieldPanel('rating'),
+        ], heading="Review"),
+        MultiFieldPanel([
+            FieldPanel('is_featured'),
+            FieldPanel('is_published'),
+            FieldPanel('display_order'),
+        ], heading="Display Settings"),
+    ]
+    
+    def __str__(self):
+        return f"{self.patient_initials} - {self.get_procedure_type_display()} ({self.country})"
+    
+    class Meta:
+        ordering = ['display_order', '-created_at']
+        verbose_name = "Patient Review"
+        verbose_name_plural = "Patient Reviews"
 
 
 # FAQ Page
