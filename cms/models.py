@@ -184,6 +184,13 @@ class HomePage(Page):
     max_count = 1
     parent_page_types = []
     
+    def get_context(self, request):
+        context = super().get_context(request)
+        # Add patient reviews for testimonials section
+        context['testimonials'] = PatientReview.objects.filter(is_published=True)[:6]
+        context['featured_testimonial'] = PatientReview.objects.filter(is_published=True, is_featured=True).first()
+        return context
+    
     class Meta:
         verbose_name = "Home Page"
 
