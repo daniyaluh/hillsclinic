@@ -7,6 +7,7 @@ Wagtail CMS pages haven't been created yet.
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from cms.models import PatientReview
 
 
 class ProceduresOverviewView(TemplateView):
@@ -276,56 +277,9 @@ class SuccessStoriesView(TemplateView):
             'title': 'Success Stories',
             'introduction': '<p>Read inspiring stories from patients who have transformed their lives through limb lengthening surgery at Hills Clinic.</p>',
         }
-        context['stories'] = [
-            {
-                'patient_initials': 'A.K.',
-                'location': 'United States',
-                'age': 28,
-                'procedure_method': 'LON Method',
-                'height_gained': '4 inches',
-                'testimonial_quote': 'The team at Hills Clinic changed my life. I gained 4 inches and my confidence has never been higher.',
-            },
-            {
-                'patient_initials': 'M.R.',
-                'location': 'United Kingdom',
-                'age': 32,
-                'procedure_method': 'Ilizarov',
-                'height_gained': '5 inches',
-                'testimonial_quote': 'After researching for years, I chose Hills Clinic for their experience and affordability. Best decision ever.',
-            },
-            {
-                'patient_initials': 'S.T.',
-                'location': 'Turkey',
-                'age': 25,
-                'procedure_method': 'LON Method',
-                'height_gained': '3.5 inches',
-                'testimonial_quote': 'The recovery was challenging but the staff supported me every step of the way. Now I stand taller than I ever imagined.',
-            },
-            {
-                'patient_initials': 'J.L.',
-                'location': 'Australia',
-                'age': 30,
-                'procedure_method': 'Ilizarov',
-                'height_gained': '6 inches',
-                'testimonial_quote': 'Combined femur and tibia lengthening gave me incredible results. The international patient support was exceptional.',
-            },
-            {
-                'patient_initials': 'R.M.',
-                'location': 'Saudi Arabia',
-                'age': 27,
-                'procedure_method': 'Internal Nail',
-                'height_gained': '3 inches',
-                'testimonial_quote': 'The internal nail method was perfect for me. Minimal scarring and I was back to work sooner than expected.',
-            },
-            {
-                'patient_initials': 'P.S.',
-                'location': 'India',
-                'age': 24,
-                'procedure_method': 'Ilizarov',
-                'height_gained': '4.5 inches',
-                'testimonial_quote': 'Dr. Khaq and his team are true professionals. The affordability compared to other countries made my dream possible.',
-            },
-        ]
+        # Get actual patient reviews from database
+        context['reviews'] = PatientReview.objects.filter(is_published=True).order_by('display_order', '-id')
+        context['featured_reviews'] = PatientReview.objects.filter(is_published=True, is_featured=True)
         return context
 
 
