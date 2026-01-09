@@ -4,6 +4,12 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
+def clear_photo_field(apps, schema_editor):
+    """Clear existing photo paths before converting to ForeignKey."""
+    Doctor = apps.get_model('core', 'Doctor')
+    Doctor.objects.update(photo=None)
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("core", "0002_add_site_settings"),
@@ -18,6 +24,8 @@ class Migration(migrations.Migration):
                 default=0, help_text="Display order (lower = first)"
             ),
         ),
+        # First, clear the photo field values (string paths can't convert to integer FKs)
+        migrations.RunPython(clear_photo_field, migrations.RunPython.noop),
         migrations.AlterField(
             model_name="doctor",
             name="photo",
