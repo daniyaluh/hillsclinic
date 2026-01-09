@@ -130,8 +130,8 @@
 </section>
 {% endif %}
 
-<!-- Support Team (Non-surgeon medical staff) -->
-{% if medical_staff %}
+<!-- Support Team (from SupportTeamMember model) -->
+{% if support_team %}
 <section class="py-20 bg-white">
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
@@ -141,25 +141,25 @@
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {% for staff in medical_staff %}
-            <a href="{{ staff.get_absolute_url }}" class="group">
+            {% for member in support_team %}
+            <div class="group">
                 <div class="bg-stone-50 rounded-2xl p-6 hover:bg-emerald-50 transition-all text-center ring-1 ring-stone-200 hover:ring-emerald-300 hover:shadow-lg">
                     <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm ring-1 ring-stone-200 overflow-hidden">
-                        {% if staff.photo %}
+                        {% if member.photo %}
                         {% load wagtailimages_tags %}
-                        {% image staff.photo fill-100x100 as staff_img %}
-                        <img src="{{ staff_img.url }}" alt="{{ staff.name }}" class="w-full h-full object-cover">
+                        {% image member.photo fill-100x100 as member_img %}
+                        <img src="{{ member_img.url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
                         {% else %}
-                        <span class="text-xl font-bold text-emerald-600">{{ staff.name|slice:":2"|upper }}</span>
+                        <span class="text-xl font-bold text-emerald-600">{{ member.name|slice:":2"|upper }}</span>
                         {% endif %}
                     </div>
-                    <h3 class="font-bold text-stone-900 group-hover:text-emerald-700 transition">{{ staff.name }}</h3>
-                    <p class="text-emerald-600 text-sm">{{ staff.role }}</p>
-                    {% if staff.languages %}
-                    <p class="text-stone-500 text-xs mt-2">{{ staff.languages }}</p>
+                    <h3 class="font-bold text-stone-900 group-hover:text-emerald-700 transition">{{ member.name }}</h3>
+                    <p class="text-emerald-600 text-sm">{{ member.job_title }}</p>
+                    {% if member.languages %}
+                    <p class="text-stone-500 text-xs mt-2">{{ member.languages }}</p>
                     {% endif %}
                 </div>
-            </a>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -167,7 +167,7 @@
 {% endif %}
 
 <!-- Empty State -->
-{% if not doctors %}
+{% if not doctors and not support_team %}
 <section class="py-24 bg-stone-50">
     <div class="container mx-auto px-4 text-center">
         <div class="w-20 h-20 bg-stone-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
