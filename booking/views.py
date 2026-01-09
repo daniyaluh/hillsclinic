@@ -209,6 +209,11 @@ Message:
         return super().form_valid(form)
 
 
+class ContactSuccessView(TemplateView):
+    """Success page after contact form submission."""
+    template_name = 'booking/contact_success.html'
+
+
 class QuickCallbackView(View):
     """Handle quick callback requests via HTMX."""
     
