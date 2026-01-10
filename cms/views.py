@@ -25,7 +25,6 @@ class ProceduresOverviewView(TemplateView):
                 'duration': '6-12 months',
                 'price_range': '$3,000 - $4,000',
                 'color': 'blue',
-                'image': 'https://res.cloudinary.com/dhovspacb/image/upload/c_fill,w_400,h_250,q_auto,f_auto/v1/media/images/p_ilizarov',
             },
             {
                 'name': 'Internal Nail (Precice)',
@@ -35,7 +34,6 @@ class ProceduresOverviewView(TemplateView):
                 'duration': '4-8 months',
                 'price_range': '$15,000 - $25,000',
                 'color': 'purple',
-                'image': 'https://res.cloudinary.com/dhovspacb/image/upload/c_fill,w_400,h_250,q_auto,f_auto/v1/media/images/p_internalnail',
             },
             {
                 'name': 'LON Method',
@@ -45,7 +43,6 @@ class ProceduresOverviewView(TemplateView):
                 'duration': '5-10 months',
                 'price_range': '$4,500 - $5,500',
                 'color': 'teal',
-                'image': 'https://res.cloudinary.com/dhovspacb/image/upload/c_fill,w_400,h_250,q_auto,f_auto/v1/media/images/p_lon',
             },
         ]
         return context
