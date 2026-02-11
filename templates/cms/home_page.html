@@ -57,7 +57,7 @@
                         {% image page.hero_image width-800 as hero_img %}
                         <img src="{{ hero_img.url }}" alt="{{ page.hero_title }}" class="w-full h-auto object-cover">
                     {% else %}
-                        <img src="{% static 'images/hero-placeholder.jpg' %}" alt="Hills Clinic - Limb Lengthening Surgery" class="w-full h-auto object-cover">
+                        <div class="w-full bg-gradient-to-br from-stone-200 to-stone-300" style="aspect-ratio: 4/3;"></div>
                     {% endif %}
                     
                     <!-- Experience Badge - Bottom Left -->
@@ -231,7 +231,7 @@
                                 {% image page.before_image fill-400x533 as before_img %}
                                 <img src="{{ before_img.url }}" alt="Before surgery" class="w-full h-full object-cover grayscale">
                             {% else %}
-                                <img src="{% static 'images/before-placeholder.jpg' %}" alt="Before surgery" class="w-full h-full object-cover grayscale">
+                                <div class="w-full h-full bg-gradient-to-br from-stone-300 to-stone-400 flex items-center justify-center"><span class="text-stone-500 text-sm">Before</span></div>
                             {% endif %}
                         </div>
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
@@ -246,7 +246,7 @@
                                 {% image page.after_image fill-400x533 as after_img %}
                                 <img src="{{ after_img.url }}" alt="After surgery" class="w-full h-full object-cover">
                             {% else %}
-                                <img src="{% static 'images/after-placeholder.jpg' %}" alt="After surgery" class="w-full h-full object-cover">
+                                <div class="w-full h-full bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center"><span class="text-stone-500 text-sm">After</span></div>
                             {% endif %}
                         </div>
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-stone-900 px-4 py-2 rounded-full">
@@ -490,7 +490,7 @@ function scrollTestimonials(direction) {
                         {% image page.doctor_image fill-600x750 as doctor_img %}
                         <img src="{{ doctor_img.url }}" alt="{{ page.doctor_name }}" class="w-full h-full object-cover">
                     {% else %}
-                        <img src="{% static 'images/doctor-placeholder.jpg' %}" alt="Doctor" class="w-full h-full object-cover">
+                        <div class="w-full h-full bg-gradient-to-br from-stone-200 to-stone-400 flex items-center justify-center"><span class="text-stone-500">Doctor Photo</span></div>
                     {% endif %}
                 </div>
             </div>
