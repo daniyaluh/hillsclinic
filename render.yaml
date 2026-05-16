@@ -29,7 +29,7 @@ services:
       - key: SITE_DOMAIN
         value: "hillsclinic.daniyaluh.me"
       - key: DELETE_CLOUDINARY_RENDITIONS
-        value: "false"
+        value: "true"
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
