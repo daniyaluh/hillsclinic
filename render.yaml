@@ -9,7 +9,7 @@ services:
     name: hillsclinic
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py createcachetable --verbosity=0 2>/dev/null; python manage.py set_site_domain && python manage.py setup_homepage && python manage.py setup_doctors && python manage.py create_superuser_if_not_exists && if [ \"$DELETE_CLOUDINARY_RENDITIONS\" = \"true\" ]; then python manage.py delete_cloudinary_renditions --apply; fi && python manage.py validate_startup"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py createcachetable --verbosity=0 2>/dev/null; python manage.py set_site_domain && python manage.py setup_homepage && python manage.py setup_doctors && python manage.py create_superuser_if_not_exists && python manage.py validate_startup"
     startCommand: "gunicorn hillsclinic.wsgi:application"
     envVars:
       - key: DATABASE_URL
@@ -28,8 +28,6 @@ services:
         value: "3.12.0"
       - key: SITE_DOMAIN
         value: "hillsclinic.daniyaluh.me"
-      - key: DELETE_CLOUDINARY_RENDITIONS
-        value: "true"
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
