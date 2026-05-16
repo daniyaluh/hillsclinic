@@ -15,6 +15,24 @@ from PIL import Image as PILImage
 class Command(BaseCommand):
     help = 'Import Cloudinary assets into Wagtail Image model'
 
+    def _is_original_asset(self, public_id):
+        normalized = public_id.lower()
+        rendition_markers = [
+            ".fill-",
+            ".width-",
+            ".max-",
+            ".crop-",
+            ".scale-",
+            ".format-",
+            ".2e16d0ba.",
+        ]
+
+        return not any(marker in normalized for marker in rendition_markers)
+
+    def _build_title(self, public_id):
+        title = public_id.replace('_', ' ').replace('-', ' ').replace('/', ' ').title()
+        return title[:100]
+
     def handle(self, *args, **options):
         cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME")
         if not cloud_name:
@@ -50,9 +68,12 @@ class Command(BaseCommand):
                 public_id = resource.get('public_id', '')
                 if not public_id:
                     continue
+
+                if not self._is_original_asset(public_id):
+                    continue
                     
                 filename = f"{public_id}.jpg"
-                title = public_id.replace('_', ' ').replace('-', ' ').title()
+                title = self._build_title(public_id)
                 
                 # Check if already imported
                 if Image.objects.filter(title=title).exists():
