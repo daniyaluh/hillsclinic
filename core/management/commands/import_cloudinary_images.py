@@ -11,6 +11,7 @@ from django.core.files.base import ContentFile
 import requests
 from PIL import Image as PILImage
 import hashlib
+import re
 from pathlib import PurePosixPath
 
 
@@ -33,17 +34,18 @@ class Command(BaseCommand):
 
     def _build_title(self, public_id):
         base_name = PurePosixPath(public_id).name
-        base_name = base_name.replace('_', ' ').replace('-', ' ').replace('/', ' ')
-        base_name = " ".join(base_name.split())
+        base_name = re.sub(r"[\s_\-\/\.]+", " ", base_name)
+        base_name = re.sub(r"\s+", " ", base_name).strip()
 
         if not base_name:
             base_name = "Cloudinary Image"
 
-        if len(base_name) > 100:
-            digest = hashlib.sha1(public_id.encode("utf-8")).hexdigest()[:8]
-            base_name = f"{base_name[:90].rstrip()} {digest}"
+        digest = hashlib.sha1(public_id.encode("utf-8")).hexdigest()[:8]
+        max_base_length = 100 - len(digest) - 1
+        if len(base_name) > max_base_length:
+            base_name = base_name[:max_base_length].rstrip()
 
-        return base_name[:100]
+        return f"{base_name} {digest}"[:100]
 
     def handle(self, *args, **options):
         cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME")
