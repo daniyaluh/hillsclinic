@@ -28,14 +28,28 @@ class Command(BaseCommand):
         
         try:
             # Get all resources from Cloudinary
-            resources = cloudinary.api.resources(max_results=500)
+            resources_response = cloudinary.api.resources(max_results=500, type='upload')
             
-            self.stdout.write(f"Found {resources['total_count']} assets in Cloudinary\n")
+            if not resources_response:
+                self.stdout.write(self.style.WARNING("No response from Cloudinary API"))
+                return
+            
+            total_count = resources_response.get('total_count', 0)
+            resources = resources_response.get('resources', [])
+            
+            self.stdout.write(f"Found {total_count} assets in Cloudinary\n")
+            
+            if not resources:
+                self.stdout.write(self.style.WARNING("No resources to import"))
+                return
             
             imported_count = 0
             
-            for resource in resources.get('resources', []):
-                public_id = resource['public_id']
+            for resource in resources:
+                public_id = resource.get('public_id', '')
+                if not public_id:
+                    continue
+                    
                 filename = f"{public_id}.jpg"
                 title = public_id.replace('_', ' ').replace('-', ' ').title()
                 
@@ -45,16 +59,13 @@ class Command(BaseCommand):
                     continue
                 
                 try:
-                    # Get secure URL
-                    url = cloudinary.CloudinaryResource(public_id).build_url(
-                        secure=True,
-                        resource_type=resource.get('type', 'image')
-                    )
+                    # Build direct Cloudinary URL
+                    url = f"https://res.cloudinary.com/{cloud_name}/image/upload/{public_id}"
                     
                     # Download image
                     response = requests.get(url, timeout=10)
                     if response.status_code != 200:
-                        self.stdout.write(f"✗ Failed to download: {title}")
+                        self.stdout.write(f"✗ Failed to download {url}: {response.status_code}")
                         continue
                     
                     # Create Image object
@@ -69,9 +80,11 @@ class Command(BaseCommand):
                     imported_count += 1
                     
                 except Exception as e:
-                    self.stdout.write(self.style.WARNING(f"✗ Error importing {title}: {e}"))
+                    self.stdout.write(self.style.WARNING(f"✗ Error importing {title}: {str(e)}"))
             
-            self.stdout.write(self.style.SUCCESS(f"\n✓ Imported {imported_count} images successfully!"))
+            self.stdout.write(self.style.SUCCESS(f"\n✓ Imported {imported_count}/{len(resources)} images successfully!"))
             
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f"Error: {e}"))
+            self.stdout.write(self.style.ERROR(f"Error: {str(e)}"))
+            import traceback
+            self.stdout.write(self.style.ERROR(traceback.format_exc()))
