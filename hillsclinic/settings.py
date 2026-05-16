@@ -146,24 +146,40 @@ if DATABASE_URL:
     )
 
 # =============================================================================
-# CACHING (Redis)
+# CACHING (Redis with database fallback)
 # =============================================================================
+# Production (Render/deployed): Use Redis if available, fallback to database cache
+# Development: Use local memory cache
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
+        "LOCATION": os.getenv("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 50},
+            # Retry failed connections with timeout
+            "SOCKET_CONNECT_TIMEOUT": 5,
+            "SOCKET_TIMEOUT": 5,
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         }
     }
 } if os.getenv("REDIS_URL") else {
     "default": {
+        # Use database cache in production without Redis (more reliable than locmem)
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "django_cache_table",
+    }
+} if not DEBUG else {
+    # Development: Use lightweight in-memory cache
+    "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "hills-clinic-cache",
     }
 }
 
-# Session backend (use cache in production)
-SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+# Session backend - use database only (no cache dependency for free tier)
+# This prevents 500 errors if cache backend is unavailable
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # =============================================================================
 # AUTHENTICATION
@@ -438,8 +454,18 @@ TASKS = {
 # =============================================================================
 # CELERY (for background tasks)
 # =============================================================================
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/0")
+# Use database backend if Redis not available (for free tier compatibility)
+# Only enable Celery if explicit env vars are set
+if os.getenv("CELERY_BROKER_URL"):
+    CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+    CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", CELERY_BROKER_URL)
+else:
+    # Disable Celery for free tier deployments (no Redis available)
+    CELERY_BROKER_URL = None
+    CELERY_RESULT_BACKEND = None
+    CELERY_ALWAYS_EAGER = True  # Execute tasks synchronously
+    CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

@@ -86,6 +86,13 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"Created and published homepage: {homepage}"))
 
             # Always ensure site exists and points to homepage
+            if not homepage:
+                homepage = HomePage.objects.first()
+            
+            if not homepage:
+                self.stdout.write(self.style.ERROR("No homepage found after setup!"))
+                return
+            
             Site.objects.all().delete()
             
             # Create site with wildcard hostname
