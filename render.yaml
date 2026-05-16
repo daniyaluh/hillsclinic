@@ -21,7 +21,7 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: ".onrender.com,hillsclinic.daniyaluh.me"
+        value: "hillsclinic.onrender.com,hillsclinic.daniyaluh.me"
       - key: CSRF_TRUSTED_ORIGINS
         value: "https://hillsclinic.onrender.com,https://hillsclinic.daniyaluh.me"
       - key: PYTHON_VERSION
