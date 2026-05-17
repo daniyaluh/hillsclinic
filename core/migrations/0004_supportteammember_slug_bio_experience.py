@@ -8,25 +8,43 @@ from django.db.utils import ProgrammingError
 
 def add_fields_safely(apps, schema_editor):
     """Add fields safely, ignoring if they already exist."""
-    with schema_editor.connection.cursor() as cursor:
-        existing_columns = [column.name for column in schema_editor.connection.introspection.get_table_description(cursor, 'core_supportteammember')]
+    from django.db import connection
+    
+    with connection.cursor() as cursor:
+        # Check existing columns
+        cursor.execute("""
+            SELECT column_name FROM information_schema.columns 
+            WHERE table_name = 'core_supportteammember'
+        """)
+        existing_columns = [row[0] for row in cursor.fetchall()]
         
         # Add slug if not exists
         if 'slug' not in existing_columns:
-            schema_editor.execute("ALTER TABLE core_supportteammember ADD COLUMN slug VARCHAR(50) NOT NULL DEFAULT ''")
+            cursor.execute("""
+                ALTER TABLE core_supportteammember 
+                ADD COLUMN slug VARCHAR(50) NOT NULL DEFAULT ''
+            """)
         
         # Add bio if not exists
         if 'bio' not in existing_columns:
-            schema_editor.execute("ALTER TABLE core_supportteammember ADD COLUMN bio TEXT NOT NULL DEFAULT ''")
+            cursor.execute("""
+                ALTER TABLE core_supportteammember 
+                ADD COLUMN bio TEXT NOT NULL DEFAULT ''
+            """)
         
         # Add experience_years if not exists
         if 'experience_years' not in existing_columns:
-            schema_editor.execute("ALTER TABLE core_supportteammember ADD COLUMN experience_years INTEGER NOT NULL DEFAULT 0")
+            cursor.execute("""
+                ALTER TABLE core_supportteammember 
+                ADD COLUMN experience_years INTEGER NOT NULL DEFAULT 0
+            """)
 
 
 def generate_slugs(apps, schema_editor):
     """Generate slugs for existing support team members using raw SQL."""
-    with schema_editor.connection.cursor() as cursor:
+    from django.db import connection
+    
+    with connection.cursor() as cursor:
         # Get all members
         cursor.execute("SELECT id, name, slug FROM core_supportteammember")
         members = cursor.fetchall()
@@ -57,12 +75,17 @@ def generate_slugs(apps, schema_editor):
 
 def make_slug_unique_safely(apps, schema_editor):
     """Add unique constraint to slug, ignoring if already exists."""
-    try:
-        schema_editor.execute(
-            "CREATE UNIQUE INDEX IF NOT EXISTS core_supportteammember_slug_unique ON core_supportteammember (slug)"
-        )
-    except ProgrammingError:
-        pass  # Index already exists
+    from django.db import connection
+    
+    with connection.cursor() as cursor:
+        try:
+            # Try to create unique index (PostgreSQL) - IF NOT EXISTS handles duplicates
+            cursor.execute("""
+                CREATE UNIQUE INDEX IF NOT EXISTS core_supportteammember_slug_unique 
+                ON core_supportteammember (slug)
+            """)
+        except ProgrammingError:
+            pass  # Index already exists
 
 
 class Migration(migrations.Migration):
