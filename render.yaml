@@ -9,7 +9,7 @@ services:
     name: hillsclinic
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py createcachetable --verbosity=0 2>/dev/null; python manage.py set_site_domain && python manage.py seed_cms && python manage.py create_superuser_if_not_exists && python manage.py validate_startup"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate && python manage.py createcachetable --verbosity=0 2>/dev/null; python manage.py set_site_domain && if [ \"${PURGE_WAGTAIL_IMAGE_RECORDS_ON_DEPLOY:-false}\" = \"true\" ]; then python manage.py clear_all_images --apply; fi && python manage.py seed_cms && python manage.py create_superuser_if_not_exists && python manage.py validate_startup"
     startCommand: "gunicorn hillsclinic.wsgi:application"
     envVars:
       - key: DATABASE_URL
@@ -46,3 +46,5 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         value: "Hills Clinic <noreply@hillsclinic.daniyaluh.me>"
+      - key: PURGE_WAGTAIL_IMAGE_RECORDS_ON_DEPLOY
+        value: "true"
