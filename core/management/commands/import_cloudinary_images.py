@@ -1,5 +1,6 @@
 """
 Import Cloudinary assets into Wagtail Image model.
+Only imports original assets, skips renditions and transformations.
 """
 from django.core.management.base import BaseCommand
 from wagtail.images.models import Image
@@ -10,42 +11,54 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 import requests
 from PIL import Image as PILImage
-import hashlib
 import re
 from pathlib import PurePosixPath
 
 
 class Command(BaseCommand):
-    help = 'Import Cloudinary assets into Wagtail Image model'
+    help = 'Import only original Cloudinary assets into Wagtail Image model (skip renditions)'
 
-    def _is_original_asset(self, public_id):
-        normalized = public_id.lower()
-        rendition_markers = [
-            ".fill-",
-            ".width-",
-            ".max-",
-            ".crop-",
-            ".scale-",
-            ".format-",
-            ".2e16d0ba.",
-        ]
-
-        return not any(marker in normalized for marker in rendition_markers)
+    def _is_original_asset(self, resource):
+        """Check if this is an original asset, not a rendition/transformation."""
+        public_id = resource.get('public_id', '').lower()
+        
+        # Skip if marked as derived by Cloudinary
+        if resource.get('derived'):
+            return False
+        
+        # Skip common rendition patterns
+        rendition_markers = [".fill-", ".width-", ".max-", ".crop-", ".scale-", ".format-"]
+        if any(marker in public_id for marker in rendition_markers):
+            return False
+        
+        # Skip if path contains rendition indicators
+        if 'rendition' in public_id or 'derivative' in public_id:
+            return False
+        
+        return True
 
     def _build_title(self, public_id):
-        base_name = PurePosixPath(public_id).name
-        base_name = re.sub(r"[\s_\-\/\.]+", " ", base_name)
-        base_name = re.sub(r"\s+", " ", base_name).strip()
-
-        if not base_name:
-            base_name = "Cloudinary Image"
-
-        digest = hashlib.sha1(public_id.encode("utf-8")).hexdigest()[:8]
-        max_base_length = 100 - len(digest) - 1
-        if len(base_name) > max_base_length:
-            base_name = base_name[:max_base_length].rstrip()
-
-        return f"{base_name} {digest}"[:100]
+        """Extract clean, readable title from public_id."""
+        # Get just the filename from path
+        filename = PurePosixPath(public_id).name
+        
+        # Replace underscores/hyphens with spaces
+        title = re.sub(r'[_\-]+', ' ', filename)
+        
+        # Remove file extensions
+        title = re.sub(r'\.[a-z]+$', '', title, flags=re.IGNORECASE)
+        
+        # Remove non-alphanumeric except spaces
+        title = re.sub(r'[^a-z0-9\s]', '', title, flags=re.IGNORECASE)
+        
+        # Normalize whitespace
+        title = re.sub(r'\s+', ' ', title).strip()
+        
+        # Fallback if empty
+        if not title or len(title) < 2:
+            title = "Image"
+        
+        return title[:100]
 
     def handle(self, *args, **options):
         cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME")
@@ -77,21 +90,30 @@ class Command(BaseCommand):
                 return
             
             imported_count = 0
+            skipped_count = 0
             
             for resource in resources:
                 public_id = resource.get('public_id', '')
                 if not public_id:
                     continue
-
-                if not self._is_original_asset(public_id):
-                    continue
-                    
-                filename = f"{public_id}.jpg"
-                title = self._build_title(public_id)
                 
-                # Check if already imported
-                if Image.objects.filter(title=title).exists():
-                    self.stdout.write(f"⊘ Already imported: {title}")
+                # Skip renditions/transformations
+                if not self._is_original_asset(resource):
+                    self.stdout.write(f"[SKIP] Rendition: {public_id}")
+                    skipped_count += 1
+                    continue
+                
+                title = self._build_title(public_id)
+
+                # Stronger duplicate detection: check existing images by file or title
+                from pathlib import PurePosixPath
+                base_name = PurePosixPath(public_id).name
+                # normalize a compact key from base name to match different variants
+                base_key = re.sub(r'[^a-z0-9]', '', base_name.lower())
+
+                if Image.objects.filter(file__icontains=base_key).exists() or Image.objects.filter(title__icontains=base_key).exists():
+                    self.stdout.write(f"[DUP] Duplicate or variant exists, skipping: {public_id}")
+                    skipped_count += 1
                     continue
                 
                 try:
@@ -101,48 +123,39 @@ class Command(BaseCommand):
                     # Download image
                     response = requests.get(url, timeout=10)
                     if response.status_code != 200:
-                        self.stdout.write(f"✗ Failed to download {url}: {response.status_code}")
+                        self.stdout.write(f"[ERROR] Failed to download: {public_id} ({response.status_code})")
                         continue
-
-                    # Determine image size using Pillow
+                    
+                    # Get image dimensions
                     try:
                         img_io = BytesIO(response.content)
                         pil_img = PILImage.open(img_io)
                         width, height = pil_img.size
                         img_format = pil_img.format.lower() if pil_img.format else 'jpg'
-                        filename = f"{public_id}.{img_format}"
+                        filename = f"{public_id.split('/')[-1]}.{img_format}"
                     except Exception as e:
-                        width = None
-                        height = None
-                        self.stdout.write(self.style.WARNING(f"⚠ Could not determine size for {title}: {e}"))
-
-                    # Create Image object and set dimensions
+                        width, height = 1, 1
+                        filename = f"{public_id.split('/')[-1]}.jpg"
+                        self.stdout.write(self.style.WARNING(f"[WARN] Could not read image dimensions: {e}"))
+                    
+                    # Create Wagtail Image
                     image = Image(title=title)
-                    # Save file without committing, so we can set width/height
                     image.file.save(
                         filename,
                         ContentFile(response.content),
                         save=False
                     )
-
-                    # For Wagtail, width and height are required fields
-                    if width:
-                        image.width = width
-                    else:
-                        image.width = 1
-                    if height:
-                        image.height = height
-                    else:
-                        image.height = 1
-
+                    image.width = width
+                    image.height = height
                     image.save()
-                    self.stdout.write(self.style.SUCCESS(f"✓ Imported: {title} (w={image.width}, h={image.height})"))
-                    imported_count += 1
                     
+                    self.stdout.write(self.style.SUCCESS(f"[IMPORTED] {title} ({width}x{height})"))
+                    imported_count += 1
+                
                 except Exception as e:
-                    self.stdout.write(self.style.WARNING(f"✗ Error importing {title}: {str(e)}"))
+                    self.stdout.write(self.style.WARNING(f"[ERROR] Failed to import {title}: {str(e)}"))
             
-            self.stdout.write(self.style.SUCCESS(f"\n✓ Imported {imported_count}/{len(resources)} images successfully!"))
+            self.stdout.write(self.style.SUCCESS(f"\n[COMPLETE] Imported {imported_count} images, Skipped {skipped_count} renditions"))
             
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Error: {str(e)}"))
