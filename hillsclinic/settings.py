@@ -328,9 +328,9 @@ WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 if os.getenv("CLOUDINARY_CLOUD_NAME"):
     # Store both original Wagtail images AND renditions in Cloudinary
     WAGTAILIMAGES_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    # Prevent Wagtail from persisting renditions into Cloudinary (avoid duplicate/variant uploads)
-    # Use local FileSystemStorage for renditions so Cloudinary only stores originals.
-    WAGTAILIMAGES_RENDITION_STORAGE = "django.core.files.storage.FileSystemStorage"
+    # Prevent Wagtail from persisting renditions into Cloudinary (avoid duplicate/variant uploads).
+    # Use a NullStorage implementation so renditions are not saved anywhere on Render (ephemeral host).
+    WAGTAILIMAGES_RENDITION_STORAGE = "core.storage.NullStorage"
 
 # Embeds (for video testimonials)
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
