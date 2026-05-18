@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static %}
+{% load wagtailcore_tags wagtailimages_tags static cloudinary_tags %}
 
 {% block title %}{{ page.title }} - Limb Lengthening Surgery{% endblock %}
 
@@ -54,8 +54,8 @@
                 <!-- Main Image Container -->
                 <div class="relative rounded-[2rem] overflow-hidden shadow-2xl">
                     {% if page.hero_image %}
-                        {% image page.hero_image width-800 as hero_img %}
-                        <img src="{{ hero_img.url }}" alt="{{ page.hero_title }}" class="w-full h-auto object-cover">
+                        {% cloudinary_url page.hero_image width=800 as hero_url %}
+                        <img src="{{ hero_url }}" alt="{{ page.hero_title }}" class="w-full h-auto object-cover">
                     {% else %}
                         <div class="w-full bg-gradient-to-br from-stone-200 to-stone-300" style="aspect-ratio: 4/3;"></div>
                     {% endif %}
@@ -228,8 +228,8 @@
                     <div class="relative flex-1">
                         <div class="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
                             {% if page.before_image %}
-                                {% image page.before_image fill-400x533 as before_img %}
-                                <img src="{{ before_img.url }}" alt="Before surgery" class="w-full h-full object-cover grayscale">
+                                {% cloudinary_url page.before_image width=400 height=533 crop='fill' as before_url %}
+                                <img src="{{ before_url }}" alt="Before surgery" class="w-full h-full object-cover grayscale">
                             {% else %}
                                 <div class="w-full h-full bg-gradient-to-br from-stone-300 to-stone-400 flex items-center justify-center"><span class="text-stone-500 text-sm">Before</span></div>
                             {% endif %}
@@ -243,8 +243,8 @@
                     <div class="relative flex-1">
                         <div class="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
                             {% if page.after_image %}
-                                {% image page.after_image fill-400x533 as after_img %}
-                                <img src="{{ after_img.url }}" alt="After surgery" class="w-full h-full object-cover">
+                                {% cloudinary_url page.after_image width=400 height=533 crop='fill' as after_url %}
+                                <img src="{{ after_url }}" alt="After surgery" class="w-full h-full object-cover">
                             {% else %}
                                 <div class="w-full h-full bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center"><span class="text-stone-500 text-sm">After</span></div>
                             {% endif %}
