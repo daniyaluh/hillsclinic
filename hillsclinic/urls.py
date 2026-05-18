@@ -29,7 +29,7 @@ from core.sitemaps import (
     StaticViewSitemap, ProceduresSitemap, HomepageSitemap, 
     BlogSitemap, DoctorSitemap, TeamPageSitemap
 )
-from core.views import robots_txt
+from core.views import robots_txt, cloudinary_webhook
 
 # Sitemaps configuration
 sitemaps = {
@@ -67,6 +67,8 @@ urlpatterns = [
     path("portal/", include("portal.urls")),
     path("staff/", include("staff.urls")),
     path("", include("core.urls")),
+    # Cloudinary webhook for real-time image sync
+    path("hooks/cloudinary/", cloudinary_webhook, name="cloudinary-webhook"),
     
     # CMS static pages (before Wagtail catch-all)
     path("", include("cms.urls")),
