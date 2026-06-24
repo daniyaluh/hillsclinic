@@ -268,8 +268,12 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # WhiteNoise for static file serving
-# Use Cloudinary for media storage in production
-if os.getenv("CLOUDINARY_CLOUD_NAME"):
+# Use Cloudinary for media storage whenever credentials are configured — both
+# in production and locally, since existing images are already stored there
+# (there's no local copy of previously-uploaded files to fall back to).
+USE_CLOUDINARY = bool(os.getenv("CLOUDINARY_CLOUD_NAME"))
+
+if USE_CLOUDINARY:
     import cloudinary
     
     cloudinary.config(
@@ -325,12 +329,20 @@ WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
 # Use Cloudinary for Wagtail images in production
 # This ensures logo, favicon, and other CMS images persist across deploys
-if os.getenv("CLOUDINARY_CLOUD_NAME"):
-    # Store both original Wagtail images AND renditions in Cloudinary
+if USE_CLOUDINARY:
+    # Store both originals AND renditions in Cloudinary so they're served by
+    # its CDN. This matters in production (DEBUG=False): nothing serves /media/
+    # there — WhiteNoise only serves static, and urls.py wires up media serving
+    # only under DEBUG — so local-filesystem renditions would 404. Leaving
+    # WAGTAILIMAGES_RENDITION_STORAGE unset makes renditions use the default
+    # storage (Cloudinary). The import_cloudinary_images command (core) skips
+    # rendition variants (.fill-/.width-/etc.), so they aren't re-ingested as
+    # originals on deploy.
+    #
+    # NOTE: do NOT route renditions to core.storage.NullStorage — its url()
+    # returns "", which silently breaks every {% image %} tag (logo, favicon,
+    # doctor photo, etc.).
     WAGTAILIMAGES_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    # Prevent Wagtail from persisting renditions into Cloudinary (avoid duplicate/variant uploads).
-    # Use a NullStorage implementation so renditions are not saved anywhere on Render (ephemeral host).
-    WAGTAILIMAGES_RENDITION_STORAGE = "core.storage.NullStorage"
 
 # Embeds (for video testimonials)
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
